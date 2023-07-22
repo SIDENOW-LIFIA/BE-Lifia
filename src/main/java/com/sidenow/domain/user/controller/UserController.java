@@ -17,10 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-
-    @GetMapping
-    public ResponseEntity<List<User>> findAll(@RequestParam(required = false))
 }
