@@ -1,9 +1,9 @@
 package com.sidenow;
 
-import com.sidenow.Repository.AnswerRepository;
-import com.sidenow.Repository.QuestionRepository;
-import com.sidenow.entity.Answer;
-import com.sidenow.entity.Question;
+import com.sidenow.domain.answer.AnswerRepository;
+import com.sidenow.domain.question.QuestionRepository;
+import com.sidenow.domain.answer.Answer;
+import com.sidenow.domain.question.Question;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
-package com.sidenow.Repository;
+package com.sidenow.domain.answer;
 
-import com.sidenow.entity.Answer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AnswerRepository extends JpaRepository<Answer, Integer> {

@@ -1,6 +1,5 @@
-package com.sidenow.Repository;
+package com.sidenow.domain.question;
 
-import com.sidenow.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
