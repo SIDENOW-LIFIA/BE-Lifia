@@ -1,4 +1,4 @@
-package com.sidenow.domain.user;
+package com.sidenow.domain.member;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

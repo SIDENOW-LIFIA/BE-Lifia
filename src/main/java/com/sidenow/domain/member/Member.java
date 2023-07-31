@@ -1,28 +1,29 @@
-package com.sidenow.domain.user;
+package com.sidenow.domain.member;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
 @Entity
-public class User {
+@NoArgsConstructor
+public class Member {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false, length = 30)
     private String email;
 
-    @Column(unique = true, length = 20)
-    private String nickname;
-
-    @Column(length = 20)
+    @Column(nullable = false)
     private String password;
 
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String name;
+
+    @Column(unique = true, length = 20, nullable = false)
+    private String nickname;
 
     @Column(nullable = false, length = 50)
     private String address;
@@ -32,13 +33,13 @@ public class User {
     private Role role;
 
     @Builder
-    public User(Long id, String email, String nickname, String password, String name, String address, Role role){
+    public Member(Long id, String email, String nickname, String password, String name, String address){
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.password = password;
         this.name = name;
         this.address = address;
-        this.role = role;
+        this.role = Role.USER;
     }
 }

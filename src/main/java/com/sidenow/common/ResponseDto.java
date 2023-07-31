@@ -1,4 +1,4 @@
-package com.sidenow.api.dto;
+package com.sidenow.common;
 
 import lombok.Getter;
 

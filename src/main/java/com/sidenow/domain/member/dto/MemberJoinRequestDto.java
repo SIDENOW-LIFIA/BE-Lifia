@@ -1,4 +1,4 @@
-package com.sidenow.api.dto;
+package com.sidenow.domain.member.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -14,6 +14,7 @@ public class MemberJoinRequestDto {
     private String email;
 
     @NotBlank(message = "비밀번호를 입력하세요.")
+    @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력하세요.")
     private String password;
 
     @NotBlank(message = "이름을 입력하세요.")

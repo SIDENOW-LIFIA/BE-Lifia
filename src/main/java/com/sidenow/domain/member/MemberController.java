@@ -1,16 +1,12 @@
-package com.sidenow.api.controller;
+package com.sidenow.domain.member;
 
-import com.sidenow.api.dto.MemberJoinRequestDto;
-import com.sidenow.api.dto.ResponseDto;
-import com.sidenow.domain.member.Member;
-import com.sidenow.domain.member.MemberService;
+import com.sidenow.common.ResponseDto;
+import com.sidenow.domain.member.dto.MemberJoinRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -56,6 +52,19 @@ public class MemberController {
         memberService.join(member);
         logger.info("SignUp Api End");
         return ResponseEntity.ok().body(new ResponseDto("Sign Up Success"));
+    }
+
+    @Operation(summary = "회원 삭제", description = "기존 회원을 삭제하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "회원삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "회원삭제 실패")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        logger.info("Delete Member Api Start");
+        memberService.delete(id);
+        logger.info("Delete Member Api End");
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "이메일 중복 검증", description = "이메일 중복 검증 API")
