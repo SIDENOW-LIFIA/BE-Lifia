@@ -1,6 +1,6 @@
 package com.sidenow.domain.member;
 
-import com.sidenow.common.ResponseDto;
+import com.sidenow.global.ResponseDto;
 import com.sidenow.domain.member.dto.MemberJoinRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

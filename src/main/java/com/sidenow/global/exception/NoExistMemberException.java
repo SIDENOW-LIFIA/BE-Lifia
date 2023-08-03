@@ -1,4 +1,4 @@
-package com.sidenow.common.exception;
+package com.sidenow.global.exception;
 
 import org.springframework.http.HttpStatus;
 

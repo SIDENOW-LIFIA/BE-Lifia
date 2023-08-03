@@ -1,7 +1,6 @@
 package com.sidenow.domain.member;
 
-import com.sidenow.common.exception.NoExistMemberException;
-import io.swagger.v3.oas.annotations.Operation;
+import com.sidenow.global.exception.NoExistMemberException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

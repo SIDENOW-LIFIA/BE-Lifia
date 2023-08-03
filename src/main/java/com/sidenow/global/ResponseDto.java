@@ -1,4 +1,4 @@
-package com.sidenow.common;
+package com.sidenow.global;
 
 import lombok.Getter;
 
