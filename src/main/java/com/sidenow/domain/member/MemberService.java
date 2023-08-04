@@ -1,5 +1,6 @@
 package com.sidenow.domain.member;
 
+import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.exception.NoExistMemberException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

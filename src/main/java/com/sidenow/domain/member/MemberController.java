@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/members")
+@RequestMapping("/api//v1/members")
 @Validated
 @Tag(name = "Member", description = "유저 API")
 public class MemberController {
@@ -54,7 +54,7 @@ public class MemberController {
         return ResponseEntity.ok().body(new ResponseDto("Sign Up Success"));
     }
 
-    @Operation(summary = "회원 삭제", description = "기존 회원을 삭제하는 API")
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴를 합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "회원삭제 성공"),
             @ApiResponse(responseCode = "400", description = "회원삭제 실패")

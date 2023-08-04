@@ -39,7 +39,7 @@ public class MemberConstant {
     public enum MemberExceptionList {
         CONNECTION_ERROR("U0001", HttpStatus.UNAUTHORIZED, "AccessToken 값이 잘못되었습니다."),
         NOT_HAVE_EMAIL_ERROR("U0002", HttpStatus.NOT_FOUND, "해당 이메일로 User를 찾을 수 없습니다."),
-        NOT_FOUND_ID_ERROR("U0003", HttpStatus.NOT_FOUND, "해당 id로 User를 찾을 수 없습니다.");
+        NOT_FOUND_MEMBER_ERROR("U0003", HttpStatus.NOT_FOUND, "해당 id로 User를 찾을 수 없습니다.");
         private final String errorCode;
         private final HttpStatus httpStatus;
         private final String message;
@@ -48,11 +48,12 @@ public class MemberConstant {
     @Getter
     @RequiredArgsConstructor
     public enum MemberServiceMessage {
+        LOGIN_URL("https://kapi.kakao.com/v2/user/me"),
+        LOGOUT_URL("https://kapi.kakao.com/v1/user/logout"),
+        DELETE_URL("https://kapi.kakao.com/v1/user/unlink"),
+        KAKAO_ACCOUNT("kakao_account"),
         VALID_NICKNAME("사용 가능한 닉네임입니다."),
         EXISTED_NICKNAME("이미 존재하는 닉네임입니다.");
         private final String value;
     }
-
-
-
 }
