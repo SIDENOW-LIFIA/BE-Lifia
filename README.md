@@ -145,19 +145,18 @@
 | **POST** | /user/signup | 자체 회원가입 |    |
 | **POST** | /user/signup/oauth2 | Oauth2 회원가입 |    |
 | **GET** | /user/id/duplicate | 아이디 중복 체크 |    |
-| **GET** | /user/nick/duplicate | 닉네임 중복 체크 |    |
+| **GET** | /user/nickname/duplicate | 닉네임 중복 체크 |    |
 | **POST** | /user/email | 인증 이메일 전송 |    |
 | **POST** | /user/login | 로그인 |    |
 | **POST** | /user/logout | 로그아웃 |    |
 | **POST** | /user/re-issue | 토큰 재발급 |    |
-| **PUT** | /user/signout | 탈퇴 |    |
-| **GET** | /user/grade | 유저 등급 조회 |    |
+| **PUT** | /user/delete | 회원탈퇴 |    |
 | **GET** | /user/region | 유저 거주지 조회 |    |
 | **GET** | /user/info | 마이페이지 유저 정보 조회 |    |
 | **PUT** | /user/password | 유저 비밀번호 수정 |    |
 | **PUT** | /user/region | 유저 거주지 수정 |    |
 | **PUT** | /user/profile | 유저 프로필 수정 |    |
-| **PUT** | /user/nick | 유저 닉네임 수정 |    |
+| **PUT** | /user/nickname | 유저 닉네임 수정 |    |
 | **GET** | /user/my-post | 마이페이지 유저 작성글 조회 |    |
 
 
