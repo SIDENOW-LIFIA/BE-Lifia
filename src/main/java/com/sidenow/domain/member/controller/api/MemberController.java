@@ -1,5 +1,7 @@
-package com.sidenow.domain.member;
+package com.sidenow.domain.member.controller.api;
 
+import com.sidenow.domain.member.Member;
+import com.sidenow.domain.member.MemberService;
 import com.sidenow.global.ResponseDto;
 import com.sidenow.domain.member.dto.MemberJoinRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,9 +22,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api//v1/members")
+@RequestMapping("/api/v1/members")
 @Validated
-@Tag(name = "Member", description = "유저 API")
+@Tag(name = "Member", description = "Member API")
 public class MemberController {
 
     private final MemberService memberService;

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -22,6 +24,7 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
+    // 추가정보
     @Column(length = 10, nullable = false)
     private String name;
 
@@ -31,23 +34,29 @@ public class Member {
     @Column(nullable = false, length = 50)
     private String address;
 
-    @Lob
-    @Column(nullable = false)
-    private String idImageUrl;
+//    @Lob
+//    @Column(nullable = false)
+//    private String idImageUrl;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private boolean isDeleted;
     private String reasonToLeave;
 
     @Builder
-    public Member(Long memberId, String email, String nickname, String password, String name, String address){
+    public Member(Long memberId, String email, String password, String name, String nickname, String address, Role role){
         this.memberId = memberId;
         this.email = email;
-        this.nickname = nickname;
         this.password = password;
         this.name = name;
+        this.nickname = nickname;
         this.address = address;
-        this.role = Role.Role_USER;
+        this.role = role;
+    }
+
+    public void setDeleted(String reasonToLeave) {
+        this.isDeleted = true;
+        this.reasonToLeave = reasonToLeave;
     }
 }

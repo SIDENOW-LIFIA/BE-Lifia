@@ -113,7 +113,4 @@ public abstract class MemberDto {
     public static class MyPageInfoDto {
         private String nickname;
     }
-
-
-
 }

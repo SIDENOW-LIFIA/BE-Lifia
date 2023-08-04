@@ -56,28 +56,4 @@ public class MemberKakaoServiceImpl implements MemberKakaoService{
         }
         throw new NotFoundEmailException();
     }
-
-    @Override
-    public String getPictureUrl(JsonObject memberInfo) {
-        return memberInfo.getAsJsonObject("properties").get("profile_image").getAsString();
-    }
-
-    @Override
-    public String getGender(JsonObject memberInfo) {
-        if (memberInfo.getAsJsonObject(KAKAO_ACCOUNT.getValue()).get("has_gender").getAsBoolean() &&
-                !memberInfo.getAsJsonObject(KAKAO_ACCOUNT.getValue()).get("gender_needs_agreement").getAsBoolean()) {
-            return memberInfo.getAsJsonObject(KAKAO_ACCOUNT.getValue()).get("gender").getAsString();
-        }
-        return "동의안함";
-    }
-
-    @Override
-    public String getAgeRange(JsonObject memberInfo) {
-        String KAKAO_ACCOUNT = "kakao_account";
-        if (memberInfo.getAsJsonObject(KAKAO_ACCOUNT).get("has_age_range").getAsBoolean() &&
-                !memberInfo.getAsJsonObject(KAKAO_ACCOUNT).get("age_range_needs_agreement").getAsBoolean()) {
-            return memberInfo.getAsJsonObject(KAKAO_ACCOUNT).get("age_range").getAsString();
-        }
-        return "동의안함";
-    }
 }
