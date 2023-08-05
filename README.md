@@ -94,7 +94,7 @@
 <br />
 
 ## ⚙ 소프트웨어 아키텍쳐
-![시스템_아키텍처](https://github.com/BellWin98/SideNow-BE/assets/60949121/d091dc20-2b8b-4fc1-8342-9f5ca2402469)
+![시스템_아키텍처](https://github.com/SIDENOW-LIFIA/BE-Lifia/assets/60949121/3624ce9b-453f-475c-8a37-7a227aa02a9f)
 
 <br />
 
