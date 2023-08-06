@@ -8,11 +8,11 @@ import com.sidenow.domain.member.service.kakao.MemberKakaoServiceImpl;
 import com.sidenow.domain.member.service.validate.MemberValidationService;
 import com.sidenow.global.config.jwt.TokenProvider;
 import com.sidenow.global.config.redis.repository.RefreshTokenRepository;
+import com.sidenow.global.config.security.util.SecurityUtils;
 import com.sidenow.global.dto.TokenInfoResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.Token;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -33,9 +33,9 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
 
     private final MemberRepository memberRepository;
     private final MemberKakaoServiceImpl kakaoService;
-    private final RefreshTokenRepository repository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
-    private final MemberValidationService validationService;
+    private final MemberValidationService validateService;
 
     @Override
     public MemberDto.LoginResponse login(MemberDto.LoginRequest loginRequest) {
@@ -61,7 +61,7 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
         // 추가 정보 입력 시
         // 1. 프론트에게 받은 (자체) 액세스 토큰 이용해서 사용자 이메일 가져오기
         Authentication authentication = tokenProvider.getAuthentication(additionInfoRequest.getAccessToken());
-        Member member = validationService.validateEmail(authentication.getName());
+        Member member = validateService.validateEmail(authentication.getName());
 
         // 2. 추가 정보 저장
         member.setMember(additionInfoRequest.getNickname(), additionInfoRequest.getAddress());
@@ -83,7 +83,7 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
         JsonObject response = kakaoService.connectKakao(LOGOUT_URL.getValue(), token);
 
         // 2. Redis에서 해당 사용자의 Refresh Token을 삭제
-        Member member = validationService.validateEmail(SecurityUtils.getLoggedInUser().getEmail());
+        Member member = validateService.validateEmail(SecurityUtils.getLoggedInUser().getEmail());
         refreshTokenRepository.deleteById(member.getMemberId());
     }
 
@@ -92,7 +92,13 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
 
         // 1. 카카오 회원탈퇴 처리
         String token = deleteAccountRequest.getToken();
-        JsonObject response = kakaoService.connectKakao(DELETE_URL.getValue(), )
+        JsonObject response = kakaoService.connectKakao(DELETE_URL.getValue(), token);
+
+        // 2. Redis에서 해당 사용자의 Refresh Token을 삭제
+        Member member = validateService.validateEmail(SecurityUtils.getLoggedInMember().getEmail());
+        refreshTokenRepository
+
+
     }
 
     @Override
