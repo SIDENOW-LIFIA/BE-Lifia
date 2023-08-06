@@ -44,7 +44,6 @@ public abstract class MemberDto {
         private String email;
         private String nickname;
         private String address;
-        private String imageUrl;
     }
 
     @Getter

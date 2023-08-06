@@ -2,6 +2,7 @@ package com.sidenow.domain.member.service.auth;
 
 import com.google.gson.JsonObject;
 import com.sidenow.domain.member.Member;
+import com.sidenow.domain.member.constant.MemberConstant;
 import com.sidenow.domain.member.dto.MemberDto;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.domain.member.service.kakao.MemberKakaoServiceImpl;
@@ -15,15 +16,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.sidenow.domain.member.constant.MemberConstant.MemberServiceMessage.*;
 import static com.sidenow.domain.member.constant.MemberConstant.Process.LOGIN_SUCCESS;
 import static com.sidenow.domain.member.constant.MemberConstant.Process.SIGN_UP_ING;
+import static com.sidenow.domain.member.constant.MemberConstant.Role.Role_USER;
 
 @Service
 @Slf4j
@@ -96,13 +100,24 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
 
         // 2. Redis에서 해당 사용자의 Refresh Token을 삭제
         Member member = validateService.validateEmail(SecurityUtils.getLoggedInMember().getEmail());
-        refreshTokenRepository
+        refreshTokenRepository.deleteById(member.getMemberId());
 
-
+        // 3. DB에서 삭제처리
+        member.setDeleted(deleteAccountRequest.getReasonToLeave());
+        memberRepository.save(member);
     }
 
     @Override
     public MemberDto.LoginResponse testLogin(MemberDto.TestLoginRequest testLoginRequest){
+        Member member = new Member(testLoginRequest.getEmail(), Role_USER);
+        member.setMember(testLoginRequest.getNickname(), testLoginRequest.getAddress());
+        memberRepository.save(member);
 
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(String.valueOf(Role_USER)));
+        OAuth2User memberDetails = createOAuth2MemberByMember(authorities, member);
+        OAuth2AuthenticationToken auth = configureAuthentication(memberDetails, authorities);
+
+        TokenInfoResponse tokenInfoResponse = tokenProvider.
     }
 }
