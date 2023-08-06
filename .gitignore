@@ -39,3 +39,4 @@ out/
 ### Secret-Key ###
 application.yml
 application-oauth.yml
+Base64_jwt_HS512.png
