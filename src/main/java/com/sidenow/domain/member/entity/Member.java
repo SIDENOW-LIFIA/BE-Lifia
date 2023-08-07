@@ -61,8 +61,10 @@ public class Member {
         this.role = role;
     }
 
-    public void setMember(String nickname, String address) {
+    public void setMember(String password, String nickname, String name, String address) {
+        this.password = password;
         this.nickname = nickname;
+        this.name = name;
         this.address = address;
     }
 
