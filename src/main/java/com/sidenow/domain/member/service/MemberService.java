@@ -1,2 +1,5 @@
-package com.sidenow.domain.member.service;public interface MemberService {
+package com.sidenow.domain.member.service;
+
+public interface MemberService {
+
 }

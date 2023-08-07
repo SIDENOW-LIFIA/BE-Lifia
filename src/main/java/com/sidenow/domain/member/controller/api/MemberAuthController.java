@@ -1,94 +1,79 @@
 package com.sidenow.domain.member.controller.api;
 
-import com.sidenow.domain.member.Member;
-import com.sidenow.domain.member.MemberService;
+import com.sidenow.domain.member.dto.MemberDto;
+import com.sidenow.domain.member.entity.Member;
+import com.sidenow.domain.member.service.MemberService;
 import com.sidenow.domain.member.service.auth.MemberAuthenticationService;
-import com.sidenow.global.ResponseDto;
-import com.sidenow.domain.member.dto.MemberJoinRequestDto;
+import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.sidenow.domain.member.constant.MemberConstant.EMemberResponseMessage.*;
+
+
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/members")
 @Validated
-@Tag(name = "Member", description = "Member API")
-public class MemberController {
+@Tag(name = "Member OAuth2 API", description = "Member Social Login API")
+public class MemberAuthController {
 
     private final MemberService memberService;
     private final MemberAuthenticationService authenticationService;
-    private final PasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Operation(summary = "회원가입", description = "회원가입을 하는 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "회원가입 성공"),
-            @ApiResponse(responseCode = "400", description = "회원가입 실패")
-    })
+    @Operation(summary = "회원가입", description = "일반 회원가입을 합니다.")
     @PostMapping("/signup")
-    public ResponseEntity<ResponseDto> signup(@RequestBody @Valid MemberJoinRequestDto dto, BindingResult bindingResult) throws Exception{
-        logger.info("SignUp Api Start");
-        if (bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().body(new ResponseDto("Field Error"));
-        }
+    public ResponseEntity<ResponseDto<Member>> signup(@RequestBody MemberDto.
 
-        Member member = Member.builder()
-                .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .name(dto.getName())
-                .nickname(dto.getNickname())
-                .address(dto.getAddress())
-                .build();
 
-        memberService.join(member);
-        logger.info("SignUp Api End");
-        return ResponseEntity.ok().body(new ResponseDto("Sign Up Success"));
+    @Operation(summary = "카카오 로그인", description = "카카오 로그인을 합니다.")
+    @PostMapping("/auth/kakao")
+    public ResponseEntity<ResponseDto<MemberDto.LoginResponse>> login(@Valid @RequestBody MemberDto.LoginRequest loginRequest) {
+        logger.info("카카오 로그인 API START");
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGIN_SUCCESS.getMessage(), this.authenticationService.login(loginRequest)));
+    }
+
+    @Operation(summary = "추가 정보 입력", description = "추가 정보를 입력합니다.")
+    @PostMapping("/additional-info")
+    public ResponseEntity<ResponseDto<MemberDto.LoginResponse>> additionalInfo(@Valid @RequestBody MemberDto.AdditionInfoRequest additionInfoRequest) {
+        logger.info("추가 정보 입력 API START");
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SIGN_UP_SUCCESS.getMessage(), this.authenticationService.socialLoginSignUp(additionInfoRequest)));
     }
 
     @Operation(summary = "회원 탈퇴", description = "회원 탈퇴를 합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "회원삭제 성공"),
-            @ApiResponse(responseCode = "400", description = "회원삭제 실패")
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        logger.info("Delete Member Api Start");
-        memberService.delete(id);
-        logger.info("Delete Member Api End");
-        return ResponseEntity.noContent().build();
+    @DeleteMapping
+    public ResponseEntity<ResponseDto> delete(@Valid @RequestBody MemberDto.DeleteAccountRequest deleteAccountRequest) {
+        logger.info("회원 탈퇴 API START");
+        this.authenticationService.deleteAccount(deleteAccountRequest);
+        logger.info("회원 탈퇴 API END");
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), DELETE_SUCCESS.getMessage()));
     }
 
-    @Operation(summary = "이메일 중복 검증", description = "이메일 중복 검증 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "사용 가능한 이메일"),
-            @ApiResponse(responseCode = "409", description = "이미 존재하는 이메일")
-    })
-    @GetMapping("/{email}/exists")
-    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
-        return ResponseEntity.ok(memberService.validateDuplicateEmail(email));
+    @Operation(summary = "로그아웃", description = "로그아웃을 합니다.")
+    @PostMapping("/logout")
+    public ResponseEntity<ResponseDto> logout(@Valid @RequestBody MemberDto.LoginRequest loginRequest) {
+        log.info("로그아웃 API START");
+        this.authenticationService.logout(loginRequest);
+        log.info("로그아웃 API END");
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGOUT_SUCCESS.getMessage()));
     }
 
-    @Operation(summary = "닉네임 중복 검증", description = "닉네임 중복 검증 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "사용 가능한 닉네임"),
-            @ApiResponse(responseCode = "409", description = "이미 존재하는 닉네임")
-    })
-    @GetMapping("/{nickname}/exists")
-    public ResponseEntity<Boolean> checkNicknameDuplicate(@PathVariable String nickname) {
-        return ResponseEntity.ok(memberService.validateDuplicateNickname(nickname));
+    // 테스트를 위한 API
+    @PostMapping("/auth/test")
+    public ResponseEntity<ResponseDto<MemberDto.LoginResponse>> login(@Valid @RequestBody MemberDto.TestLoginRequest testLoginRequest) {
+        log.info("테스트 로그인 API START");
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGIN_SUCCESS.getMessage(), this.authenticationService.testLogin(testLoginRequest)));
     }
 
 }

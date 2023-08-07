@@ -1,6 +1,6 @@
 package com.sidenow.global.config.jwt;
 
-import com.sidenow.domain.member.Member;
+import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.NotFoundEmailException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.config.jwt.exception.*;

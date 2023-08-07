@@ -1,6 +1,6 @@
 package com.sidenow.global.config.security.service;
 
-import com.sidenow.domain.member.Member;
+import com.sidenow.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,5 +1,6 @@
 package com.sidenow.domain.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sidenow.global.dto.TokenInfoResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public abstract class MemberDto {
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    @Schema(description = "회원가입을 위한 요청 객체")
+    @NoArgsConstructor
+    public static class SignUpRequest {
+        private Long memberId;
+        private String email;
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        private String password;
+        private String name;
+        private String nickname;
+        private String address;
+    }
 
     @Getter
     @AllArgsConstructor
@@ -42,6 +58,8 @@ public abstract class MemberDto {
     @NoArgsConstructor
     public static class TestLoginRequest {
         private String email;
+        private String password;
+        private String name;
         private String nickname;
         private String address;
     }
@@ -77,9 +95,17 @@ public abstract class MemberDto {
         @Schema(description = "자체 액세스 토큰을 입력해주세요.")
         private String accessToken;
 
+        @NotBlank(message = "비밀번호를 입력해주세요.")
+        @Schema(description = "비밀번호를 입력해주세요")
+        private String password;
+
         @NotBlank(message = "닉네임을 입력해주세요.")
         @Schema(description = "닉네임을 입력해주세요")
         private String nickname;
+
+        @NotBlank(message = "실명을 입력해주세요.")
+        @Schema(description = "실명을 입력해주세요")
+        private String name;
 
         @NotBlank(message = "주소를 입력해주세요.")
         @Schema(description = "주소를 입력해주세요")

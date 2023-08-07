@@ -1,6 +1,6 @@
 package com.sidenow.domain.member.repository;
 
-import com.sidenow.domain.member.Member;
+import com.sidenow.domain.member.entity.Member;
 
 import java.util.Optional;
 

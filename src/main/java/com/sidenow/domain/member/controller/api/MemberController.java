@@ -1,7 +1,7 @@
 package com.sidenow.domain.member.controller.api;
 
-import com.sidenow.domain.member.Member;
-import com.sidenow.domain.member.MemberService;
+import com.sidenow.domain.member.entity.Member;
+import com.sidenow.domain.member.service.MemberServiceImpl;
 import com.sidenow.global.ResponseDto;
 import com.sidenow.domain.member.dto.MemberJoinRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,15 +27,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member", description = "Member API")
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Operation(summary = "회원가입", description = "회원가입을 하는 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "회원가입 성공"),
-            @ApiResponse(responseCode = "400", description = "회원가입 실패")
-    })
+    @Operation(summary = "회원가입", description = "일반 회원가입을 합니다.")
     @PostMapping("/signup")
     public ResponseEntity<ResponseDto> signup(@RequestBody @Valid MemberJoinRequestDto dto, BindingResult bindingResult) throws Exception{
         logger.info("SignUp Api Start");

@@ -1,5 +1,6 @@
-package com.sidenow.domain.member;
+package com.sidenow.domain.member.service;
 
+import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.exception.NoExistMemberException;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class MemberService {
+public class MemberServiceImpl {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final MemberRepository memberRepository;
