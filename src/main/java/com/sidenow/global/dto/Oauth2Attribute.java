@@ -1,7 +1,6 @@
 package com.sidenow.global.dto;
 
-import com.sidenow.domain.member.Member;
-import com.sidenow.domain.member.constant.MemberConstant;
+import com.sidenow.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 

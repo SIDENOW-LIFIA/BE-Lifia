@@ -1,6 +1,6 @@
 package com.sidenow.global.config.security.util;
 
-import com.sidenow.domain.member.Member;
+import com.sidenow.domain.member.entity.Member;
 import com.sidenow.global.config.security.exception.RequiredLoggedInException;
 import com.sidenow.global.config.security.service.CustomMemberDetails;
 import lombok.AccessLevel;

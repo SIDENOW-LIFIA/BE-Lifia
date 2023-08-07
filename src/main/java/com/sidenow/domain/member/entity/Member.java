@@ -1,7 +1,8 @@
-package com.sidenow.domain.member;
+package com.sidenow.domain.member.entity;
 
 import com.sidenow.domain.member.constant.MemberConstant.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @Entity
 @NoArgsConstructor
 public class Member {
@@ -55,14 +58,16 @@ public class Member {
 //        this.role = role;
 //    }
 
-    @Builder
-    public Member(String email, Role role){
-        this.email = email;
-        this.role = role;
-    }
+//    @Builder
+//    public Member(String email, Role role){
+//        this.email = email;
+//        this.role = role;
+//    }
 
-    public void setMember(String nickname, String address) {
+    public void setMember(String password, String nickname, String name, String address) {
+        this.password = password;
         this.nickname = nickname;
+        this.name = name;
         this.address = address;
     }
 
