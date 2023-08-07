@@ -1,0 +1,49 @@
+spring:
+  datasource:
+    url: jdbc:h2:~/test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/sidenow_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#    username: root
+#    password: 1234
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+#        dialect: org.hibernate.dialect.MySQL57Dialect
+        format_sql: true
+        show_sql: true
+
+  springdoc:
+    swagger-ui: # swagger-ui 접근 경로
+      path: /
+      groups-order: DESC # 각 API의 그룹 표시 순서. path, query, body, response 순 출력
+      tags-sorter: alpha # 태그 정렬 순서, alpha: 알파벳 순
+      operations-sorter: method # 컨트롤러 정렬순서, method: delete-get-patch-post-put 순
+      disable-swagger-default-url: true # swagger-ui default url인 petstore html의 비활성화
+      display-request-duration: true # swagger-ui에서 try했을 때 request duration을 알려주는 설정
+
+    api-docs: # openAPI 접근 경로. default값은 /v3/api-docs다.
+      path: /api-docs
+    packages-to-scan: com.sidenow.api.controller
+    show-actuator: true # Spring Actuator의 endpoint까지 보여줄 것인지?
+    default-consumes-media-type: application/json;charset=UTF-8 # request media type의 기본값
+    default-produces-media-type: application/json;charset=UTF-8 # response media type의 기본값
+    paths-to-match: # 해당 패턴에 매칭되는 컨트롤러만 swagger-ui에 노출
+      - /api/**
+
+  profiles:
+    include: oauth
+
+jwt:
+  header: Authorization
+  secret: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDAzMTEiLCJuYW1lIjoiSGFuIEpvbmdTZXVuZyIsImlhdCI6MjMwODA2MTAwNX0.Jd30Ub8zjl0VZgSW1eg-y8F9vKLmWTBurmIYNh-AhzrKPvyGjr34rbNwrBbSvrwjzlde0oshN4kutjURqqQ9gQ
+  access-token-validity-in-seconds: 60480
+  refresh-token-validity-in-seconds: 86400
+
