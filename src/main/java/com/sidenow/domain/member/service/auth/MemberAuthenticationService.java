@@ -9,9 +9,9 @@ import com.sidenow.domain.member.entity.Member;
 public interface MemberAuthenticationService {
 
     Member signUp(SignUpRequest signUpRequest);
-    LoginResponse login(MemberDto.LoginRequest loginRequest);
+    LoginResponse kakaoLogin(MemberDto.LoginRequest loginRequest);
     LoginResponse socialLoginSignUp(MemberDto.AdditionInfoRequest additionInfoRequest);
-    void logout(MemberDto.LoginRequest loginRequest);
+    void kakaoLogout(MemberDto.LoginRequest loginRequest);
     void deleteAccount(DeleteAccountRequest deleteAccountRequest);
     LoginResponse testLogin(MemberDto.TestLoginRequest testLoginRequest);
 }

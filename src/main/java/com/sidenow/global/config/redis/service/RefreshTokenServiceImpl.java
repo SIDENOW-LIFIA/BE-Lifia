@@ -1,4 +1,4 @@
 package com.sidenow.global.config.redis.service;
 
-public class RefreshTokenServiceImpl {
+public class RefreshTokenServiceImpl implements RefreshTokenService {
 }

@@ -18,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -44,13 +45,13 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
     private final MemberValidationService validateService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Member signUp(SignUpRequest signUpRequest) {
         Member member = Member.builder()
-                .memberId(signUpRequest.getMemberId())
-                .password(bCryptPasswordEncoder.encode(signUpRequest.getPassword()))
+                .email(signUpRequest.getEmail())
+                .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .name(signUpRequest.getName())
                 .nickname(signUpRequest.getNickname())
                 .address(signUpRequest.getAddress())
@@ -58,25 +59,6 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
                 .build();
 
         return memberRepository.save(member);
-    }
-
-    @Override
-    public LoginResponse login(LoginRequest loginRequest) {
-
-        // 1. 프론트에게 받은 액세스 토큰을 이용해서 사용자 정보 가져오기
-        String token = loginRequest.getToken();
-        JsonObject memberInfo = kakaoService.connectKakao(LOGIN_URL.getValue(), token);
-        Member member = saveMember(kakaoService.getEmail(memberInfo));
-        boolean isSignedUp = member.getNickname() != null;
-
-        // 2. 스프링 시큐리티 처리
-        List<GrantedAuthority> authorities = initAuthorities();
-        OAuth2User memberDetails = createOAuth2MemberByJson(authorities, memberInfo, kakaoService.getEmail(memberInfo));
-        OAuth2AuthenticationToken auth = configureAuthentication(memberDetails, authorities);
-
-        // 3. JWT 토큰 생성
-        TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(auth, isSignedUp, member.getMemberId());
-        return LoginResponse.from(tokenInfoResponse, isSignedUp ? LOGIN_SUCCESS.getMessage() : SIGN_UP_ING.getMessage(), member.getMemberId());
     }
 
     @Override
@@ -99,8 +81,29 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
         TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(auth, true, member.getMemberId());
         return LoginResponse.from(tokenInfoResponse, LOGIN_SUCCESS.getMessage(), member.getMemberId());
     }
+
     @Override
-    public void logout(LoginRequest loginRequest){
+    public LoginResponse kakaoLogin(LoginRequest loginRequest) {
+
+        // 1. 프론트에게 받은 액세스 토큰을 이용해서 사용자 정보 가져오기
+        String token = loginRequest.getToken();
+        JsonObject memberInfo = kakaoService.connectKakao(LOGIN_URL.getValue(), token);
+        Member member = saveMember(kakaoService.getEmail(memberInfo));
+        boolean isSignedUp = member.getNickname() != null;
+
+        // 2. 스프링 시큐리티 처리
+        List<GrantedAuthority> authorities = initAuthorities();
+        OAuth2User memberDetails = createOAuth2MemberByJson(authorities, memberInfo, kakaoService.getEmail(memberInfo));
+        OAuth2AuthenticationToken auth = configureAuthentication(memberDetails, authorities);
+
+        // 3. JWT 토큰 생성
+        TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(auth, isSignedUp, member.getMemberId());
+        return LoginResponse.from(tokenInfoResponse, isSignedUp ? LOGIN_SUCCESS.getMessage() : SIGN_UP_ING.getMessage(), member.getMemberId());
+    }
+
+
+    @Override
+    public void kakaoLogout(LoginRequest loginRequest){
         // 1. 카카오 로그아웃 처리
         String token = loginRequest.getToken();
         JsonObject response = kakaoService.connectKakao(LOGOUT_URL.getValue(), token);
@@ -128,7 +131,7 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
 
     @Override
     public LoginResponse testLogin(TestLoginRequest testLoginRequest){
-        Member member = new Member()
+        Member member = new Member();
         member.setMember(testLoginRequest.getPassword(), testLoginRequest.getNickname(), testLoginRequest.getName(), testLoginRequest.getAddress());
         memberRepository.save(member);
 
@@ -142,7 +145,10 @@ public class MemberAuthenticationServiceImpl implements MemberAuthenticationServ
     }
 
     public Member saveMember(String email) {
-        Member member = new Member(email, Role_USER);
+        Member member = Member.builder()
+                .email(email)
+                .role(Role_USER)
+                .build();
         if (memberRepository.findByEmail(email).isEmpty()) {
             return memberRepository.save(member);
         }

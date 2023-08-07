@@ -25,6 +25,12 @@ public class MemberConstant {
     }
 
     @Getter
+    public enum Provider {
+        GOOGLE, KAKAO, NAVER
+    }
+
+
+    @Getter
     @RequiredArgsConstructor
     public enum Process {
         SIGN_UP_ING("회원가입 중 - 추가 정보를 입력해주세요."),

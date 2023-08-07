@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class RefreshTokenRepository {
     private RedisTemplate redisTemplate;
 
-    @Value("${jwt.refresh-token-validity-in-seconds}")
+    @Value("${spring.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenValidityTime;
 
     public RefreshTokenRepository(final RedisTemplate redisTemplate){

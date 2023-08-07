@@ -11,9 +11,9 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,13 +37,13 @@ public class TokenProvider implements InitializingBean {
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    @Value("${jwt.secret}")
+    @Value("${spring.jwt.secret}")
     private String secret;
 
-    @Value("${jwt.access-token-validity-in-seconds}")
+    @Value("${spring.jwt.access-token-validity-in-seconds}")
     private long accessTokenValidityTime;
 
-    @Value("${jwt.refresh-token-validity-in-seconds}")
+    @Value("${spring.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenValidityTime;
 
     private Key key;

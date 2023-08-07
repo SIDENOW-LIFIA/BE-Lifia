@@ -25,23 +25,25 @@ import static com.sidenow.domain.member.constant.MemberConstant.EMemberResponseM
 @Slf4j
 @RequestMapping("/api/v1/members")
 @Validated
-@Tag(name = "Member OAuth2 API", description = "Member Social Login API")
+@Tag(name = "Member Auth API", description = "Member API")
 public class MemberAuthController {
 
-    private final MemberService memberService;
     private final MemberAuthenticationService authenticationService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Operation(summary = "회원가입", description = "일반 회원가입을 합니다.")
     @PostMapping("/signup")
-    public ResponseEntity<ResponseDto<Member>> signup(@RequestBody MemberDto.
+    public ResponseEntity<ResponseDto<Member>> signup(@RequestBody MemberDto.SignUpRequest signUpRequest) {
+        logger.info("회원가입 API START");
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SIGN_UP_SUCCESS.getMessage(), this.authenticationService.signUp(signUpRequest)));
+    }
 
 
     @Operation(summary = "카카오 로그인", description = "카카오 로그인을 합니다.")
     @PostMapping("/auth/kakao")
     public ResponseEntity<ResponseDto<MemberDto.LoginResponse>> login(@Valid @RequestBody MemberDto.LoginRequest loginRequest) {
         logger.info("카카오 로그인 API START");
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGIN_SUCCESS.getMessage(), this.authenticationService.login(loginRequest)));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGIN_SUCCESS.getMessage(), this.authenticationService.kakaoLogin(loginRequest)));
     }
 
     @Operation(summary = "추가 정보 입력", description = "추가 정보를 입력합니다.")
@@ -64,7 +66,7 @@ public class MemberAuthController {
     @PostMapping("/logout")
     public ResponseEntity<ResponseDto> logout(@Valid @RequestBody MemberDto.LoginRequest loginRequest) {
         log.info("로그아웃 API START");
-        this.authenticationService.logout(loginRequest);
+        this.authenticationService.kakaoLogout(loginRequest);
         log.info("로그아웃 API END");
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGOUT_SUCCESS.getMessage()));
     }

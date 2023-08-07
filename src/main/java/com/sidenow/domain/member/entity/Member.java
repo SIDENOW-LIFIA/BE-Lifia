@@ -1,13 +1,12 @@
 package com.sidenow.domain.member.entity;
 
+import com.sidenow.domain.member.constant.MemberConstant.Provider;
 import com.sidenow.domain.member.constant.MemberConstant.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Objects;
 
 @Getter
 @Builder
@@ -21,7 +20,7 @@ public class Member {
     @Column(name = "member_id")
     private Long memberId;
 
-    @Column(unique = true, nullable = false, length = 30)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -43,6 +42,9 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     private boolean isDeleted;
     private String reasonToLeave;
