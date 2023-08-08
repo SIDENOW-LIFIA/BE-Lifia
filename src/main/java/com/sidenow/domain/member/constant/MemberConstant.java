@@ -15,7 +15,8 @@ public class MemberConstant {
         DELETE_SUCCESS("회원 탈퇴를 하였습니다."),
         LOGOUT_SUCCESS("로그아웃을 하였습니다."),
         MYPAGE_UPDATE_SUCCESS("마이페이지 수정이 완료되었습니다."),
-        TOKEN_REFRESH_SUCCESS("토근 재발급을 완료하였습니다.");
+        TOKEN_REFRESH_SUCCESS("토근 재발급을 완료하였습니다."),
+        CHECK_ADDITIONALINFO_SUCCESS("추가 정보를 입력했습니다.");
         private final String message;
     }
 
