@@ -11,10 +11,19 @@ spring:
 
         registration:
           kakao:
+            # 어플리케이션(서비스)을 식별함. Resource Server(KAKAO) 입장에서 어떤 서비스를 제공할 것인지 구분
+            # Resource Owner(사용자)와 연결된 client가 누군지
             client-id: 5959d5b5e84c99e08f01cbfda21e03ea
+
+            # Client ID에 대한 비밀번호로 외부에 유출되면 안됨
+            # Resource Owner와 연결된 client의 비밀번호
             client-secret: WWk7pznLNJgXXJ0MAi5d9J9FFGFgRaSJ
+
+            # Resource Server에서 사전에 사용 가능하도록 미리 정의한 기능
+            # Client가 Resource Owner 대신에 사용할 기능들
             scope: profile_nickname, account_email
             client-name: Kakao
             authorization-grant-type: authorization_code
+            # Resource Server만 갖는 정보로, client에 권한을 부여하는 과정에서 나중에 Authorization code(임시 비밀번호)를 전달하는 통로
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             client-authentication-method: POST
