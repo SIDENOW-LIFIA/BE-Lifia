@@ -48,6 +48,8 @@ public class TokenProvider implements InitializingBean {
 
     private Key key;
 
+
+    // Bean 생성이 되고, 의존성 주입을 받은 후에 secret 값을 Base64 Decode해서 key 변수에 할당하기 위함.
     @Override
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
@@ -71,6 +73,7 @@ public class TokenProvider implements InitializingBean {
 
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
+                .setIssuedAt(new Date())
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(ADDITIONAL_INFO, isAdditionalInfoProvided) // 추가 정보 입력 여부를 클레임에 추가
                 .signWith(key, SignatureAlgorithm.HS512)
@@ -93,7 +96,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     /**
-     * 인증하는 함수
+     * 인증하는 함수 (Token에 담겨있는 정보를 이용해 Authentication 객체 리턴)
      *
      * @param token
      * @return authentication
