@@ -1,2 +1,4 @@
-package com.sidenow.domain.board.entity;public class GroupPurchase {
+package com.sidenow.domain.board.entity;
+
+public class GroupPurchase {
 }
