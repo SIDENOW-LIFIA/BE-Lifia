@@ -2,30 +2,27 @@ package com.sidenow.domain.member.controller.api;
 
 import com.sidenow.domain.member.dto.MemberDto;
 import com.sidenow.domain.member.entity.Member;
-import com.sidenow.domain.member.service.MemberService;
 import com.sidenow.domain.member.service.auth.MemberAuthenticationService;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.sidenow.domain.member.constant.MemberConstant.EMemberResponseMessage.*;
 
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/members")
-@Validated
-@Tag(name = "Member Auth API", description = "Member API")
+@Tag(name = "Member Auth API", description = "회원 인증 API입니다.")
 public class MemberAuthController {
 
     private final MemberAuthenticationService authenticationService;

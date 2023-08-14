@@ -22,10 +22,10 @@ public class BaseTimeEntity {
     @CreatedDate
     @Column(updatable = false)
     @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column
     @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updatedAt;
 }
