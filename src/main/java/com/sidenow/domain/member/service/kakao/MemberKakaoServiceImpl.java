@@ -42,8 +42,7 @@ public class MemberKakaoServiceImpl implements MemberKakaoService{
             }
 
             in.close();
-            JsonObject json = JsonParser.parseString(response.toString()).getAsJsonObject();
-            return json;
+            return JsonParser.parseString(response.toString()).getAsJsonObject();
         } catch (IOException e){
             throw new ConnException();
         }
