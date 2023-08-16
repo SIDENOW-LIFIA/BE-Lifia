@@ -1,4 +1,4 @@
-package com.sidenow.domain.boardType.free.board.service;
+package com.sidenow.domain.boardType.free.comment.service;
 
 import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.CreateFreeBoardPostRequest;
 import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardPostDetailResponse;
@@ -18,13 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Transactional
 @Service
-public class FreeBoardService {
+public class FreeBoardCommentService {
 
     private final MemberRepository memberRepository;
     private final FreeBoardRepository freeBoardRepository;
+    private final SecurityUtils securityUtils;
+    private int cnt;
 
-    // 자유게시판 글 등록
-    public void createPost(CreateFreeBoardPostRequest requestDto) {
+    // 자유게시판 게시글 댓글 등록
+    public void saveComments(CreateFreeBoardPostRequest requestDto) {
         Member member = memberRepository.findById(SecurityUtils.getLoggedInMember().getMemberId()).orElseThrow(NoExistMemberException::new);
         FreeBoard freeBoard = CreateFreeBoardPostRequest.to(requestDto, member);
         freeBoardRepository.save(freeBoard);

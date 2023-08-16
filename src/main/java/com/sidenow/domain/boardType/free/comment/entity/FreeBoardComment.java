@@ -1,7 +1,8 @@
-package com.sidenow.domain.boardType.free.board.entity;
+package com.sidenow.domain.boardType.free.comment.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;

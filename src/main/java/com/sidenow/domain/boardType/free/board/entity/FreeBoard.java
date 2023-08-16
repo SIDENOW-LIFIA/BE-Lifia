@@ -1,5 +1,6 @@
 package com.sidenow.domain.boardType.free.board.entity;
 
+import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;

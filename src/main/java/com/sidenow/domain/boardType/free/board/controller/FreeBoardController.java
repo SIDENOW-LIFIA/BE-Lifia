@@ -1,7 +1,9 @@
 package com.sidenow.domain.boardType.free.board.controller;
 
-import com.sidenow.domain.boardType.free.board.dto.FreeBoardDto;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
+import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.CreateFreeBoardPostRequest;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.CreatePostResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardPostDetailResponse;
 import com.sidenow.domain.boardType.free.board.service.FreeBoardService;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.sidenow.domain.boardType.constant.BoardConstant.EBoardResponseMessage.CREATE_POST_SUCCESS;
+import static com.sidenow.domain.boardType.free.board.constant.FreeBoardConstants.FreeBoardResponseMessage.CREATE_FREE_BOARD_POST_SUCCESS;
+import static com.sidenow.domain.boardType.free.board.constant.FreeBoardConstants.FreeBoardResponseMessage.READ_FREE_BOARD_POST_DETAIL_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,16 +28,23 @@ public class FreeBoardController {
 
     @PostMapping("/post")
     @Operation(summary = "자유게시판 글 등록", description = "로그인 X의 경우 접근 불가")
-    public ResponseEntity<ResponseDto<FreeBoardResponse.CreatePostResponse>> createPost(@RequestBody FreeBoardDto.CreateFreeBoardRequest request) {
+    public ResponseEntity<ResponseDto<CreatePostResponse>> createPost(@RequestBody CreateFreeBoardPostRequest request) {
         freeBoardService.createPost(request);
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), CREATE_POST_SUCCESS.getMessage()));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), CREATE_FREE_BOARD_POST_SUCCESS.getMessage()));
     }
 
-    @PostMapping("/{postId}")
+    @GetMapping("/{postId}")
     @Operation(summary = "자유게시판 게시글 상세 조회", description = "로그인 X의 경우 접근 불가")
-    public ResponseEntity<ResponseDto<FreeBoardResponse.ReadPostDetailResponse>> readPostDetail(@PathVariable Long postId) {
-        freeBoardService.
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), CREATE_POST_SUCCESS.getMessage()));
+    public ResponseEntity<ResponseDto<ReadFreeBoardPostDetailResponse>> readPostDetail(@PathVariable Long postId) {
+        ReadFreeBoardPostDetailResponse postDetail = freeBoardService.readPostDetail(postId);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), READ_FREE_BOARD_POST_DETAIL_SUCCESS.getMessage(), postDetail));
+    }
+
+    @PostMapping
+    @Operation(summary = "자유게시판 게시글 전체 조회", description = "로그인 X의 경우 접근 불가")
+    public ResponseEntity<ResponseDto<ReadFreeBoardResponse>> readFreeBoards(@PathVariable Long postId) {
+
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), READ_FREE_BOARD_POST_DETAIL_SUCCESS.getMessage()));
     }
 
 }
