@@ -1,7 +1,8 @@
-package com.sidenow.domain.board.free.controller;
+package com.sidenow.domain.boardType.free.board.controller;
 
-import com.sidenow.domain.board.free.dto.FreeBoardDto;
-import com.sidenow.domain.board.free.service.FreeBoardService;
+import com.sidenow.domain.boardType.free.board.dto.FreeBoardDto;
+import com.sidenow.domain.boardType.free.board.service.FreeBoardService;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,21 +15,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.sidenow.domain.board.constant.BoardConstant.EBoardResponseMessage.CREATE_POST_SUCCESS;
+import static com.sidenow.domain.boardType.constant.BoardConstant.EBoardResponseMessage.CREATE_POST_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/board/free")
 @Tag(name = "FreeBoard API", description = "자유게시판 API 입니다.")
-public class FreeBoardController {
+public class FreeBoardCommentController {
 
     private final FreeBoardService freeBoardService;
 
     @PostMapping("/post")
     @Operation(summary = "자유게시판 글 등록", description = "로그인 X의 경우 접근 불가")
-    public ResponseEntity<ResponseDto> save(@RequestBody FreeBoardDto.CreateFreeBoardRequest request) {
-        freeBoardService.save(request);
+    public ResponseEntity<ResponseDto<FreeBoardResponse.ReadPostDetailResponse>> save(@RequestBody FreeBoardDto.CreateFreeBoardRequest request) {
+        freeBoardService.createPost(request);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), CREATE_POST_SUCCESS.getMessage()));
     }
 

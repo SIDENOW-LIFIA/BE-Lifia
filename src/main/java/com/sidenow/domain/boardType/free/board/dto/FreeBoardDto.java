@@ -1,6 +1,6 @@
-package com.sidenow.domain.board.free.dto;
+package com.sidenow.domain.boardType.free.board.dto;
 
-import com.sidenow.domain.board.free.entity.FreeBoard;
+import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.sidenow.domain.board.constant;
+package com.sidenow.domain.boardType.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

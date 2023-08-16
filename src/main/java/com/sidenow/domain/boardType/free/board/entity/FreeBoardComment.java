@@ -1,4 +1,4 @@
-package com.sidenow.domain.board.free.entity;
+package com.sidenow.domain.boardType.free.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

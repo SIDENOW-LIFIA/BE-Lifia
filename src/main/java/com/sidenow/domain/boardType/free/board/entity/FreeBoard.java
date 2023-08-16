@@ -1,4 +1,4 @@
-package com.sidenow.domain.board.free.entity;
+package com.sidenow.domain.boardType.free.board.entity;
 
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.global.entity.BaseTimeEntity;
@@ -32,7 +32,7 @@ public class FreeBoard extends BaseTimeEntity {
     private String imageUrl;
 
     @Column(nullable = false, columnDefinition = "integer default 0")
-    private int hit; // 게시글 조회 수
+    private int hits; // 게시글 조회 수
 
     @Column(nullable = false)
     private int likes; // 게시글 좋아요 수
@@ -51,8 +51,8 @@ public class FreeBoard extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member writer; // 게시글 작성자
 
-    public void increaseHit() { // 조회 수 증가
-        this.hit++;
+    public void increaseHits() { // 조회 수 증가
+        this.hits++;
     }
 
     public void increaseLikes() { // 좋아요 수 증가
