@@ -1,5 +1,7 @@
 package com.sidenow.domain.member.entity;
 
+import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
+import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.constant.MemberConstant.Provider;
 import com.sidenow.domain.member.constant.MemberConstant.Role;
 import jakarta.persistence.*;
@@ -7,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -36,9 +41,13 @@ public class Member {
     @Column(nullable = false, length = 50)
     private String address;
 
-//    @Lob
-//    @Column(nullable = false)
-//    private String idImageUrl;
+    // 작성한 자유게시판 게시글
+    @OneToMany(mappedBy = "member")
+    private List<FreeBoard> freeBoards = new ArrayList<>();
+
+    // 작성한 자유게시판 게시글의 댓글
+    @OneToMany(mappedBy = "member")
+    private List<FreeBoardComment> freeBoardComments = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
