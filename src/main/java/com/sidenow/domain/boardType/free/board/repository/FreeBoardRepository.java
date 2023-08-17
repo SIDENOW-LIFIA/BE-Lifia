@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
     Optional<FreeBoard> findByPostId(Long postId);
-    List<FreeBoard> findAllByWriter(Member writer);
+    List<FreeBoard> findAllByMember(Member member);
     List<FreeBoard> findAllByTitle(String title);
 }

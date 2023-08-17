@@ -58,23 +58,6 @@ public class Member {
     private boolean isDeleted;
     private String reasonToLeave;
 
-//    @Builder
-//    public Member(Long memberId, String email, String password, String name, String nickname, String address, Role role){
-//        this.memberId = memberId;
-//        this.email = email;
-//        this.password = password;
-//        this.name = name;
-//        this.nickname = nickname;
-//        this.address = address;
-//        this.role = role;
-//    }
-
-//    @Builder
-//    public Member(String email, Role role){
-//        this.email = email;
-//        this.role = role;
-//    }
-
     public void setMember(String password, String nickname, String name, String address) {
         this.password = password;
         this.nickname = nickname;

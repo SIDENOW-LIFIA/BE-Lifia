@@ -50,7 +50,7 @@ public class FreeBoard extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member writer; // 게시글 작성자
+    private Member member; // 게시글 작성자
 
     public void increaseHits() { // 조회 수 증가
         this.hits++;

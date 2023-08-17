@@ -35,7 +35,7 @@ public class FreeBoardComment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member writer;
+    private Member member;
 
     @CreationTimestamp
     @Column(nullable = false)
