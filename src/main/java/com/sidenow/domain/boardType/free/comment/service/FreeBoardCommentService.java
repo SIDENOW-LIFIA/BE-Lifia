@@ -1,10 +1,13 @@
 package com.sidenow.domain.boardType.free.comment.service;
 
-import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.CreateFreeBoardPostRequest;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardPostDetailResponse;
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostIdException;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
+import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.CreateFreeBoardCommentRequest;
+import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.CreateFreeBoardCommentResponse;
+import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
+import com.sidenow.domain.boardType.free.comment.exception.NotFoundFreeBoardCommentIdException;
+import com.sidenow.domain.boardType.free.comment.repository.FreeBoardCommentRepository;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.config.security.util.SecurityUtils;
@@ -22,19 +25,45 @@ public class FreeBoardCommentService {
 
     private final MemberRepository memberRepository;
     private final FreeBoardRepository freeBoardRepository;
-    private final SecurityUtils securityUtils;
+    private final FreeBoardCommentRepository freeBoardCommentRepository;
     private int cnt;
 
     // 자유게시판 게시글 댓글 등록
-    public void saveComments(CreateFreeBoardPostRequest requestDto) {
+    public CreateFreeBoardCommentResponse saveComments(Long freeBoardPostId, CreateFreeBoardCommentRequest createFreeBoardCommentRequest) {
         Member member = memberRepository.findById(SecurityUtils.getLoggedInMember().getMemberId()).orElseThrow(NoExistMemberException::new);
-        FreeBoard freeBoard = CreateFreeBoardPostRequest.to(requestDto, member);
-        freeBoardRepository.save(freeBoard);
+        FreeBoard freeBoard = freeBoardRepository.findByPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+        FreeBoardComment freeBoardComments;
+        if (createFreeBoardCommentRequest.getParentId() == null) {
+            freeBoardComments = saveParentComments(createFreeBoardCommentRequest, member, freeBoard);
+        } else {
+            freeBoardComments = saveChildComments(createFreeBoardCommentRequest, member, freeBoard);
+        }
+
+        freeBoardCommentRepository.save(freeBoardComments);
+        return new CreateFreeBoardCommentResponse(freeBoardComments.getCommentId());
     }
 
-    // 자유게시판 게시글 상세 조회
-    public ReadFreeBoardPostDetailResponse readPostDetail(Long postId) {
-        FreeBoard freeBoard = freeBoardRepository.findByPostId(postId).orElseThrow(NotFoundFreeBoardPostIdException::new);
-        return ReadFreeBoardPostDetailResponse.from(freeBoard);
+    // 자식 댓글 등록 (대댓글)
+    private FreeBoardComment saveChildComments(CreateFreeBoardCommentRequest createFreeBoardCommentRequest, Member member, FreeBoard freeBoard) {
+        FreeBoardComment parent = freeBoardCommentRepository.findById(createFreeBoardCommentRequest.getParentId()).orElseThrow(NotFoundFreeBoardCommentIdException::new);
+
+        return FreeBoardComment.builder()
+                .member(member)
+                .freeBoard(freeBoard)
+                .isDeleted(false)
+                .content(createFreeBoardCommentRequest.getContent())
+                .parent(parent)
+                .build();
+    }
+
+    // 부모 댓글 등록 (댓글)
+    private FreeBoardComment saveParentComments(CreateFreeBoardCommentRequest createFreeBoardCommentRequest, Member member, FreeBoard freeBoard) {
+
+        return FreeBoardComment.builder()
+                .member(member)
+                .freeBoard(freeBoard)
+                .isDeleted(false)
+                .content(createFreeBoardCommentRequest.getContent())
+                .build();
     }
 }
