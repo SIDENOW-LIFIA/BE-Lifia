@@ -1,10 +1,8 @@
 package com.sidenow.domain.boardType.free.board.service;
 
 import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.CreateFreeBoardPostRequest;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
 import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.CreateFreeBoardPostResponse;
 import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardPostDetailResponse;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardResponse;
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostIdException;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
@@ -31,7 +29,7 @@ public class FreeBoardService {
         Member member = memberRepository.findById(SecurityUtils.getLoggedInMember().getMemberId()).orElseThrow(NoExistMemberException::new);
         FreeBoard freeBoard = CreateFreeBoardPostRequest.to(requestDto, member);
         freeBoardRepository.save(freeBoard);
-        return new CreateFreeBoardPostResponse(freeBoard.getPostId());
+        return new CreateFreeBoardPostResponse(freeBoard.getFreeBoardPostId());
     }
 
     // 자유게시판 게시글 상세 조회

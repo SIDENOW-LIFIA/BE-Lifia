@@ -33,7 +33,7 @@ public abstract class FreeBoardCommentResponse {
     @Getter
     @Builder
     @RequiredArgsConstructor
-    @Schema(description = "자유게시판 게시글의 댓글 상세 조회 응답 객체")
+    @Schema(description = "자유게시판 게시글의 댓글(부모) 상세 조회 응답 객체")
     public static class ReadFreeBoardCommentDetailResponse {
         private final String nickname;
         private final String content;
@@ -59,7 +59,7 @@ public abstract class FreeBoardCommentResponse {
     @Getter
     @Builder
     @RequiredArgsConstructor
-    @Schema(description = "자유게시판 게시글의 댓글 상세 조회 응답 객체")
+    @Schema(description = "자유게시판 게시글의 대댓글(자식) 상세 조회 응답 객체")
     public static class ReadFreeBoardChildCommentResponse {
         private final String nickname;
         private final String content;
