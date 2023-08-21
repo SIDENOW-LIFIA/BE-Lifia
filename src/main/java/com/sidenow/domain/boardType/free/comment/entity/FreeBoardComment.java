@@ -30,7 +30,7 @@ public class FreeBoardComment extends BaseTimeEntity {
     private String content; // 댓글 내용
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false) // 댓글의 게시글 (자유게시판)
+    @JoinColumn(name = "free_board_post_id", nullable = false) // 댓글의 게시글 (자유게시판)
     private FreeBoard freeBoard;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,6 +56,9 @@ public class FreeBoardComment extends BaseTimeEntity {
     @JsonManagedReference
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FreeBoardComment> children; // 자식 댓글 (부모 댓글 삭제돼도 삭제 안됨)
+
+    // 댓글 좋아요
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "freeBoardComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
 
     // 부모 댓글 삭제 여부 확인
     public void changeIsDeleted(Boolean isDeleted) {

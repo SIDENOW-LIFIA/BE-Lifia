@@ -37,4 +37,6 @@ public class FreeBoardService {
         FreeBoard freeBoard = freeBoardRepository.findByPostId(postId).orElseThrow(NotFoundFreeBoardPostIdException::new);
         return ReadFreeBoardPostDetailResponse.from(freeBoard);
     }
+
+    // 자유게시판 게시글 전체 조회
 }
