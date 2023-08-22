@@ -1,9 +1,8 @@
 package com.sidenow.domain.boardType.free.board.service;
 
 import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.CreateFreeBoardPostRequest;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.CreateFreeBoardPostResponse;
 import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardPostDetailResponse;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardResponse;
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostIdException;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
@@ -13,12 +12,8 @@ import com.sidenow.global.config.security.util.SecurityUtils;
 import com.sidenow.global.exception.NoExistMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.awt.print.Pageable;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,23 +23,20 @@ public class FreeBoardService {
 
     private final MemberRepository memberRepository;
     private final FreeBoardRepository freeBoardRepository;
-    private final SecurityUtils securityUtils;
 
     // 자유게시판 글 등록
-    public void createPost(CreateFreeBoardPostRequest requestDto) {
+    public CreateFreeBoardPostResponse createFreeBoardPost(CreateFreeBoardPostRequest requestDto) {
         Member member = memberRepository.findById(SecurityUtils.getLoggedInMember().getMemberId()).orElseThrow(NoExistMemberException::new);
         FreeBoard freeBoard = CreateFreeBoardPostRequest.to(requestDto, member);
         freeBoardRepository.save(freeBoard);
+        return new CreateFreeBoardPostResponse(freeBoard.getFreeBoardPostId());
     }
 
     // 자유게시판 게시글 상세 조회
-    public ReadFreeBoardPostDetailResponse readPostDetail(Long postId) {
+    public ReadFreeBoardPostDetailResponse readFreeBoardPostDetail(Long postId) {
         FreeBoard freeBoard = freeBoardRepository.findByPostId(postId).orElseThrow(NotFoundFreeBoardPostIdException::new);
         return ReadFreeBoardPostDetailResponse.from(freeBoard);
     }
 
     // 자유게시판 게시글 전체 조회
-    public ReadFreeBoardResponse readFreeBoard() {
-
-    }
 }

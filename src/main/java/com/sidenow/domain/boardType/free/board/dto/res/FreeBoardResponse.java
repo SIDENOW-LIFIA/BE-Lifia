@@ -15,7 +15,7 @@ public abstract class FreeBoardResponse {
     @Builder
     @RequiredArgsConstructor
     @Schema(description = "게시글 등록 응답 객체")
-    public static class CreatePostResponse {
+    public static class CreateFreeBoardPostResponse {
         private final Long postId;
     }
 
@@ -35,7 +35,7 @@ public abstract class FreeBoardResponse {
         private final List<FreeBoardComment> comments;
 
         public static ReadFreeBoardPostDetailResponse from(FreeBoard freeBoard) {
-            Member member = freeBoard.getWriter();
+            Member member = freeBoard.getMember();
             return ReadFreeBoardPostDetailResponse.builder()
                     .title(freeBoard.getTitle())
                     .content(freeBoard.getContent())
@@ -45,7 +45,7 @@ public abstract class FreeBoardResponse {
                     .likes(freeBoard.getLikes())
                     .commentsCount(freeBoard.getFreeBoardComments().size())
                     .createdAt(freeBoard.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm")))
-                    .comments(freeBoard.getFreeBoardComments().stream().map())
+                    .comments(freeBoard.getFreeBoardComments())
                     .build();
         }
     }

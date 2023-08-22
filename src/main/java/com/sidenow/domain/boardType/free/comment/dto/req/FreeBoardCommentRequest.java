@@ -11,6 +11,7 @@ public abstract class FreeBoardCommentRequest {
     @RequiredArgsConstructor
     @Schema(description = "자유게시판 게시글의 댓글 생성 요청 객체")
     public static class CreateFreeBoardCommentRequest {
+        private final Long memberId;
         private final String content;
         private final Long parentId;
     }

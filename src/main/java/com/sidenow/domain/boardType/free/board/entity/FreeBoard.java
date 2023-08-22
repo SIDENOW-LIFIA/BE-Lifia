@@ -20,8 +20,8 @@ public class FreeBoard extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
-    private Long postId; // 게시글 고유 ID
+    @Column(name = "free_board_post_id")
+    private Long freeBoardPostId; // 게시글 고유 ID
 
     @Column(nullable = false)
     private String title; // 게시글 제목
@@ -50,7 +50,7 @@ public class FreeBoard extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member writer; // 게시글 작성자
+    private Member member; // 게시글 작성자
 
     public void increaseHits() { // 조회 수 증가
         this.hits++;

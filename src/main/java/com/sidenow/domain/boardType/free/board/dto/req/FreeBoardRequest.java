@@ -29,7 +29,7 @@ public abstract class FreeBoardRequest {
                     .title(requestDto.title)
                     .content(requestDto.content)
                     .imageUrl(requestDto.imageUrl)
-                    .writer(member)
+                    .member(member)
                     .build();
         }
     }
