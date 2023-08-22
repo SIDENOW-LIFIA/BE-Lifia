@@ -22,4 +22,19 @@ public class ResponseDto<T> {
         return new ResponseDto<>(statusCode, message, dto);
     }
 
+    public static <T> ResponseDto<T> delete(int statusCode, String message) {
+        return new ResponseDto<>(statusCode, message, null);
+    }
+
+    public static <T> ResponseDto<T> delete(int statusCode, String message, T dto) {
+        return new ResponseDto<>(statusCode, message, dto);
+    }
+
+    public static <T> ResponseDto<T> update(int statusCode, String message) {
+        return new ResponseDto<>(statusCode, message, null);
+    }
+
+    public static <T> ResponseDto<T> update(int statusCode, String message, T dto) {
+        return new ResponseDto<>(statusCode, message, dto);
+    }
 }

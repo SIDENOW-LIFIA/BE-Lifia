@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
-    Optional<FreeBoard> findByPostId(Long postId);
+    Optional<FreeBoard> findByFreeBoardPostId(Long freeBoardPostId);
     List<FreeBoard> findAllByMember(Member member);
     List<FreeBoard> findAllByTitle(String title);
 }

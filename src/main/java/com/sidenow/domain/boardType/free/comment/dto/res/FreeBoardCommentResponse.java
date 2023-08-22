@@ -4,63 +4,62 @@ import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public abstract class FreeBoardCommentResponse {
 
     @Getter
-    @Builder
-    @RequiredArgsConstructor
-    @Schema(description = "자유게시판 게시글의 댓글 생성 응답 객체")
-    public static class CreateFreeBoardCommentResponse{
+    @Setter
+    @NoArgsConstructor
+    @Schema(description = "자유게시판 게시글의 댓글 생성, 삭제, 업데이트 응답 객체")
+    public static class FreeBoardCommentCheck {
 
-        private final FreeBoardComment freeBoardComment;
-        private final Member member;
-        private final FreeBoard freeBoardPost;
+        @Schema(description = "자유게시판 게시글의 댓글 생성 여부 확인")
+        private boolean saved;
+
+        @Schema(description = "자유게시판 게시글의 댓글 삭제 여부 확인")
+        private boolean deleted;
+
+        @Schema(description = "자유게시판 게시글의 댓글 수정 여부 확인")
+        private boolean updated;
     }
 
+//    @Getter
+//    @Builder
+//    @RequiredArgsConstructor
+//    @Schema(description = "자유게시판 게시글의 댓글 전체 조회 응답 객체")
+//    public static class ReadFreeBoardCommentsAllResponse {
+//        private final int cnt; // 댓글 개수
+//        private final List<ReadFreeBoardCommentDetailResponse> freeBoardCommentList;
+//    }
 
     @Getter
     @Builder
     @RequiredArgsConstructor
     @Schema(description = "자유게시판 게시글의 댓글 전체 조회 응답 객체")
-    public static class ReadFreeBoardCommentsAllResponse {
-        private final int cnt; // 댓글 개수
-        private final List<ReadFreeBoardCommentDetailResponse> freeBoardCommentList;
-    }
-
-    @Getter
-    @Builder
-    @RequiredArgsConstructor
-    @Schema(description = "자유게시판 게시글의 댓글(부모) 상세 조회 응답 객체")
-    public static class ReadFreeBoardCommentDetailResponse {
+    public static class ReadFreeBoardCommentsResponse {
         private final Long freeBoardCommentId;
         private final Long memberId;
         private final String nickname; // 작성자 별명
         private final String content; // 내용
         private final boolean isDeleted; // 삭제여부
         private final String createdAt; // 생성일시
-        private final Long parentId; // 부모 댓글
-        private final List<ReadFreeBoardChildCommentResponse> children; // 자식댓글
-        private final int commentLikesCount; // 댓글 좋아요 개수
+//        private final Long parentId; // 부모 댓글
+//        private final List<ReadFreeBoardChildCommentResponse> children; // 자식댓글
+//        private final int commentLikesCount; // 댓글 좋아요 개수
 
-        public static ReadFreeBoardCommentDetailResponse from(FreeBoardComment freeBoardComments, List<ReadFreeBoardChildCommentResponse> children) {
+        public static ReadFreeBoardCommentsResponse from(FreeBoardComment freeBoardComments) {
 
             Member member = freeBoardComments.getMember();
 
-            return ReadFreeBoardCommentDetailResponse.builder()
+            return ReadFreeBoardCommentsResponse.builder()
                     .nickname(member.getNickname())
                     .content(freeBoardComments.getContent())
                     .createdAt(freeBoardComments.getCreatedAt()
                             .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
-                    .parentId(freeBoardComments.getCommentId())
                     .isDeleted(freeBoardComments.getIsDeleted())
-                    .children(children)
                     .build();
         }
     }
@@ -87,5 +86,4 @@ public abstract class FreeBoardCommentResponse {
                     .build();
         }
     }
-
 }

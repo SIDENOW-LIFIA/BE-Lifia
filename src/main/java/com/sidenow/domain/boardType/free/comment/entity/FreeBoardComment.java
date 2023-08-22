@@ -44,7 +44,6 @@ public class FreeBoardComment extends BaseTimeEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt; // 댓글 수정일자
 
-    @ColumnDefault("FALSE")
     @Column(nullable = false)
     private Boolean isDeleted; // 댓글 삭제 여부
 
@@ -60,13 +59,14 @@ public class FreeBoardComment extends BaseTimeEntity {
     // 댓글 좋아요
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "freeBoardComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
 
-    // 부모 댓글 삭제 여부 확인
+    // 댓글 삭제 여부 확인
     public void changeIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
     // 댓글 내용 수정
-    public void updateContent(String content) {
+    public FreeBoardComment updateContent(String content) {
         this.content = content;
+        return this;
     }
 }

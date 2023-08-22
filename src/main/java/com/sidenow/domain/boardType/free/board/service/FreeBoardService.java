@@ -34,7 +34,7 @@ public class FreeBoardService {
 
     // 자유게시판 게시글 상세 조회
     public ReadFreeBoardPostDetailResponse readFreeBoardPostDetail(Long postId) {
-        FreeBoard freeBoard = freeBoardRepository.findByPostId(postId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+        FreeBoard freeBoard = freeBoardRepository.findByFreeBoardPostId(postId).orElseThrow(NotFoundFreeBoardPostIdException::new);
         return ReadFreeBoardPostDetailResponse.from(freeBoard);
     }
 
