@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Secret-Key ###
+Base64_jwt_HS512.png
