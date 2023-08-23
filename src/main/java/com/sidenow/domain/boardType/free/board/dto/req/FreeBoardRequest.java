@@ -5,6 +5,9 @@ import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public abstract class FreeBoardRequest {
 
@@ -12,7 +15,7 @@ public abstract class FreeBoardRequest {
     @Builder
     @RequiredArgsConstructor
     @Schema(description = "게시글 등록 요청 객체")
-    public static class CreateFreeBoardPostRequest {
+    public static class FreeBoardCreatePostRequest {
         @NotBlank(message = "자유게시판 게시글 제목 입력")
         @Schema(description = "게시글 제목을 입력해주세요.")
         private final String title;
@@ -21,14 +24,16 @@ public abstract class FreeBoardRequest {
         @Schema(description = "게시글 내용을 입력해주세요.")
         private final String content;
 
-        @Schema(description = "게시글에 이미지를 첨부해주세요.")
-        private final String imageUrl;
+        @Schema(description = "게시글 작성자 ID")
+        private final Long memberId;
 
-        public static FreeBoard to(CreateFreeBoardPostRequest requestDto, Member member){
+        @Schema(description = "게시글 첨부 파일")
+        private final List<MultipartFile> files;
+
+        public static FreeBoard to(FreeBoardCreatePostRequest createFreeBoardPostRequest, Member member){
             return FreeBoard.builder()
-                    .title(requestDto.title)
-                    .content(requestDto.content)
-                    .imageUrl(requestDto.imageUrl)
+                    .title(createFreeBoardPostRequest.title)
+                    .content(createFreeBoardPostRequest.content)
                     .member(member)
                     .build();
         }

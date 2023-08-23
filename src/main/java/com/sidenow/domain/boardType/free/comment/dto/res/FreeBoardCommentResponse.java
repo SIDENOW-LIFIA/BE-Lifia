@@ -1,6 +1,5 @@
 package com.sidenow.domain.boardType.free.comment.dto.res;
 
-import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,20 +25,11 @@ public abstract class FreeBoardCommentResponse {
         private boolean updated;
     }
 
-//    @Getter
-//    @Builder
-//    @RequiredArgsConstructor
-//    @Schema(description = "자유게시판 게시글의 댓글 전체 조회 응답 객체")
-//    public static class ReadFreeBoardCommentsAllResponse {
-//        private final int cnt; // 댓글 개수
-//        private final List<ReadFreeBoardCommentDetailResponse> freeBoardCommentList;
-//    }
-
     @Getter
     @Builder
     @RequiredArgsConstructor
     @Schema(description = "자유게시판 게시글의 댓글 전체 조회 응답 객체")
-    public static class ReadFreeBoardCommentsResponse {
+    public static class FreeBoardGetCommentListResponse {
         private final Long freeBoardCommentId;
         private final Long memberId;
         private final String nickname; // 작성자 별명
@@ -50,14 +40,14 @@ public abstract class FreeBoardCommentResponse {
 //        private final List<ReadFreeBoardChildCommentResponse> children; // 자식댓글
 //        private final int commentLikesCount; // 댓글 좋아요 개수
 
-        public static ReadFreeBoardCommentsResponse from(FreeBoardComment freeBoardComments) {
+        public static FreeBoardGetCommentListResponse from(FreeBoardComment freeBoardComments) {
 
             Member member = freeBoardComments.getMember();
 
-            return ReadFreeBoardCommentsResponse.builder()
+            return FreeBoardGetCommentListResponse.builder()
                     .nickname(member.getNickname())
                     .content(freeBoardComments.getContent())
-                    .createdAt(freeBoardComments.getCreatedAt()
+                    .createdAt(freeBoardComments.getRegDate()
                             .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .isDeleted(freeBoardComments.getIsDeleted())
                     .build();
@@ -80,7 +70,7 @@ public abstract class FreeBoardCommentResponse {
             return ReadFreeBoardChildCommentResponse.builder()
                     .nickname(member.getNickname())
                     .content(freeBoardComments.getContent())
-                    .createdAt(freeBoardComments.getCreatedAt()
+                    .createdAt(freeBoardComments.getRegDate()
                             .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .isDeleted(freeBoardComments.getIsDeleted())
                     .build();

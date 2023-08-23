@@ -1,10 +1,9 @@
 package com.sidenow.domain.boardType.free.comment.controller;
 
 import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.CreateFreeBoardCommentRequest;
-import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardCommentCheck;
-import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.ReadFreeBoardCommentsResponse;
-import com.sidenow.domain.boardType.free.comment.service.FreeBoardCommentService;
+import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardGetCommentListResponse;
+import com.sidenow.domain.boardType.free.comment.service.FreeBoardCommentServiceImpl;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +25,7 @@ import static com.sidenow.domain.boardType.free.comment.constant.FreeBoardCommen
 @Tag(name = "FreeBoard Comment API", description = "자유게시판 게시글의 댓글 API 입니다.")
 public class FreeBoardCommentController {
 
-    private final FreeBoardCommentService freeBoardCommentService;
+    private final FreeBoardCommentServiceImpl freeBoardCommentService;
 
     @PostMapping("/{postId}/comments")
     @Operation(summary = "자유게시판 게시글의 댓글 작성")
@@ -40,9 +39,9 @@ public class FreeBoardCommentController {
 
     @GetMapping("/{postId}/comments")
     @Operation(summary = "자유게시판 게시글의 댓글 전체 조회")
-    public ResponseEntity<ResponseDto<List<ReadFreeBoardCommentsResponse>>> readFreeBoardComments(@PathVariable("postId") Long freeBoardPostId) {
+    public ResponseEntity<ResponseDto<List<FreeBoardGetCommentListResponse>>> readFreeBoardComments(@PathVariable("postId") Long freeBoardPostId) {
         log.info("Read FreeBoard Comments Api Start");
-        List<FreeBoardCommentResponse.ReadFreeBoardCommentsResponse> readFreeBoardComments = freeBoardCommentService.readFreeBoardComments(freeBoardPostId);
+        List<FreeBoardGetCommentListResponse> readFreeBoardComments = freeBoardCommentService.readFreeBoardComments(freeBoardPostId);
         log.info("Read FreeBoard Comments Api End");
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), READ_FREE_BOARD_COMMENT_SUCCESS.getMessage(), readFreeBoardComments));
     }

@@ -29,9 +29,6 @@ public class FreeBoard extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content; // 게시글 내용
 
-    @Column
-    private String imageUrl;
-
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int hits; // 게시글 조회 수
 
@@ -40,10 +37,10 @@ public class FreeBoard extends BaseTimeEntity {
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime createdAt; // 게시글 생성일자
+    private LocalDateTime regDate; // 게시글 생성일자
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt; // 게시글 수정일자
+    private LocalDateTime updatedDate; // 게시글 수정일자
 
     @OneToMany(mappedBy = "freeBoard")
     List<FreeBoardComment> freeBoardComments;
@@ -51,6 +48,13 @@ public class FreeBoard extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member; // 게시글 작성자
+
+    // 게시글 제목, 내용 수정
+    public FreeBoard update(String title, String content) {
+        this.title = title;
+        this.content = content;
+        return this;
+    }
 
     public void increaseHits() { // 조회 수 증가
         this.hits++;
