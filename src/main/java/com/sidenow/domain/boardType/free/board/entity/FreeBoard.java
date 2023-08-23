@@ -32,7 +32,7 @@ public class FreeBoard extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int hits; // 게시글 조회 수
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer default 0")
     private int likes; // 게시글 좋아요 수
 
     @CreationTimestamp

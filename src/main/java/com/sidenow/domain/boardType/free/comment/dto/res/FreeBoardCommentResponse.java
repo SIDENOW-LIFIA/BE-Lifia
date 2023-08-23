@@ -35,7 +35,7 @@ public abstract class FreeBoardCommentResponse {
         private final String nickname; // 작성자 별명
         private final String content; // 내용
         private final boolean isDeleted; // 삭제여부
-        private final String createdAt; // 생성일시
+        private final String reqDate; // 생성일시
 //        private final Long parentId; // 부모 댓글
 //        private final List<ReadFreeBoardChildCommentResponse> children; // 자식댓글
 //        private final int commentLikesCount; // 댓글 좋아요 개수
@@ -47,7 +47,7 @@ public abstract class FreeBoardCommentResponse {
             return FreeBoardGetCommentListResponse.builder()
                     .nickname(member.getNickname())
                     .content(freeBoardComments.getContent())
-                    .createdAt(freeBoardComments.getRegDate()
+                    .reqDate(freeBoardComments.getRegDate()
                             .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .isDeleted(freeBoardComments.getIsDeleted())
                     .build();
@@ -62,7 +62,7 @@ public abstract class FreeBoardCommentResponse {
         private final String nickname;
         private final String content;
         private final boolean isDeleted;
-        private final String createdAt;
+        private final String regDate;
         private final Long parentId;
 
         public static ReadFreeBoardChildCommentResponse from(FreeBoardComment freeBoardComments) {
@@ -70,7 +70,7 @@ public abstract class FreeBoardCommentResponse {
             return ReadFreeBoardChildCommentResponse.builder()
                     .nickname(member.getNickname())
                     .content(freeBoardComments.getContent())
-                    .createdAt(freeBoardComments.getRegDate()
+                    .regDate(freeBoardComments.getRegDate()
                             .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .isDeleted(freeBoardComments.getIsDeleted())
                     .build();

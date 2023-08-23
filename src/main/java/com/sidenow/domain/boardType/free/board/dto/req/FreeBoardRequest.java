@@ -15,7 +15,7 @@ public abstract class FreeBoardRequest {
     @Builder
     @RequiredArgsConstructor
     @Schema(description = "게시글 등록 요청 객체")
-    public static class FreeBoardCreatePostRequest {
+    public static class FreeBoardRegisterPostRequest {
         @NotBlank(message = "자유게시판 게시글 제목 입력")
         @Schema(description = "게시글 제목을 입력해주세요.")
         private final String title;
@@ -30,7 +30,7 @@ public abstract class FreeBoardRequest {
         @Schema(description = "게시글 첨부 파일")
         private final List<MultipartFile> files;
 
-        public static FreeBoard to(FreeBoardCreatePostRequest createFreeBoardPostRequest, Member member){
+        public static FreeBoard to(FreeBoardRegisterPostRequest createFreeBoardPostRequest, Member member){
             return FreeBoard.builder()
                     .title(createFreeBoardPostRequest.title)
                     .content(createFreeBoardPostRequest.content)
@@ -38,4 +38,6 @@ public abstract class FreeBoardRequest {
                     .build();
         }
     }
+
+
 }

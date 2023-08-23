@@ -3,7 +3,7 @@ package com.sidenow.domain.boardType.free.comment.service;
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostIdException;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
-import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.CreateFreeBoardCommentRequest;
+import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.RegisterFreeBoardCommentRequest;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardCommentCheck;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardGetCommentListResponse;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
@@ -25,23 +25,24 @@ import java.util.*;
 @Slf4j
 @Transactional
 @Service
-public class FreeBoardCommentServiceImpl {
+public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
     private final MemberRepository memberRepository;
     private final FreeBoardRepository freeBoardRepository;
     private final FreeBoardCommentRepository freeBoardCommentRepository;
 
+    @Override
     // 자유게시판 게시글 댓글 등록
-    public FreeBoardCommentCheck createFreeBoardComment(Long freeBoardPostId, CreateFreeBoardCommentRequest createFreeBoardCommentRequest) {
+    public FreeBoardCommentCheck registerFreeBoardComment(Long freeBoardPostId, RegisterFreeBoardCommentRequest registerFreeBoardCommentRequest) {
         log.info("Create FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
-        Member findMember = memberRepository.findById(createFreeBoardCommentRequest.getMemberId()).orElseThrow(NotFoundMemberException::new);
+        Member findMember = memberRepository.findById(registerFreeBoardCommentRequest.getMemberId()).orElseThrow(NotFoundMemberException::new);
         FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
         FreeBoardComment freeBoardComments;
-        if (createFreeBoardCommentRequest.getParentId() == null) {
-            freeBoardComments = createFreeBoardParentComments(createFreeBoardCommentRequest, findMember, findFreeBoardPost);
+        if (registerFreeBoardCommentRequest.getParentId() == null) {
+            freeBoardComments = createFreeBoardParentComments(registerFreeBoardCommentRequest, findMember, findFreeBoardPost);
         } else {
-            freeBoardComments = createFreeBoardChildComments(createFreeBoardCommentRequest, findMember, findFreeBoardPost);
+            freeBoardComments = createFreeBoardChildComments(registerFreeBoardCommentRequest, findMember, findFreeBoardPost);
         }
         freeBoardCommentRepository.save(freeBoardComments);
         freeBoardCommentCheck.setSaved(true);
@@ -49,8 +50,9 @@ public class FreeBoardCommentServiceImpl {
         return freeBoardCommentCheck;
     }
 
+    @Override
     // 자유게시판 게시글의 댓글 전체 조회
-    public List<FreeBoardGetCommentListResponse> readFreeBoardComments(Long freeBoardPostId) {
+    public List<FreeBoardGetCommentListResponse> getFreeBoardCommentList(Long freeBoardPostId) {
         log.info("Read FreeBoard Comment Service Start");
         FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
         List<FreeBoardComment> freeBoardCommentsList = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardPostIdOrderByCreatedAtAsc(findFreeBoardPost.getFreeBoardPostId());
@@ -60,6 +62,7 @@ public class FreeBoardCommentServiceImpl {
         return readFreeBoardCommentDto;
     }
 
+    @Override
     // 자유게시판 게시글의 댓글 삭제
     public FreeBoardCommentCheck deleteFreeBoardComment(Long freeBoardPostId, Long freeBoardCommentId) {
         log.info("Delete FreeBoard Comment Service Start");
@@ -73,11 +76,12 @@ public class FreeBoardCommentServiceImpl {
         return freeBoardCommentCheck;
     }
 
+    @Override
     // 자유게시판 게시글의 댓글 수정
-    public FreeBoardCommentCheck modifyFreeBoardComment(Long freeBoardPostId, Long freeBoardCommentId, CreateFreeBoardCommentRequest createFreeBoardCommentRequest) {
+    public FreeBoardCommentCheck modifyFreeBoardComment(Long freeBoardPostId, Long freeBoardCommentId, RegisterFreeBoardCommentRequest registerFreeBoardCommentRequest) {
         log.info("Modify FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
-        Member findMember = memberRepository.findById(createFreeBoardCommentRequest.getMemberId()).orElseThrow(NotFoundMemberException::new);
+        Member findMember = memberRepository.findById(registerFreeBoardCommentRequest.getMemberId()).orElseThrow(NotFoundMemberException::new);
         freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
         FreeBoardComment findFreeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
         if (findFreeBoardComment.getIsDeleted()) {
@@ -86,7 +90,7 @@ public class FreeBoardCommentServiceImpl {
         if (!findFreeBoardComment.getMember().getMemberId().equals(findMember.getMemberId())){
             throw new FreeBoardCommentAuthErrorException();
         }
-        FreeBoardComment newFreeBoardComment = findFreeBoardComment.updateContent(createFreeBoardCommentRequest.getContent());
+        FreeBoardComment newFreeBoardComment = findFreeBoardComment.updateContent(registerFreeBoardCommentRequest.getContent());
         newFreeBoardComment.setUpdatedAt(LocalDateTime.now());
         freeBoardCommentRepository.save(newFreeBoardComment);
         freeBoardCommentCheck.setUpdated(true);
@@ -95,12 +99,12 @@ public class FreeBoardCommentServiceImpl {
     }
 
     // 자식 댓글 등록 (대댓글)
-    private FreeBoardComment createFreeBoardChildComments(CreateFreeBoardCommentRequest createFreeBoardCommentRequest, Member member, FreeBoard freeBoard) {
+    private FreeBoardComment createFreeBoardChildComments(RegisterFreeBoardCommentRequest createFreeBoardCommentRequest, Member member, FreeBoard freeBoard) {
         FreeBoardComment parent = freeBoardCommentRepository.findById(createFreeBoardCommentRequest.getParentId()).orElseThrow(NotFoundFreeBoardCommentIdException::new);
 
         return FreeBoardComment.builder()
                 .member(member)
-                .createdAt(LocalDateTime.now())
+                .regDate(LocalDateTime.now())
                 .freeBoard(freeBoard)
                 .isDeleted(false)
                 .content(createFreeBoardCommentRequest.getContent())
@@ -109,11 +113,11 @@ public class FreeBoardCommentServiceImpl {
     }
 
     // 부모 댓글 등록 (댓글)
-    private FreeBoardComment createFreeBoardParentComments(CreateFreeBoardCommentRequest createFreeBoardCommentRequest, Member member, FreeBoard freeBoard) {
+    private FreeBoardComment createFreeBoardParentComments(RegisterFreeBoardCommentRequest createFreeBoardCommentRequest, Member member, FreeBoard freeBoard) {
 
         return FreeBoardComment.builder()
                 .member(member)
-                .createdAt(LocalDateTime.now())
+                .regDate(LocalDateTime.now())
                 .freeBoard(freeBoard)
                 .isDeleted(false)
                 .content(createFreeBoardCommentRequest.getContent())

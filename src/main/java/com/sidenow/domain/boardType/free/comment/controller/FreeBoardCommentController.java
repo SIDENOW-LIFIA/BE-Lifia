@@ -1,6 +1,6 @@
 package com.sidenow.domain.boardType.free.comment.controller;
 
-import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.CreateFreeBoardCommentRequest;
+import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardCommentCheck;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardGetCommentListResponse;
 import com.sidenow.domain.boardType.free.comment.service.FreeBoardCommentServiceImpl;
@@ -30,9 +30,9 @@ public class FreeBoardCommentController {
     @PostMapping("/{postId}/comments")
     @Operation(summary = "자유게시판 게시글의 댓글 작성")
     public ResponseEntity<ResponseDto<FreeBoardCommentCheck>> createFreeBoardComment(@PathVariable("postId") Long freeBoardPostId,
-                                                                                     @RequestBody @Valid CreateFreeBoardCommentRequest createFreeBoardCommentRequest) {
+                                                                                     @RequestBody @Valid FreeBoardCommentRequest.RegisterFreeBoardCommentRequest createFreeBoardCommentRequest) {
         log.info("Create FreeBoard Comment Api Start");
-        FreeBoardCommentCheck freeBoardCommentCheck = freeBoardCommentService.createFreeBoardComment(freeBoardPostId, createFreeBoardCommentRequest);
+        FreeBoardCommentCheck freeBoardCommentCheck = freeBoardCommentService.registerFreeBoardComment(freeBoardPostId, createFreeBoardCommentRequest);
         log.info("Create FreeBoard Comment Api End");
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), CREATE_FREE_BOARD_COMMENT_SUCCESS.getMessage(), freeBoardCommentCheck));
     }
@@ -41,7 +41,7 @@ public class FreeBoardCommentController {
     @Operation(summary = "자유게시판 게시글의 댓글 전체 조회")
     public ResponseEntity<ResponseDto<List<FreeBoardGetCommentListResponse>>> readFreeBoardComments(@PathVariable("postId") Long freeBoardPostId) {
         log.info("Read FreeBoard Comments Api Start");
-        List<FreeBoardGetCommentListResponse> readFreeBoardComments = freeBoardCommentService.readFreeBoardComments(freeBoardPostId);
+        List<FreeBoardGetCommentListResponse> readFreeBoardComments = freeBoardCommentService.getFreeBoardCommentList(freeBoardPostId);
         log.info("Read FreeBoard Comments Api End");
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), READ_FREE_BOARD_COMMENT_SUCCESS.getMessage(), readFreeBoardComments));
     }
@@ -58,7 +58,7 @@ public class FreeBoardCommentController {
     @Operation(summary = "자유게시판 게시글의 댓글 수정")
     public ResponseEntity<ResponseDto<FreeBoardCommentCheck>> modifyFreeBoardComment(@PathVariable("postId") Long freeBoardPostId,
                                                                                      @PathVariable("commentId") Long freeBoardCommentId,
-                                                                                     @RequestBody @Valid CreateFreeBoardCommentRequest createFreeBoardCommentRequest) {
+                                                                                     @RequestBody @Valid FreeBoardCommentRequest.RegisterFreeBoardCommentRequest createFreeBoardCommentRequest) {
         FreeBoardCommentCheck freeBoardCommentCheck = freeBoardCommentService.modifyFreeBoardComment(freeBoardPostId, freeBoardCommentId, createFreeBoardCommentRequest);
         return ResponseEntity.ok(ResponseDto.update(HttpStatus.ACCEPTED.value(), MODIFY_FREE_BOARD_COMMENT_SUCCESS.getMessage(), freeBoardCommentCheck));
     }

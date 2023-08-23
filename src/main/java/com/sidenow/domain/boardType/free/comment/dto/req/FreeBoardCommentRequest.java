@@ -10,7 +10,7 @@ public abstract class FreeBoardCommentRequest {
     @Builder
     @RequiredArgsConstructor
     @Schema(description = "자유게시판 게시글의 댓글 생성 요청 객체")
-    public static class CreateFreeBoardCommentRequest {
+    public static class RegisterFreeBoardCommentRequest {
         @Schema(description = "댓글 작성자 id")
         private final Long memberId;
 

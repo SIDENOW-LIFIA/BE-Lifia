@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 public abstract class FreeBoardResponse {
 
@@ -31,26 +32,31 @@ public abstract class FreeBoardResponse {
     @RequiredArgsConstructor
     @Schema(description = "단일 게시글 조회 응답 객체")
     public static class FreeBoardGetPostResponse {
+        private final Long freeBoardPostId;
+        private final Long memberId;
         private final String title;
         private final String content;
         private final String nickname;
-        private final String imageUrl;
         private final int hits;
         private final int likes;
         private final int commentsCount;
-        private final String createdAt;
+        private final String regDate;
+        private final Map<String, String> files;
         private final List<FreeBoardComment> comments;
 
-        public static FreeBoardGetPostResponse from(FreeBoard freeBoard) {
+        public static FreeBoardGetPostResponse from(FreeBoard freeBoard, Map<String, String> files) {
             Member member = freeBoard.getMember();
             return FreeBoardGetPostResponse.builder()
+                    .freeBoardPostId(freeBoard.getFreeBoardPostId())
+                    .memberId(member.getMemberId())
                     .title(freeBoard.getTitle())
                     .content(freeBoard.getContent())
                     .nickname(member.getNickname())
                     .hits(freeBoard.getHits())
                     .likes(freeBoard.getLikes())
                     .commentsCount(freeBoard.getFreeBoardComments().size())
-                    .createdAt(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm")))
+                    .regDate(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm")))
+                    .files(files)
                     .comments(freeBoard.getFreeBoardComments())
                     .build();
         }
