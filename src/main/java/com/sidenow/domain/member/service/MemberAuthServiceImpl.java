@@ -1,11 +1,11 @@
-package com.sidenow.domain.member.service.auth;
+package com.sidenow.domain.member.service;
 
 import com.google.gson.JsonObject;
 import com.sidenow.domain.member.dto.MemberDto.*;
+import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
+import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.repository.MemberRepository;
-import com.sidenow.domain.member.service.kakao.MemberKakaoService;
-import com.sidenow.domain.member.service.validate.MemberValidationService;
 import com.sidenow.global.config.jwt.TokenProvider;
 import com.sidenow.global.config.redis.repository.RefreshTokenRepository;
 import com.sidenow.global.config.security.util.SecurityUtils;
@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -38,28 +37,16 @@ import static com.sidenow.domain.member.constant.MemberConstant.Role.Role_USER;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class MemberAuthenticationServiceImpl implements MemberAuthenticationService{
+public class MemberAuthServiceImpl implements MemberAuthService {
 
     private final MemberRepository memberRepository;
     private final MemberKakaoService kakaoService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
-    private final MemberValidationService validateService;
-    private final PasswordEncoder passwordEncoder;
+    private final MemberMainService validateService;
 
-    @Override
-    public Member signUp(SignUpRequest signUpRequest) {
-        Member member = Member.builder()
-                .email(signUpRequest.getEmail())
-                .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                .name(signUpRequest.getName())
-                .nickname(signUpRequest.getNickname())
-                .address(signUpRequest.getAddress())
-                .role(Role_USER)
-                .build();
 
-        return memberRepository.save(member);
-    }
+
 
     @Override
     public LoginResponse socialLoginSignUp(AdditionInfoRequest additionInfoRequest){

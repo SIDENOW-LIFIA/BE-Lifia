@@ -1,10 +1,10 @@
-package com.sidenow.domain.member.controller.validate;
+package com.sidenow.domain.member.controller;
 
 import static com.sidenow.domain.member.constant.MemberConstant.EMemberResponseMessage.CHECK_ADDITIONALINFO_SUCCESS;
 import static com.sidenow.domain.member.constant.MemberConstant.EMemberResponseMessage.CHECK_NICKNAME;
 
 import com.sidenow.domain.member.dto.MemberDto;
-import com.sidenow.domain.member.service.validate.MemberValidationService;
+import com.sidenow.domain.member.service.MemberMainService;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Member Validation API")
 public class MemberValidationController {
 
-    private final MemberValidationService validationService;
+    private final MemberMainService validationService;
 
     @Operation(summary = "추가 정보 입력 검사", description = "추가 정보 입력 여부를 검사합니다.")
     @GetMapping("/additional-info")

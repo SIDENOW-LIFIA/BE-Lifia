@@ -1,6 +1,6 @@
 package com.sidenow.global.config.security.service;
 
-import com.sidenow.domain.member.service.validate.MemberValidationService;
+import com.sidenow.domain.member.service.MemberMainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CustomMemberDetailsService implements UserDetailsService {
 
-    private final MemberValidationService validateService;
+    private final MemberMainService validateService;
 
     @Override
     @Transactional(readOnly = true)

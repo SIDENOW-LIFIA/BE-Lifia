@@ -1,4 +1,4 @@
-package com.sidenow.domain.member.service.validate;
+package com.sidenow.domain.member.service;
 
 
 import com.sidenow.domain.member.entity.Member;
@@ -17,9 +17,9 @@ import static com.sidenow.domain.member.constant.MemberConstant.MemberServiceMes
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class MemberValidationServiceImpl implements MemberValidationService {
+public class MemberMainServiceImpl implements MemberMainService {
 
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public MemberDto.CheckNicknameResponse checkNickname(String nickname) {

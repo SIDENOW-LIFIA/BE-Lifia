@@ -1,14 +1,14 @@
-package com.sidenow.domain.member.service.auth;
+package com.sidenow.domain.member.service;
 
 import com.sidenow.domain.member.dto.MemberDto;
 import com.sidenow.domain.member.dto.MemberDto.DeleteAccountRequest;
 import com.sidenow.domain.member.dto.MemberDto.LoginResponse;
-import com.sidenow.domain.member.dto.MemberDto.SignUpRequest;
-import com.sidenow.domain.member.entity.Member;
+import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
+import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 
-public interface MemberAuthenticationService {
+public interface MemberAuthService {
 
-    Member signUp(SignUpRequest signUpRequest);
+
     LoginResponse kakaoLogin(MemberDto.LoginRequest loginRequest);
     LoginResponse socialLoginSignUp(MemberDto.AdditionInfoRequest additionInfoRequest);
     void kakaoLogout(MemberDto.LoginRequest loginRequest);

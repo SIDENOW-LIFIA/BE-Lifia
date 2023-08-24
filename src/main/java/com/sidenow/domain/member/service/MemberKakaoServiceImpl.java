@@ -1,4 +1,4 @@
-package com.sidenow.domain.member.service.kakao;
+package com.sidenow.domain.member.service;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

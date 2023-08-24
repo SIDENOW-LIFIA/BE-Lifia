@@ -3,7 +3,7 @@ package com.sidenow.global.config.redis.service;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.NotFoundEmailException;
 import com.sidenow.domain.member.repository.MemberRepository;
-import com.sidenow.domain.member.service.auth.MemberAuthenticationServiceImpl;
+import com.sidenow.domain.member.service.MemberAuthServiceImpl;
 import com.sidenow.global.config.jwt.TokenProvider;
 import com.sidenow.global.config.redis.dto.RefreshTokenDto;
 import com.sidenow.global.config.redis.exception.NotFoundRefreshToken;
@@ -27,7 +27,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
-    private final MemberAuthenticationServiceImpl authenticationService;
+    private final MemberAuthServiceImpl authenticationService;
 
     @Override
     public RefreshTokenDto.RefreshTokenResponse refreshToken(RefreshTokenDto.RefreshTokenRequest refreshTokenRequest) {
