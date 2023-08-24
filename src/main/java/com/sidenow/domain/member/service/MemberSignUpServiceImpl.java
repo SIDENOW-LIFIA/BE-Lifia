@@ -1,7 +1,9 @@
 package com.sidenow.domain.member.service;
 
 import com.sidenow.domain.member.dto.req.MemberRequest;
+import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
 import com.sidenow.domain.member.dto.res.MemberResponse;
+import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -9,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 import static com.sidenow.domain.member.constant.MemberConstant.Role.Role_USER;
 
@@ -20,10 +24,12 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+
+    // 회원가입
     @Override
-    public MemberResponse.MemberCheck signUp(MemberRequest.SignUpMemberRequest signUpMemberRequest) {
+    public MemberCheck signUp(SignUpMemberRequest signUpMemberRequest) {
         log.info("Sign Up Member Service Start");
-        MemberResponse.MemberCheck memberCheck = new MemberResponse.MemberCheck();
+        MemberCheck memberCheck = new MemberCheck();
         Member newMember = Member.builder()
                 .email(signUpMemberRequest.getEmail())
                 .password(passwordEncoder.encode(signUpMemberRequest.getPassword()))
@@ -36,5 +42,25 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
         memberCheck.setSaved(true);
         log.info("Sign Up Member Service End");
         return memberCheck;
+    }
+
+    // 이메일 중복 체크
+    @Override
+    public boolean checkEmailDuplicate(String email) {
+        Optional<Member> findEmail = memberRepository.findByEmail(email);
+        if (findEmail.isPresent()) {
+            return false;
+        }
+        return true;
+    }
+
+    // 닉네임 중복 체크
+    @Override
+    public boolean checkNicknameDuplicate(String nickname) {
+        Optional<Member> findNickname = memberRepository.findByNickname(nickname);
+        if (findNickname.isPresent()) {
+            return false;
+        }
+        return true;
     }
 }

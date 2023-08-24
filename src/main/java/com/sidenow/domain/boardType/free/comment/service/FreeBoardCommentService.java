@@ -11,7 +11,7 @@ import com.sidenow.domain.boardType.free.comment.exception.FreeBoardCommentAuthE
 import com.sidenow.domain.boardType.free.comment.exception.NotFoundFreeBoardCommentIdException;
 import com.sidenow.domain.boardType.free.comment.repository.FreeBoardCommentRepository;
 import com.sidenow.domain.member.entity.Member;
-import com.sidenow.domain.member.exception.NotFoundMemberException;
+import com.sidenow.domain.member.exception.MemberEmailDuplicateException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class FreeBoardCommentService {
     public FreeBoardCommentCheck createFreeBoardComment(Long freeBoardPostId, CreateFreeBoardCommentRequest createFreeBoardCommentRequest) {
         log.info("Create FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
-        Member findMember = memberRepository.findById(createFreeBoardCommentRequest.getMemberId()).orElseThrow(NotFoundMemberException::new);
+        Member findMember = memberRepository.findById(createFreeBoardCommentRequest.getMemberId()).orElseThrow(MemberEmailDuplicateException::new);
         FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
         FreeBoardComment freeBoardComments;
         if (createFreeBoardCommentRequest.getParentId() == null) {
@@ -77,7 +77,7 @@ public class FreeBoardCommentService {
     public FreeBoardCommentCheck modifyFreeBoardComment(Long freeBoardPostId, Long freeBoardCommentId, CreateFreeBoardCommentRequest createFreeBoardCommentRequest) {
         log.info("Modify FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
-        Member findMember = memberRepository.findById(createFreeBoardCommentRequest.getMemberId()).orElseThrow(NotFoundMemberException::new);
+        Member findMember = memberRepository.findById(createFreeBoardCommentRequest.getMemberId()).orElseThrow(MemberEmailDuplicateException::new);
         freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
         FreeBoardComment findFreeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
         if (findFreeBoardComment.getIsDeleted()) {

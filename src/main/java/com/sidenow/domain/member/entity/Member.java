@@ -5,10 +5,7 @@ import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.constant.MemberConstant.Provider;
 import com.sidenow.domain.member.constant.MemberConstant.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
@@ -58,15 +55,15 @@ public class Member {
     private boolean isDeleted;
     private String reasonToLeave;
 
-    public void setMember(String password, String nickname, String name, String address) {
-        this.password = password;
-        this.nickname = nickname;
-        this.name = name;
-        this.address = address;
-    }
-
-    public void setDeleted(String reasonToLeave) {
-        this.isDeleted = true;
-        this.reasonToLeave = reasonToLeave;
-    }
+//    public void setMember(String password, String nickname, String name, String address) {
+//        this.password = password;
+//        this.nickname = nickname;
+//        this.name = name;
+//        this.address = address;
+//    }
+//
+//    public void setDeleted(String reasonToLeave) {
+//        this.isDeleted = true;
+//        this.reasonToLeave = reasonToLeave;
+//    }
 }

@@ -20,24 +20,6 @@ spring:
         format_sql: true
         show_sql: true
 
-  springdoc:
-    swagger-ui: # swagger-ui 접근 경로
-      path: /
-      groups-order: DESC # 각 API의 그룹 표시 순서. path, query, body, response 순 출력
-      tags-sorter: alpha # 태그 정렬 순서, alpha: 알파벳 순
-      operations-sorter: method # 컨트롤러 정렬순서, method: delete-get-patch-post-put 순
-      disable-swagger-default-url: true # swagger-ui default url인 petstore html의 비활성화
-      display-request-duration: true # swagger-ui에서 try했을 때 request duration을 알려주는 설정
-
-    api-docs: # openAPI 접근 경로. default값은 /v3/api-docs다.
-      path: /api-docs
-    packages-to-scan: com.sidenow.api.controller
-    show-actuator: true # Spring Actuator의 endpoint까지 보여줄 것인지?
-    default-consumes-media-type: application/json;charset=UTF-8 # request media type의 기본값
-    default-produces-media-type: application/json;charset=UTF-8 # response media type의 기본값
-    paths-to-match: # 해당 패턴에 매칭되는 컨트롤러만 swagger-ui에 노출
-      - /api/**
-
   redis:
     host: localhost
     port: 6379
@@ -51,5 +33,26 @@ spring:
     access-token-validity-in-seconds: 60480
     refresh-token-validity-in-seconds: 86400
 
+  aws:
+    ses:
+      access-key: AKIAU5GCOHQL7OAOEH2F
+      secret-key: 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
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAU5GCOHQL7OAOEH2F
+      secretKey: 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
+    s3:
+      bucket: # 버킷 이름
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 

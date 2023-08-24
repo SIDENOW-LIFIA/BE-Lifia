@@ -1,4 +1,4 @@
-package com.sidenow.global.config.aws;
+package com.sidenow.global.config.aws.util;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AwsSesConfig {
-    @Value("${aws.ses.access-key}")
+    @Value("${spring.aws.ses.access-key}")
     private String accessKey;
 
-    @Value("${aws.ses.secret-key}")
+    @Value("${spring.aws.ses.secret-key}")
     private String secretKey;
 
     @Value("${cloud.aws.region.static}")

@@ -1,7 +1,6 @@
-package com.sidenow.global.config.aws;
+package com.sidenow.global.config.aws.service;
 
 public interface AwsSesService {
-    void send(String receiver);
-    void verifyCode(String code);
-    String getCode();
+    String send(String receiver);
+    boolean verifyEmailCode(String email, String code);
 }

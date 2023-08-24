@@ -1,11 +1,11 @@
 package com.sidenow.domain.member.exception;
 
-import static com.sidenow.domain.member.constant.MemberConstant.MemberExceptionList.*;
+import static com.sidenow.domain.member.exception.constant.MemberExceptionList.MEMBER_NOT_EXIST_ERROR;
 
-public class NotFoundEmailException extends MemberException {
-    public NotFoundEmailException() {
-        super(NOT_FOUND_MEMBER_ERROR.getErrorCode(),
-                NOT_FOUND_MEMBER_ERROR.getHttpStatus(),
-                NOT_FOUND_MEMBER_ERROR.getMessage());
+public class MemberNotExistException extends MemberException {
+    public MemberNotExistException() {
+        super(MEMBER_NOT_EXIST_ERROR.getErrorCode(),
+                MEMBER_NOT_EXIST_ERROR.getHttpStatus(),
+                MEMBER_NOT_EXIST_ERROR.getMessage());
     }
 }
