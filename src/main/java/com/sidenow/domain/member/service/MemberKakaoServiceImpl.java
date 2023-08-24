@@ -3,7 +3,7 @@ package com.sidenow.domain.member.service;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sidenow.domain.member.exception.ConnException;
-import com.sidenow.domain.member.exception.NotFoundEmailException;
+import com.sidenow.domain.member.exception.MemberNotExistException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +53,6 @@ public class MemberKakaoServiceImpl implements MemberKakaoService{
         if (memberInfo.getAsJsonObject(KAKAO_ACCOUNT.getValue()).get("has_email").getAsBoolean()){
             return memberInfo.getAsJsonObject(KAKAO_ACCOUNT.getValue()).get("email").getAsString();
         }
-        throw new NotFoundEmailException();
+        throw new MemberNotExistException();
     }
 }

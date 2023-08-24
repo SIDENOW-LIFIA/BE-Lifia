@@ -6,7 +6,7 @@ import com.sidenow.domain.member.dto.MemberDto.LoginResponse;
 import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
 import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 
-public interface MemberAuthService {
+public interface MemberTempService {
 
 
     LoginResponse kakaoLogin(MemberDto.LoginRequest loginRequest);
