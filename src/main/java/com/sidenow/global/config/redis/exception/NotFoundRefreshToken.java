@@ -1,6 +1,6 @@
 package com.sidenow.global.config.redis.exception;
 
-import static com.sidenow.global.config.redis.constant.RefreshTokenConstant.RefreshTokenExceptionList.NOT_FOUND_TOKEN_ERROR;
+import static com.sidenow.global.config.redis.constant.RedisConstants.RefreshTokenExceptionList.NOT_FOUND_TOKEN_ERROR;
 
 public class NotFoundRefreshToken extends RefreshTokenException{
     public NotFoundRefreshToken(){

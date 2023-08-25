@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-public class RefreshTokenConstant {
+public class RedisConstants {
 
     @Getter
     @RequiredArgsConstructor

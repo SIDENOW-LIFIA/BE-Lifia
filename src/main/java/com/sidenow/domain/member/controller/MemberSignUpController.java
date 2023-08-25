@@ -80,6 +80,5 @@ public class MemberSignUpController {
         }
         log.info("Verify Mail Code Api End");
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_EMAIL_AUTH_CODE_VERIFIED.getMessage(), true));
-
     }
 }

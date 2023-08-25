@@ -1,5 +1,6 @@
 package com.sidenow.domain.member.dto.res;
 
+import com.sidenow.global.dto.TokenInfoResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -19,6 +20,22 @@ public abstract class MemberResponse {
 
         @Schema(description = "유저 정보 수정 여부 확인")
         private boolean updated;
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    @Schema(description = "로그인 응답 객체")
+    public static class MemberLoginResponse{
+        private final String accessToken;
+        private final String refreshToken;
+
+        public static MemberLoginResponse from(TokenInfoResponse tokenInfoResponse) {
+            return MemberLoginResponse.builder()
+                    .accessToken(tokenInfoResponse.getAccessToken())
+                    .refreshToken(tokenInfoResponse.getRefreshToken())
+                    .build();
+        }
     }
 
 }

@@ -38,4 +38,16 @@ public abstract class MemberRequest {
         private final MultipartFile multipartFile;
     }
 
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    @Schema(description = "유저 로그인 요청 객체")
+    public static class MemberLoginRequest{
+
+        @NotBlank(message = "이메일을 입력하세요.")
+        private final String email;
+
+        @NotBlank(message = "비밀번호를 입력하세요.")
+        private final String password;
+    }
 }
