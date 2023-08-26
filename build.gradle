@@ -28,14 +28,24 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	testImplementation 'org.mockito:mockito-inline:5.2.0'
+
+	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    // AWS
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	// AWS
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'com.amazonaws:aws-java-sdk-ses:1.12.408'
 
 	// JWT
@@ -43,25 +53,20 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 
-	// Email 인증
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// oauth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	implementation 'com.google.code.gson:gson'
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
-
-	implementation 'org.springframework.security:spring-security-test'
-	testImplementation ('org.springframework.boot:spring-boot-starter-test')
-			{
-				exclude group: 'org.mockito', module: 'mockito-core'
-			}
-	testImplementation 'org.mockito:mockito-inline:4.6.1'
+//	implementation 'org.springframework.security:spring-security-test'
+//	testImplementation ('org.springframework.boot:spring-boot-starter-test')
+//			{
+//				exclude group: 'org.mockito', module: 'mockito-core'
+//			}
+//	testImplementation 'org.mockito:mockito-inline:4.6.1'
 
 }
 

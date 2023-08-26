@@ -5,6 +5,8 @@ import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
 import com.sidenow.domain.member.dto.res.MemberResponse;
 import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 import com.sidenow.domain.member.entity.Member;
+import com.sidenow.domain.member.exception.MemberEmailDuplicateException;
+import com.sidenow.domain.member.exception.MemberNicknameDuplicateException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +51,7 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
     public boolean checkEmailDuplicate(String email) {
         Optional<Member> findEmail = memberRepository.findByEmail(email);
         if (findEmail.isPresent()) {
-            return false;
+            throw new MemberEmailDuplicateException();
         }
         return true;
     }
@@ -59,7 +61,7 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
     public boolean checkNicknameDuplicate(String nickname) {
         Optional<Member> findNickname = memberRepository.findByNickname(nickname);
         if (findNickname.isPresent()) {
-            return false;
+            throw new MemberNicknameDuplicateException();
         }
         return true;
     }

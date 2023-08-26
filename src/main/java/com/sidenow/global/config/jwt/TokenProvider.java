@@ -60,6 +60,7 @@ public class TokenProvider implements InitializingBean {
 
     // 토큰 생성
     public TokenInfoResponse createToken(Authentication authentication) {
+        log.info("JWT 토큰 생성 메서드 Start");
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -76,6 +77,7 @@ public class TokenProvider implements InitializingBean {
         return TokenInfoResponse.from(GRANT, accessToken, refreshToken, accessTokenValidityTime);
     }
 
+    // Refresh Token 업데이트
     public void updateRefreshToken(Long memberId, String refreshToken) {
 
         try {
@@ -87,7 +89,22 @@ public class TokenProvider implements InitializingBean {
         }
     }
 
+    public String getMemberId(String accessToken) {
+        Claims claims = parseClaims(accessToken);
+
+        return claims.get(MEMBER_ID).toString();
+    }
+
+    // JWT 토큰에서 만료시간을 확인하고, 현재 시간과 비교하여 남은 시간을 반환
+    public Long getExpiration(String accessToken) {
+        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
+        Long now = new Date().getTime();
+        return (expiration.getTime() - now);
+    }
+
+    // Access Token 생성
     private String createAccessToken(String authorities, Date now, Long memberID) {
+        log.info("Access Token 생성 메서드 Start");
         Date accessTokenValidity = new Date(now.getTime() + this.accessTokenValidityTime);
 
         String accessToken = Jwts.builder()
@@ -99,12 +116,15 @@ public class TokenProvider implements InitializingBean {
                 .setExpiration(accessTokenValidity)
                 .compact();
 
-        log.info("Access Token 저장");
+        log.info("Access Token 생성 완료");
         redisRepository.setValues(ACCESS + memberID.toString(), accessToken, Duration.ofSeconds(accessTokenValidityTime));
+        log.info("Access Token Redis에 저장 완료");
 
+        log.info("Access Token 생성 메서드 End");
         return accessToken;
     }
 
+    // Refresh Token 생성
     private String createRefreshToken(String authorities, Date now, Long memberId) {
 
         Date refreshTokenValidity = new Date(now.getTime() + this.refreshTokenValidityTime);
@@ -120,6 +140,23 @@ public class TokenProvider implements InitializingBean {
 
         return refreshToken;
     }
+
+    // 주어진 JWT 토큰에서 클레임을 추출
+    private Claims parseClaims(String accessToken) {
+        try {
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
+
+    private String getSubject(String accessToken) {
+        Claims claims = parseClaims(accessToken);
+
+        return claims.getSubject();
+    }
+
+
 
     // 인증하는 함수 (Token에 담겨있는 정보를 이용해 Authentication 객체 리턴)
     public Authentication getAuthentication(String token) {
@@ -188,31 +225,5 @@ public class TokenProvider implements InitializingBean {
         } finally {
             return false;
         }
-    }
-
-    /**
-     * 주어진 JWT 토큰에서 클레임을 추출
-     *
-     * @param accessToken
-     * @return Claims
-     */
-    private Claims parseClaims(String accessToken) {
-        try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
-    }
-
-    /**
-     * JWT 토큰에서 만료시간을 확인하고, 현재 시간과 비교하여 남은 시간을 반환
-     *
-     * @param accessToken
-     * @return 남은 시간
-     */
-    public Long getExpiration(String accessToken) {
-        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
-        Long now = new Date().getTime();
-        return (expiration.getTime() - now);
     }
 }

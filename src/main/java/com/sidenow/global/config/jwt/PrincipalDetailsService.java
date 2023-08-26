@@ -1,5 +1,7 @@
 package com.sidenow.global.config.jwt;
 
+import com.sidenow.domain.member.exception.MemberEmailNotFoundException;
+import com.sidenow.domain.member.exception.MemberException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +17,6 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String memberEmail) throws UsernameNotFoundException {
-        return new PrincipalDetails(this.memberRepository.findByEmail(memberEmail));
+        return new PrincipalDetails(this.memberRepository.findByEmail(memberEmail).orElseThrow(MemberEmailNotFoundException::new));
     }
 }
