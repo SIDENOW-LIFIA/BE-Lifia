@@ -6,7 +6,9 @@ import com.sidenow.domain.member.constant.MemberConstant.Provider;
 import com.sidenow.domain.member.constant.MemberConstant.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,16 @@ public class Member {
     @Column(nullable = false, length = 50)
     private String address;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @CreationTimestamp
+    private LocalDate createdAt;
+    private LocalDate loginAt;
+
+    // Kakao, Google, Naver 등
+    private Provider provider;
+
     // 작성한 자유게시판 게시글
     @OneToMany(mappedBy = "member")
     private List<FreeBoard> freeBoards = new ArrayList<>();
@@ -46,24 +58,13 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<FreeBoardComment> freeBoardComments = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    // 유저 로그인 시간 업데이트
+    public void updateLoginAt(LocalDate now) {
+        this.loginAt = now;
+    }
 
-    @Enumerated(EnumType.STRING)
-    private Provider provider;
-
-    private boolean isDeleted;
-    private String reasonToLeave;
-
-//    public void setMember(String password, String nickname, String name, String address) {
-//        this.password = password;
-//        this.nickname = nickname;
-//        this.name = name;
-//        this.address = address;
-//    }
-//
-//    public void setDeleted(String reasonToLeave) {
-//        this.isDeleted = true;
-//        this.reasonToLeave = reasonToLeave;
-//    }
+    // 유저 닉네임 변경
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

@@ -21,9 +21,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -62,39 +64,64 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        Date current = new Date();
+        Date now = new Date();
 
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        Long memberId = principal.getMember().getMemberId();
+        String accessToken = createAccessToken(authorities, now, memberId);
+        String refreshToken = createRefreshToken(authorities, now, memberId);
 
-        long now = (new Date()).getTime();
-        Date accessTokenValidity = new Date(now + 1000*this.accessTokenValidityTime);
-        Date refreshTokenValidity = new Date(now + 1000*this.refreshTokenValidityTime);
+        updateRefreshToken(memberId, refreshToken);
+
+        return TokenInfoResponse.from(GRANT, accessToken, refreshToken, accessTokenValidityTime);
+    }
+
+    public void updateRefreshToken(Long memberId, String refreshToken) {
+
+        try {
+            log.info("Refresh Token 저장");
+            redisRepository.setValues(String.valueOf(memberId), refreshToken, Duration.ofSeconds(refreshTokenValidityTime));
+        } catch (NoSuchElementException e) {
+            log.error("일치하는 회원이 없습니다.");
+            throw e;
+        }
+    }
+
+    private String createAccessToken(String authorities, Date now, Long memberID) {
+        Date accessTokenValidity = new Date(now.getTime() + this.accessTokenValidityTime);
 
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .setIssuedAt(new Date())
+                .setSubject(ACCESS)
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim(ADDITIONAL_INFO, isAdditionalInfoProvided) // 추가 정보 입력 여부를 클레임에 추가
+                .claim(MEMBER_ID, memberID)
+                .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(accessTokenValidity)
                 .compact();
 
-        String refreshToken = Jwts.builder()
-                .setExpiration(refreshTokenValidity)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+        log.info("Access Token 저장");
+        redisRepository.setValues(ACCESS + memberID.toString(), accessToken, Duration.ofSeconds(accessTokenValidityTime));
 
-        redisRepository.save(refreshToken, memberId);
-
-        return TokenInfoResponse.from("Bearer", accessToken, refreshToken, refreshTokenValidityTime);
+        return accessToken;
     }
 
-    /**
-     * 인증하는 함수 (Token에 담겨있는 정보를 이용해 Authentication 객체 리턴)
-     *
-     * @param token
-     * @return authentication
-     * nameAttributeKey와 authorizedClientRegistrationId
-     */
+    private String createRefreshToken(String authorities, Date now, Long memberId) {
+
+        Date refreshTokenValidity = new Date(now.getTime() + this.refreshTokenValidityTime);
+
+        String refreshToken = Jwts.builder()
+                .setSubject(REFRESH)
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim(MEMBER_ID, memberId)
+                .setIssuedAt(now)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(refreshTokenValidity)
+                .compact();
+
+        return refreshToken;
+    }
+
+    // 인증하는 함수 (Token에 담겨있는 정보를 이용해 Authentication 객체 리턴)
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
         Collection<? extends GrantedAuthority> authorities =

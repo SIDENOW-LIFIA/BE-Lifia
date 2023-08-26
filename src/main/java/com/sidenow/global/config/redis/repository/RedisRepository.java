@@ -1,34 +1,36 @@
 package com.sidenow.global.config.redis.repository;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
+import java.time.Duration;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
+@RequiredArgsConstructor
 @Repository
 public class RedisRepository {
-    private RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final HashOperations<String, String, String> hashOperations;
 
-    @Value("${spring.jwt.refresh-token-validity-in-seconds}")
-    private long refreshTokenValidityTime;
-
-    public RedisRepository(final RedisTemplate redisTemplate){
-        this.redisTemplate = redisTemplate;
+    public void setValue(String key, String data) {
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        values.set(key, data);
     }
 
-    public void save(String refreshToken, Long memberId) {
-        // 동일한 key 값으로 저장하면 value 값 update됨
-        redisTemplate.opsForValue().set(String.valueOf(memberId), refreshToken, refreshTokenValidityTime, TimeUnit.SECONDS);
+    public void setValues(String key, String data, Duration duration) {
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        values.set(key, data, duration);
     }
 
-    public void deleteById(Long memberId) {
-        redisTemplate.delete(String.valueOf(memberId));
+    public Optional<String> getValues(String key) {
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        return Optional.ofNullable(values.get(key));
     }
 
-    public Optional<String> findById(final Long memberId) {
-        String refreshToken = (String) redisTemplate.opsForValue().get(String.valueOf(memberId));
-        return Optional.ofNullable(refreshToken);
+    public void deleteValues(String key) {
+        redisTemplate.delete(key);
     }
 }
