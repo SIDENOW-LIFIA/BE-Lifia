@@ -12,7 +12,7 @@ spring:
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
@@ -32,6 +32,7 @@ spring:
     secret: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9eyJzdWIiOiI2MDAzMTEiLCJuYW1lIjoiSGFuIEpvbmdTZXVuZyIsImlhdCI6MjMwODA2MTAwNX0Jd30Ub8zjl0VZgSW1egy8F9vKLmWTBurmIYNhAhzrKPvyGjr34rbNwrBbSvrwjzlde0oshN4kutjURqqQ9gQ
     access-token-validity-in-seconds: 60480
     refresh-token-validity-in-seconds: 86400
+
 
   aws:
     ses:

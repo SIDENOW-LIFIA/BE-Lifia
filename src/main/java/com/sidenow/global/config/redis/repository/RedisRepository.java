@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public class RedisRepository {
     private final RedisTemplate<String, String> redisTemplate;
-    private final HashOperations<String, String, String> hashOperations;
+//    private final HashOperations<String, String, String> hashOperations;
 
     public void setValue(String key, String data) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
