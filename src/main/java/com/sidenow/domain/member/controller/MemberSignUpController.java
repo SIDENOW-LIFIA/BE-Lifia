@@ -8,6 +8,7 @@ import com.sidenow.global.config.aws.service.AwsSesService;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class MemberSignUpController {
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입")
-    public ResponseEntity<ResponseDto<MemberCheck>> signUp(@RequestBody SignUpMemberRequest signUpMemberRequest) {
+    public ResponseEntity<ResponseDto<MemberCheck>> signUp(@Valid @RequestBody SignUpMemberRequest signUpMemberRequest) {
         log.info("Sign Up Api Start");
         MemberCheck memberCheck = memberSignUpService.signUp(signUpMemberRequest);
         log.info("Sign Up Api End");

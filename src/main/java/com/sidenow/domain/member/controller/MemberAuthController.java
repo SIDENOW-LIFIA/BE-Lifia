@@ -7,6 +7,7 @@ import com.sidenow.domain.member.service.MemberAuthService;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class MemberAuthController {
 
     @PostMapping("/login")
     @Operation(summary = "유저 로그인")
-    public ResponseEntity<ResponseDto<MemberLoginResponse>> login(@RequestBody MemberLoginRequest memberLoginRequest){
+    public ResponseEntity<ResponseDto<MemberLoginResponse>> login(@Valid @RequestBody MemberLoginRequest memberLoginRequest){
         log.info("Member Login Api Start");
         MemberLoginResponse memberLoginResponse = memberAuthService.login(memberLoginRequest);
         log.info("Member Login Api End");
