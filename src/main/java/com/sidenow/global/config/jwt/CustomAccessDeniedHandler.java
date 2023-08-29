@@ -17,7 +17,7 @@ import java.io.IOException;
  * 권한이 없는 사용자가 보호된 리소스에 액세스 할 때 호출
  */
 @Component
-public class JwtAccessDeniedHandler implements AccessDeniedHandler {
+public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {

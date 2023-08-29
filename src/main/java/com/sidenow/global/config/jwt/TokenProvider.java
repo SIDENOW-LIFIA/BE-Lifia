@@ -12,6 +12,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.auth.AUTH;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -89,14 +90,62 @@ public class TokenProvider implements InitializingBean {
         }
     }
 
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+            throw new MalformedException();
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");
+            throw new ExpiredException();
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+            throw new UnsupportedException();
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
+            throw new IllegalException();
+        } catch (NoSuchElementException e) {
+            log.error("유효하지 않은 JWT입니다.");
+            throw e;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw e;
+        }
+    }
+
     // Refresh Token 검증 함수
     public boolean validateRefreshToken(String token) {
         if (!getSubject(token).equals(REFRESH)) {
             throw new IllegalArgumentException("Refresh Token이 아닙니다.");
         }
-        try{
+        try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-
+            String memberId = getMemberId(token);
+            String redisToken = redisRepository.getValues(memberId).orElseThrow();
+            if (!redisToken.equals(token)) {
+                throw new IllegalArgumentException("요청 Refresh Token이 서버의 Refresh Token과 다릅니다.");
+            }
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+            throw e;
+        } catch (ExpiredJwtException e) {
+            log.info("만료된  JWT 토큰입니다.");
+            throw e;
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+            throw e;
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
+            throw e;
+        } catch (NoSuchElementException e) {
+            log.error("유효하지 않은 JWT입니다.");
+            throw e;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw e;
         }
     }
 
@@ -113,11 +162,25 @@ public class TokenProvider implements InitializingBean {
         return (expiration.getTime() - now);
     }
 
+    // redis blackList 확인
     public boolean checkBlackList(String token) {
         if (redisRepository.checkBlackList(token).isPresent()) {
             throw new IllegalArgumentException("이미 로그아웃된 유저입니다.");
         }
         return true;
+    }
+
+    public void checkMultiLogin(String token) {
+
+        Claims claims = parseClaims(token);
+        String memberId = claims.get(MEMBER_ID).toString();
+        log.info("Check if multi login");
+
+        if (!redisRepository.getValues(ACCESS + memberId)
+                .orElseThrow()
+                .equals(token)) {
+            throw new RemovedAccessTokenException();
+        }
     }
 
     // Access Token 생성
@@ -178,42 +241,28 @@ public class TokenProvider implements InitializingBean {
 
     // 인증하는 함수 (Token에 담겨있는 정보를 이용해 Authentication 객체 리턴)
     public Authentication getAuthentication(String token) {
+
         Claims claims = parseClaims(token);
+
+        if (claims.get("auth") == null) {
+            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+        }
+
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        Member member = this.memberRepository.findByEmail(claims.getSubject()).orElseThrow(MemberNotExistException::new);
-        return new UsernamePasswordAuthenticationToken(new CustomMemberDetails(member), token, authorities);
+        String memberId = String.valueOf(claims.get(MEMBER_ID));
+
+        Member member = this.memberRepository.findById(Long.parseLong(memberId)).orElseThrow(MemberNotExistException::new);
+
+        return new UsernamePasswordAuthenticationToken(new PrincipalDetails(member), token, authorities);
+
+
     }
 
-    /**
-     * AccessToken 검증하는 함수
-     * @param token
-     * @return true / false
-     */
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
-            throw new MalformedException();
-        } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
-            throw new ExpiredException();
-        } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않은 JWT 토큰입니다.");
-            throw new UnsupportedException();
-        } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
-            throw new IllegalException();
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw e;
-        }
-    }
+
 
 
 }

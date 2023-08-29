@@ -1,11 +1,14 @@
 package com.sidenow.global.config.security;
 
 import com.amazonaws.services.ec2.model.ExcessCapacityTerminationPolicy;
+import com.sidenow.global.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
@@ -22,6 +25,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final TokenProvider tokenProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,9 +49,20 @@ public class SecurityConfig {
                 // form 기반의 로그인 비활성화하며, 커스텀으로 구성한 필터 사용
                 .formLogin(AbstractHttpConfigurer::disable)
 
+                // 요청에 대한 인가 설정
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(HttpMethod.PUT, "/api/member/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/board/free/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/board/free/**").authenticated()
+                        .requestMatchers("/api/member/logout").permitAll()
+                        .anyRequest().permitAll())
 
                 // JWT를 활용하면 세션이 필요 없으므로, STATELESS 설정
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .addFilterBefore()
+
+
 //                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
 //                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll())// 인증되지 않은 요청을 허락함
 //                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests

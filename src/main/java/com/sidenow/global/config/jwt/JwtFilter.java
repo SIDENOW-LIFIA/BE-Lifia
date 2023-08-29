@@ -2,6 +2,9 @@ package com.sidenow.global.config.jwt;
 
 import com.sidenow.global.config.jwt.constant.JwtContants;
 import com.sidenow.global.config.jwt.exception.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,16 +32,41 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (!requestURI.contains("/api/auth/logout")){
             try {
+                // JWT 유무, 유효 여부, 블랙리스트에 등록 여부 확인
                 if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt) && tokenProvider.checkBlackList(jwt)) {
                     if (requestURI.contains("/user/re-issue")) {
                         log.info("Token 재발급 진행 시 유효성 검사");
                         checkRefreshTokenAndReIssueAccessToken(jwt);
-                    } else{
-                        tokenProvider.
+                    } else {
+                        tokenProvider.checkMultiLogin(jwt);
                     }
+
+                    Authentication authentication = tokenProvider.getAuthentication(jwt);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
                 }
+            } catch (RemovedAccessTokenException e) {
+                log.warn("RemovedAccessToken reject");
+                log.error("exception : {}", e.getMessage());
+                throw e;
+            } catch (SecurityException | MalformedJwtException e) {
+                log.error("exception : {}", e.getMessage());
+                throw new MalformedException();
+            } catch (ExpiredJwtException e) {
+                log.error("exception : {}", e.getMessage());
+                throw new ExpiredException();
+            } catch (UnsupportedJwtException e) {
+                log.error("exception : {}", e.getMessage());
+                throw new UnsupportedException();
+            } catch (IllegalArgumentException e) {
+                log.error("exception : {}", e.getMessage());
+                throw new IllegalException();
+            } catch (Exception e) {
+                log.error("exception : {}", e.getMessage());
+                throw new UnknownException();
             }
         }
+        filterChain.doFilter(request, response);
     }
 
     // Http Request로부터 토큰을 가져오는 메서드

@@ -3,6 +3,7 @@ package com.sidenow.global.config.jwt;
 import com.sidenow.global.config.jwt.constant.JwtContants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
@@ -17,7 +18,8 @@ import java.time.LocalDateTime;
  */
 @Component
 @Slf4j
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+@RequiredArgsConstructor
+public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
