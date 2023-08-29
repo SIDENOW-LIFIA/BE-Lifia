@@ -89,6 +89,17 @@ public class TokenProvider implements InitializingBean {
         }
     }
 
+    // Refresh Token 검증 함수
+    public boolean validateRefreshToken(String token) {
+        if (!getSubject(token).equals(REFRESH)) {
+            throw new IllegalArgumentException("Refresh Token이 아닙니다.");
+        }
+        try{
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
+        }
+    }
+
     public String getMemberId(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
@@ -100,6 +111,13 @@ public class TokenProvider implements InitializingBean {
         Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
         Long now = new Date().getTime();
         return (expiration.getTime() - now);
+    }
+
+    public boolean checkBlackList(String token) {
+        if (redisRepository.checkBlackList(token).isPresent()) {
+            throw new IllegalArgumentException("이미 로그아웃된 유저입니다.");
+        }
+        return true;
     }
 
     // Access Token 생성
@@ -197,33 +215,5 @@ public class TokenProvider implements InitializingBean {
         }
     }
 
-    /**
-     * RefreshToken 검증
-     *
-     * @param token
-     * @return true / false
-     */
-    public boolean validateRefreshToken(String token) {
-        try{
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
-            throw new MalformedException();
-        } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
-            throw new ExpiredException();
-        } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않은 JWT 토큰입니다.");
-            throw new UnsupportedException();
-        } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
-            throw new IllegalException();
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new UnknownException();
-        } finally {
-            return false;
-        }
-    }
+
 }

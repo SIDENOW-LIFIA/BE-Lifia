@@ -23,14 +23,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//    private static final String[] AUTH_WHITELIST = {
-//            "/api/**", "/swagger-ui/**", "/api-docs", "swagger-ui-custom.html",
-//            "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html"
-//    };
-
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // 비밀번호를 암호화하기 위한 BCrypt 인코딩을 통하여 비밀번호에
     }
 
     @Bean
@@ -43,9 +38,14 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
-                .formLogin(AbstractHttpConfigurer::disable)
+                // 서버에 인증정보를 저장하지 않으므로 csrf 사용 X
                 .csrf(AbstractHttpConfigurer::disable)
-                // 토큰을 활용하면 세션이 필요 없으므로, STATELESS 설정
+
+                // form 기반의 로그인 비활성화하며, 커스텀으로 구성한 필터 사용
+                .formLogin(AbstractHttpConfigurer::disable)
+
+
+                // JWT를 활용하면 세션이 필요 없으므로, STATELESS 설정
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
 //                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll())// 인증되지 않은 요청을 허락함

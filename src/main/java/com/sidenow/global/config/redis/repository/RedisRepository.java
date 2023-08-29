@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.time.Duration;
 import java.util.Optional;
 
@@ -32,5 +33,11 @@ public class RedisRepository {
 
     public void deleteValues(String key) {
         redisTemplate.delete(key);
+    }
+
+    public Optional<String> checkBlackList(String token) {
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        String isBlackList = values.get("blackList:" + token);
+        return Optional.ofNullable(isBlackList);
     }
 }
