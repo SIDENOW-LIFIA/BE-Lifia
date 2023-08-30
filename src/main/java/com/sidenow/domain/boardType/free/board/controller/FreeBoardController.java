@@ -20,7 +20,7 @@ import static com.sidenow.domain.boardType.free.board.constant.FreeBoardConstant
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/v1/board/free")
+@RequestMapping("/api/board/free")
 @Tag(name = "FreeBoard API", description = "자유게시판 API 입니다.")
 public class FreeBoardController {
 

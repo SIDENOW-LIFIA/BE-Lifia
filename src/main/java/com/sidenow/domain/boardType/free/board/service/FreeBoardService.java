@@ -7,6 +7,7 @@ import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostIdException;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
 import com.sidenow.domain.member.entity.Member;
+import com.sidenow.domain.member.exception.MemberNotExistException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.config.security.util.SecurityUtils;
 import com.sidenow.global.exception.NoExistMemberException;
@@ -23,11 +24,14 @@ public class FreeBoardService {
 
     private final MemberRepository memberRepository;
     private final FreeBoardRepository freeBoardRepository;
+    private final SecurityUtils securityUtils;
 
     // 자유게시판 글 등록
     public CreateFreeBoardPostResponse createFreeBoardPost(CreateFreeBoardPostRequest requestDto) {
-        Member member = memberRepository.findById(SecurityUtils.getLoggedInMember().getMemberId()).orElseThrow(NoExistMemberException::new);
-        FreeBoard freeBoard = CreateFreeBoardPostRequest.to(requestDto, member);
+        Member findMember = memberRepository.findById(securityUtils.getLoggedInMember()
+                .orElseThrow(() -> new ClassCastException("Not Login"))
+                .getMemberId()).get();
+        FreeBoard freeBoard = CreateFreeBoardPostRequest.to(requestDto, findMember);
         freeBoardRepository.save(freeBoard);
         return new CreateFreeBoardPostResponse(freeBoard.getFreeBoardPostId());
     }
