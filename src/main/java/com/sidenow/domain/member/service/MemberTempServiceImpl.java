@@ -9,7 +9,6 @@
 //import com.sidenow.global.config.jwt.TokenProvider;
 //import com.sidenow.global.config.redis.repository.RefreshTokenRepository;
 //import com.sidenow.global.config.security.util.SecurityUtils;
-//import com.sidenow.global.dto.TokenInfoResponse;
 //import jakarta.transaction.Transactional;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;

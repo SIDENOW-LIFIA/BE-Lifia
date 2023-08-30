@@ -1,6 +1,6 @@
 package com.sidenow.global.config.redis.dto;
 
-import com.sidenow.global.dto.TokenInfoResponse;
+import com.sidenow.global.config.jwt.TokenInfoResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

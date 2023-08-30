@@ -6,7 +6,7 @@ import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.domain.member.service.MemberAuthServiceImpl;
 import com.sidenow.global.config.jwt.TokenProvider;
-import com.sidenow.global.dto.TokenInfoResponse;
+import com.sidenow.global.config.jwt.TokenInfoResponse;
 import com.sidenow.utils.MockMember;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

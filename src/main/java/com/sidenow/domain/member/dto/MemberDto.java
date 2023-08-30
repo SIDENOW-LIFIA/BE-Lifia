@@ -1,7 +1,7 @@
 package com.sidenow.domain.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sidenow.global.dto.TokenInfoResponse;
+import com.sidenow.global.config.jwt.TokenInfoResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
