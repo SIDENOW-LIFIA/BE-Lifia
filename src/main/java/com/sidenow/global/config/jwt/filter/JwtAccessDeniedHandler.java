@@ -1,4 +1,4 @@
-package com.sidenow.global.config.jwt;
+package com.sidenow.global.config.jwt.filter;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package com.sidenow.global.config.jwt;
+package com.sidenow.global.config.jwt.filter;
 
 import com.sidenow.global.config.jwt.constant.JwtContants;
 import jakarta.servlet.ServletException;

@@ -1,5 +1,6 @@
-package com.sidenow.global.config.jwt;
+package com.sidenow.global.config.jwt.filter;
 
+import com.sidenow.global.config.jwt.TokenProvider;
 import com.sidenow.global.config.jwt.constant.JwtContants;
 import com.sidenow.global.config.jwt.exception.*;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -85,8 +86,10 @@ public class JwtFilter extends OncePerRequestFilter {
         log.info("Resolve Token 진입");
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            log.info("Claim 추출");
             return bearerToken.substring(7); // "Bearer " 7글자 빼고 나머지 부분(Access Token) 추출 / 앞부분은 type임. 요청헤더의 구성은 Authorization: <type> <credentials>임
         }
+        log.info("토큰 없음");
         return null;
     }
 

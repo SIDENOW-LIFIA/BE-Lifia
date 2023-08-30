@@ -1,40 +1,47 @@
 package com.sidenow.global.config.security;
 
-import com.amazonaws.services.ec2.model.ExcessCapacityTerminationPolicy;
+import com.sidenow.global.config.jwt.filter.JwtAccessDeniedHandler;
+import com.sidenow.global.config.jwt.filter.JwtAuthenticationEntryPoint;
+import com.sidenow.global.config.jwt.filter.JwtFilter;
 import com.sidenow.global.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // 비밀번호를 암호화하기 위한 BCrypt 인코딩을 통하여 비밀번호에
+        return new BCryptPasswordEncoder();
     }
 
+    // h2 database, Swagger 접속이 원활하도록 관련 API 전부 무시
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
+
+        log.info("webSecurityCustomizer 진입");
+
         return web -> web.ignoring()
                 .requestMatchers("/h2-console/**",
                         "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**");
@@ -42,7 +49,10 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
+        log.info("filterChain 진입");
         http
+
                 // 서버에 인증정보를 저장하지 않으므로 csrf 사용 X
                 .csrf(AbstractHttpConfigurer::disable)
 
@@ -50,29 +60,27 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
 
                 // 요청에 대한 인가 설정
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.PUT, "/api/member/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/board/free/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/board/free/**").authenticated()
-                        .requestMatchers("/api/member/logout").permitAll()
-                        .anyRequest().permitAll())
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .requestMatchers("/api/auth/**").permitAll() // 로그인, 회원가입 API는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
+                        .requestMatchers(toH2Console()).permitAll() // h2-console 접속시키기
+                        .anyRequest().authenticated()) // 그 외 나머지 API는 전부 인증 필요
 
-                // JWT를 활용하면 세션이 필요 없으므로, STATELESS 설정
+                // JWT를 활용하면 세션이 필요 없으므로, STATELESS 설정 (Security는 기본적으로 세션을 사용함)
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .addFilterBefore()
+                // exception handling 할 때 자체로 만든 클래스 추가
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler))
 
+                // JWT 필터 추가
+                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
 
-//                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-//                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll())// 인증되지 않은 요청을 허락함
-//                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-//                        .requestMatchers(AUTH_WHITELIST).authenticated())
-//                .csrf((csrf) -> csrf
-//                        .ignoringRequestMatchers(new AntPathRequestMatcher("/**"))) // /h2-console/로 시작하는 URL은 CSRF 검증을 하지 않는다는 설정 추가
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))); //헤더의 값으로 sameorigin을 설정하면 frame에 포함된 페이지가 페이지를 제공하는 사이트와 동일한 경우에는 계속 사용가능
+                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))); //헤더의 값으로 sameorigin을 설정하면 frame에 포함된 페이지가 페이지를 제공하는 사이트와 동일한 경우에는 계속 사용 가능
+        log.info("filterChain 종료");
+
         return http.build();
     }
-
 }

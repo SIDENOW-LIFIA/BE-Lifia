@@ -1,4 +1,4 @@
-package com.sidenow.global.dto;
+package com.sidenow.global.config.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

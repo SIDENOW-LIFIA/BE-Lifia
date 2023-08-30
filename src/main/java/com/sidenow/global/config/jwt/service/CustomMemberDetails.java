@@ -1,4 +1,4 @@
-package com.sidenow.global.config.jwt;
+package com.sidenow.global.config.jwt.service;
 
 import com.sidenow.domain.member.entity.Member;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.Collections;
 
 @Getter
 @RequiredArgsConstructor
-public class PrincipalDetails implements UserDetails {
+public class CustomMemberDetails implements UserDetails {
 
     private final Member member;
 
