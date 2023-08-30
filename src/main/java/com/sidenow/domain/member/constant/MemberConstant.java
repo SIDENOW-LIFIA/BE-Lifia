@@ -8,15 +8,17 @@ public class MemberConstant {
 
     @Getter
     @RequiredArgsConstructor
-    public enum EMemberResponseMessage{
-        LOGIN_SUCCESS("성공적으로 로그인을 했습니다."),
-        SIGN_UP_SUCCESS("회원 가입을 완료했습니다."),
-        CHECK_NICKNAME("닉네임 중복 검사를 하였습니다."),
-        DELETE_SUCCESS("회원 탈퇴를 하였습니다."),
-        LOGOUT_SUCCESS("로그아웃을 하였습니다."),
-        MYPAGE_UPDATE_SUCCESS("마이페이지 수정이 완료되었습니다."),
-        TOKEN_REFRESH_SUCCESS("토근 재발급을 완료하였습니다."),
-        CHECK_ADDITIONALINFO_SUCCESS("추가 정보를 입력했습니다.");
+    public enum MemberSuccessMessage {
+        MEMBER_LOGIN_SUCCESS("로그인에 성공했습니다."),
+        MEMBER_SIGN_UP_SUCCESS("회원 가입에 성공했습니다."),
+        MEMBER_CHECK_EMAIL_DUPLICATE_SUCCESS("사용 가능한 이메일입니다."),
+        MEMBER_CHECK_NICKNAME_DUPLICATE_SUCCESS("사용 가능한 닉네임입니다."),
+        MEMBER_DELETE_SUCCESS("회원 탈퇴를 하였습니다."),
+        MEMBER_LOGOUT_SUCCESS("로그아웃을 하였습니다."),
+        MEMBER_MY_PAGE_MODIFY_SUCCESS("마이페이지가 성공적으로 수정되었습니다."),
+        MEMBER_SEND_EMAIL_AUTH_CODE_SUCCESS("이메일 인증코드를 전송하였습니다."),
+        MEMBER_EMAIL_AUTH_CODE_VERIFIED("이메일 인증코드가 일치합니다."),
+        MEMBER_TOKEN_REFRESH_SUCCESS("토큰 재발급을 완료하였습니다.");
         private final String message;
     }
 

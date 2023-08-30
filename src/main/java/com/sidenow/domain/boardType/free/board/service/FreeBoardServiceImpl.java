@@ -9,6 +9,7 @@ import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostId
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardFileRepository;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
 import com.sidenow.domain.member.entity.Member;
+import com.sidenow.domain.member.exception.MemberEmailNotFoundException;
 import com.sidenow.domain.member.exception.NotFoundMemberException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.config.aws.AwsS3Service;
@@ -38,7 +39,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
     public FreeBoardCheck registerFreeBoardPost(List<MultipartFile> multipartFile, FreeBoardRegisterPostRequest createFreeBoardPostRequest) {
         log.info("Register FreeBoard Post Service Start");
         FreeBoardCheck freeBoardCheck = new FreeBoardCheck();
-        Member findMember = memberRepository.findById(createFreeBoardPostRequest.getMemberId()).orElseThrow(NotFoundMemberException::new);
+        Member findMember = memberRepository.findById(createFreeBoardPostRequest.getMemberId()).orElseThrow(MemberEmailNotFoundException::new);
         FreeBoard freeBoard = FreeBoardRegisterPostRequest.to(createFreeBoardPostRequest, findMember);
         freeBoardRepository.save(freeBoard);
         if (multipartFile != null) {
@@ -54,7 +55,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
     public FreeBoardGetPostResponse getFreeBoardPost(Long freeBoardPostId){
         log.info("Get FreeBoard Post Service Start");
         FreeBoard findFreeBoard = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
-        memberRepository.findById(findFreeBoard.getMember().getMemberId()).orElseThrow(NotFoundMemberException::new);
+        memberRepository.findById(findFreeBoard.getMember().getMemberId()).orElseThrow(MemberEmailNotFoundException::new);
         Map<String, String> files = new HashMap<>();
 
         freeBoardFileRepository.findByFreeBoard(findFreeBoard).forEach(freeBoardFile -> {
