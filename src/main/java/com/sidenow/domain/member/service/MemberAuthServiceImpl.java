@@ -1,21 +1,20 @@
 package com.sidenow.domain.member.service;
 
-import com.sidenow.domain.member.dto.req.MemberRequest;
 import com.sidenow.domain.member.dto.req.MemberRequest.MemberLoginRequest;
-import com.sidenow.domain.member.dto.res.MemberResponse;
 import com.sidenow.domain.member.dto.res.MemberResponse.MemberLoginResponse;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailNotFoundException;
+import com.sidenow.domain.member.exception.MemberNotExistException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.config.jwt.TokenProvider;
+import com.sidenow.global.config.redis.exception.NoSuchRefreshTokenException;
 import com.sidenow.global.config.redis.repository.RedisRepository;
-import com.sidenow.global.dto.ResponseDto;
-import com.sidenow.global.dto.TokenInfoResponse;
+import com.sidenow.global.config.jwt.TokenInfoResponse;
+import com.sidenow.global.config.security.util.SecurityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.swagger.v3.oas.annotations.Operation;
+import io.lettuce.core.RedisException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -23,8 +22,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -39,6 +36,7 @@ public class MemberAuthServiceImpl implements MemberAuthService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final RedisRepository redisRepository;
+    private final SecurityUtils securityUtils;
 
     // 로그인
     @Override
@@ -79,11 +77,21 @@ public class MemberAuthServiceImpl implements MemberAuthService{
         }
     }
 
-//    // 토큰 만료 시 재발행
-//    @Override
-//    public MemberLoginResponse reIssueToken(){
-//
-//    }
+    // 토큰 만료 시 재발행
+    @Override
+    public MemberLoginResponse reIssueToken(){
+
+        log.info("reIssueToken Service 진입");
+        Long memberId = securityUtils.getLoggedInMember()
+                .orElseThrow(MemberNotExistException::new).getMemberId();
+
+        String refreshToken = redisRepository.getValues(memberId.toString()).orElseThrow(NoSuchRefreshTokenException::new);
+        Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+        TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(authentication);
+        log.info("reIssueToken Service 종료(토큰 재발급 및 저장 완료)");
+
+        return MemberLoginResponse.from(tokenInfoResponse);
+    }
 
     private TokenInfoResponse validateLogin(MemberLoginRequest memberLoginRequest) {
         log.info("회원 아이디/비밀번호 일치여부 확인 및 토큰 발행 Start");

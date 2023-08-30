@@ -9,5 +9,5 @@ public interface MemberAuthService {
 
     MemberLoginResponse login(MemberLoginRequest memberLoginRequest);
     void logout(String authorization);
-    // MemberLoginResponse reIssueToken();
+     MemberLoginResponse reIssueToken();
 }
