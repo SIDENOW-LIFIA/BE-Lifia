@@ -55,7 +55,7 @@ public abstract class FreeBoardResponse {
                     .hits(freeBoard.getHits())
                     .likes(freeBoard.getLikes())
                     .commentsCount(freeBoard.getFreeBoardComments().size())
-                    .regDate(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm")))
+                    .regDate(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                     .files(files)
                     .comments(freeBoard.getFreeBoardComments())
                     .build();

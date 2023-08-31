@@ -29,14 +29,14 @@ public class FreeBoardController {
     private final FreeBoardService freeBoardService;
 
     @PostMapping(value = "/post", consumes = {"multipart/form-data"})
-    @Operation(summary = "자유게시판 글 등록", description = "")
+    @Operation(summary = "자유게시판 글 등록", description = "로그인 필수 / 미로그인 시 접근 불가")
     public ResponseEntity<ResponseDto<FreeBoardCheck>> registerFreeBoardPost(@RequestPart(required = false)List<MultipartFile> multipartFile, @RequestBody FreeBoardRegisterPostRequest freeBoardRegisterPostRequest) {
         FreeBoardCheck registerFreeBoardPost = freeBoardService.registerFreeBoardPost(multipartFile, freeBoardRegisterPostRequest);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), REGISTER_FREE_BOARD_POST_SUCCESS.getMessage(), registerFreeBoardPost));
     }
 
     @GetMapping("/{postId}")
-    @Operation(summary = "자유게시판 게시글 단건 조회", description = "")
+    @Operation(summary = "자유게시판 게시글 단건 조회", description = "로그인 필수 / 미로그인 시 접근 불가")
     public ResponseEntity<ResponseDto<FreeBoardGetPostResponse>> getFreeBoardPost(@PathVariable Long freeBoardPostId) {
         FreeBoardGetPostResponse getFreeBoardPost = freeBoardService.getFreeBoardPost(freeBoardPostId);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), GET_FREE_BOARD_POST_SUCCESS.getMessage(), getFreeBoardPost));

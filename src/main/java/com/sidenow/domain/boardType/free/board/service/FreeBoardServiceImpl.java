@@ -10,9 +10,10 @@ import com.sidenow.domain.boardType.free.board.repository.FreeBoardFileRepositor
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailNotFoundException;
-import com.sidenow.domain.member.exception.NotFoundMemberException;
+import com.sidenow.domain.member.exception.MemberNotLoginException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.config.aws.AwsS3Service;
+import com.sidenow.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,13 +34,16 @@ public class FreeBoardServiceImpl implements FreeBoardService{
     private final FreeBoardRepository freeBoardRepository;
     private final FreeBoardFileRepository freeBoardFileRepository;
     private final AwsS3Service awsS3Service;
+    private final SecurityUtils securityUtils;
 
     // 자유게시판 게시글 등록
     @Override
     public FreeBoardCheck registerFreeBoardPost(List<MultipartFile> multipartFile, FreeBoardRegisterPostRequest createFreeBoardPostRequest) {
         log.info("Register FreeBoard Post Service Start");
         FreeBoardCheck freeBoardCheck = new FreeBoardCheck();
-        Member findMember = memberRepository.findById(createFreeBoardPostRequest.getMemberId()).orElseThrow(MemberEmailNotFoundException::new);
+        Member findMember = memberRepository.findById(securityUtils.getLoggedInMember()
+                .orElseThrow(MemberNotLoginException::new)
+                .getMemberId()).get();
         FreeBoard freeBoard = FreeBoardRegisterPostRequest.to(createFreeBoardPostRequest, findMember);
         freeBoardRepository.save(freeBoard);
         if (multipartFile != null) {
@@ -47,6 +51,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
         }
         freeBoardCheck.setSaved(true);
         log.info("Register FreeBoard Post Service End");
+
         return freeBoardCheck;
     }
 
@@ -55,9 +60,9 @@ public class FreeBoardServiceImpl implements FreeBoardService{
     public FreeBoardGetPostResponse getFreeBoardPost(Long freeBoardPostId){
         log.info("Get FreeBoard Post Service Start");
         FreeBoard findFreeBoard = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
-        memberRepository.findById(findFreeBoard.getMember().getMemberId()).orElseThrow(MemberEmailNotFoundException::new);
+        memberRepository.findById(securityUtils.getLoggedInMember()
+                .orElseThrow(MemberNotLoginException::new).getMemberId());
         Map<String, String> files = new HashMap<>();
-
         freeBoardFileRepository.findByFreeBoard(findFreeBoard).forEach(freeBoardFile -> {
             String fileUrl = awsS3Service.getFilePath(freeBoardFile.getNewFileName());
             files.put(freeBoardFile.getOriginFileName(), fileUrl);
@@ -73,6 +78,9 @@ public class FreeBoardServiceImpl implements FreeBoardService{
     // 자유게시판 게시글 전체 조회
     @Override
     public List<FreeBoardGetPostListResponse> getFreeBoardPostList(String accessToken, int pageNumber){
+
+        log.info("Get FreeBoard Post List Service 진입");
+
 
     }
 
