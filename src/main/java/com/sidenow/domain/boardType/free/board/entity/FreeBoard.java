@@ -35,6 +35,9 @@ public class FreeBoard extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int likes; // 게시글 좋아요 수
 
+    @Column(nullable = false)
+    private String apartment; // 거주 아파트
+
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime regDate; // 게시글 생성일자

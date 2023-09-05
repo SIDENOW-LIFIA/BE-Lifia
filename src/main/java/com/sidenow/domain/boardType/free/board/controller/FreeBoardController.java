@@ -1,6 +1,8 @@
 package com.sidenow.domain.boardType.free.board.controller;
 
 import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardRegisterPostRequest;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.AllFreeBoards;
 import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardCheck;
 import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardGetPostResponse;
 import com.sidenow.domain.boardType.free.board.service.FreeBoardService;
@@ -11,13 +13,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.sidenow.domain.boardType.free.board.constant.FreeBoardConstants.FreeBoardResponseMessage.REGISTER_FREE_BOARD_POST_SUCCESS;
-import static com.sidenow.domain.boardType.free.board.constant.FreeBoardConstants.FreeBoardResponseMessage.GET_FREE_BOARD_POST_SUCCESS;
+import static com.sidenow.domain.boardType.free.board.constant.FreeBoardConstants.FreeBoardResponseMessage.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,5 +42,12 @@ public class FreeBoardController {
     public ResponseEntity<ResponseDto<FreeBoardGetPostResponse>> getFreeBoardPost(@PathVariable Long freeBoardPostId) {
         FreeBoardGetPostResponse getFreeBoardPost = freeBoardService.getFreeBoardPost(freeBoardPostId);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), GET_FREE_BOARD_POST_SUCCESS.getMessage(), getFreeBoardPost));
+    }
+
+    @GetMapping("/page/{page}")
+    @Operation(summary = "자유게시판 게시글 전체 조회", description = "로그인 필수 / 미로그인 시 접근 불가")
+    public ResponseEntity<ResponseDto<AllFreeBoards>> getFreeBoard(@PathVariable @Nullable Integer page) {
+        AllFreeBoards freeBoards = freeBoardService.getFreeBoardPostList(page);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), GET_FREE_BOARD_POST_LIST_SUCCESS.getMessage(), freeBoards));
     }
 }

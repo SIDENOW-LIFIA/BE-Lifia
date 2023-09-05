@@ -79,8 +79,34 @@ public abstract class FreeBoardResponse {
         @Schema(description = "자유게시판 게시글 조회수")
         private final int hits;
 
+        @Schema(description = "자유게시판 게시글 좋아요 수")
+        private final int likes;
+
+        @Schema(description = "자유게시판 게시글 댓글 수")
+        private final int commentsCount;
+
         @Schema(description = "자유게시판 게시글 등록일자")
         private final String regDate;
+
+        public static FreeBoardGetPostListResponse from(FreeBoard freeBoard) {
+            return FreeBoardGetPostListResponse.builder()
+                    .freeBoardPostId(freeBoard.getFreeBoardPostId())
+                    .nickname(freeBoard.getMember().getNickname())
+                    .title(freeBoard.getTitle())
+                    .hits(freeBoard.getHits())
+                    .likes(freeBoard.getLikes())
+                    .commentsCount(freeBoard.getFreeBoardComments().size())
+                    .regDate(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    @Schema(description = "자유게시판 게시글 전체 조회")
+    public static class AllFreeBoards {
+        private final List<FreeBoardGetPostListResponse> freeBoards;
     }
 
 }

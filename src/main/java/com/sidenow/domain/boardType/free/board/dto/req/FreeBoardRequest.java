@@ -27,6 +27,9 @@ public abstract class FreeBoardRequest {
         @Schema(description = "게시글 작성자 ID")
         private final Long memberId;
 
+        @Schema(description = "게시글 작성자 거주지")
+        private final String address;
+
         @Schema(description = "게시글 첨부 파일")
         private final List<MultipartFile> files;
 
@@ -34,6 +37,7 @@ public abstract class FreeBoardRequest {
             return FreeBoard.builder()
                     .title(createFreeBoardPostRequest.title)
                     .content(createFreeBoardPostRequest.content)
+                    
                     .member(member)
                     .build();
         }
