@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 public abstract class MemberRequest {
 
@@ -30,8 +29,8 @@ public abstract class MemberRequest {
         @Size(min = 2, max = 10, message = "닉네임은 2자 이상 10자 이하로 입력하세요.")
         private String nickname;
 
-        @NotBlank(message = "거주지를 선택하세요.")
-        private String address;
+        @NotBlank(message = "아파트를 선택하세요.")
+        private String apartment;
 
 //        @NotBlank(message = "신분증을 첨부하세요.")
 //        private MultipartFile multipartFile;
