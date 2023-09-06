@@ -22,6 +22,8 @@ public class FreeBoardRepositoryCustomImpl implements FreeBoardRepositoryCustom{
 
         log.info("findApartmentFreeBoard Query 진입");
         log.info("findApartmentFreeBoard Query 종료");
+
+        return null;
     }
 
 

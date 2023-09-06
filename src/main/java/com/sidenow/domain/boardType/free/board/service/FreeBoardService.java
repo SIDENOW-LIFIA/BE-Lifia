@@ -1,5 +1,6 @@
 package com.sidenow.domain.boardType.free.board.service;
 
+import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest;
 import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardRegisterPostRequest;
 import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
 import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.AllFreeBoards;
@@ -14,6 +15,6 @@ public interface FreeBoardService {
     FreeBoardCheck registerFreeBoardPost(List<MultipartFile> multipartFile, FreeBoardRegisterPostRequest createFreeBoardPostRequest);
     AllFreeBoards getFreeBoardPostList(Integer page);
     FreeBoardGetPostResponse getFreeBoardPost(Long freeBoardPostId);
-    FreeBoardCheck updateFreeBoardPost(String accessToken, List<MultipartFile> multipartFile, FreeBoardRegisterPostRequest freeBoardCreatePostRequest);
+    FreeBoardCheck updateFreeBoardPost(List<MultipartFile> multipartFile, Long freeBoardPostId, FreeBoardRequest.FreeBoardUpdatePostRequest freeBoardUpdatePostRequest);
     FreeBoardCheck deleteFreeBoardPost(Long freeBoardPostId);
 }

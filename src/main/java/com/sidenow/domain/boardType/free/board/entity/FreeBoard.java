@@ -45,8 +45,13 @@ public class FreeBoard extends BaseTimeEntity {
     @UpdateTimestamp
     private LocalDateTime updatedDate; // 게시글 수정일자
 
-    @OneToMany(mappedBy = "freeBoard")
-    List<FreeBoardComment> freeBoardComments;
+    // 게시글 삭제 시 첨부파일 모두 삭제
+    @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardFile> freeBoardFiles;
+
+    // 게시글 삭제 시 달려있는 댓글 모두 삭제
+    @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardComment> freeBoardComments;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
