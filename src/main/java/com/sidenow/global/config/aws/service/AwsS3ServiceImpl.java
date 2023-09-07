@@ -1,4 +1,4 @@
-package com.sidenow.global.config.aws;
+package com.sidenow.global.config.aws.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;

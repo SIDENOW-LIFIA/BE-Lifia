@@ -2,7 +2,7 @@ package com.sidenow.global.config.aws.service;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.model.SendEmailResult;
-import com.sidenow.global.config.aws.dto.EmailDto;
+import com.sidenow.global.config.aws.dto.AwsEmailDto;
 import com.sidenow.global.config.redis.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class AwsSesServiceImpl implements AwsSesService{
     @Override
     public String send(String receiver){
         String subject = "LIFIA 회원가입 인증번호";
-        EmailDto emailDto = EmailDto.builder()
+        AwsEmailDto emailDto = AwsEmailDto.builder()
                 .receiver(receiver)
                 .subject(subject)
                 .content(content)
