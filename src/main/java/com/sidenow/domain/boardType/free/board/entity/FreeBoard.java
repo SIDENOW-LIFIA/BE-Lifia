@@ -57,13 +57,6 @@ public class FreeBoard extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member; // 게시글 작성자
 
-    // 게시글 제목, 내용 수정
-    public FreeBoard update(String title, String content) {
-        this.title = title;
-        this.content = content;
-        return this;
-    }
-
     public void increaseHits() { // 조회 수 증가
         this.hits++;
     }

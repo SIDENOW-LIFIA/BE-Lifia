@@ -3,10 +3,7 @@ package com.sidenow.domain.boardType.free.board.entity;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.global.entity.BaseTimeEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class FreeBoardFile extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long freeBoardFileId;
 
     private String originFileName;
     private String newFileName;

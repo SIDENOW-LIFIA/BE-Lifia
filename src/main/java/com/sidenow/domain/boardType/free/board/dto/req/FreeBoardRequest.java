@@ -30,9 +30,6 @@ public abstract class FreeBoardRequest {
         @Schema(description = "게시글 작성자 거주지")
         private final String apartment;
 
-        @Schema(description = "게시글 첨부 파일")
-        private final List<MultipartFile> files;
-
         public static FreeBoard to(FreeBoardRegisterPostRequest createFreeBoardPostRequest, Member member){
             return FreeBoard.builder()
                     .title(createFreeBoardPostRequest.title)
@@ -57,9 +54,6 @@ public abstract class FreeBoardRequest {
 
         @Schema(description = "게시글 작성자 거주지")
         private final String apartment;
-
-        @Schema(description = "게시글 첨부 파일")
-        private final List<MultipartFile> files;
 
         public static FreeBoard to(FreeBoardUpdatePostRequest freeBoardUpdatePostRequest, Member member){
             return FreeBoard.builder()

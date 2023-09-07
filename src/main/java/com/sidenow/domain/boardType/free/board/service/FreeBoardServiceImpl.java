@@ -14,7 +14,7 @@ import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberNotExistException;
 import com.sidenow.domain.member.exception.MemberNotLoginException;
 import com.sidenow.domain.member.repository.MemberRepository;
-import com.sidenow.global.config.aws.AwsS3Service;
+import com.sidenow.global.config.aws.service.AwsS3Service;
 import com.sidenow.global.config.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
