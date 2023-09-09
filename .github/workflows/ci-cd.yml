@@ -12,10 +12,6 @@ on: # event를 정의하는 곳
     branches:
       - 'master' # master에 push할 때
       - 'dev' # dev에 push할 때
-  pull_request:
-    branches:
-      - 'master'
-      - 'dev'
 
 env:
   AWS_REGION: ap-northeast-2
