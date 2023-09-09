@@ -144,24 +144,60 @@
 
 ## 📃 API 명세
   
-| 메소드 | URI | 설명 | 현재 구현 여부 ✔️ |
+### 마이페이지
+
+| 메소드 | URI | 설명 | 현재 구현 여부 ✔️ |
 | --- | --- | --- | --- |
-| **POST** | /user/signup | 자체 회원가입 |    |
-| **POST** | /user/signup/oauth2 | Oauth2 회원가입 |    |
-| **GET** | /user/id/duplicate | 아이디 중복 체크 |    |
-| **GET** | /user/nickname/duplicate | 닉네임 중복 체크 |    |
-| **POST** | /user/email | 인증 이메일 전송 |    |
-| **POST** | /user/login | 로그인 |    |
-| **POST** | /user/logout | 로그아웃 |    |
-| **POST** | /user/re-issue | 토큰 재발급 |    |
-| **PUT** | /user/delete | 회원탈퇴 |    |
-| **GET** | /user/region | 유저 거주지 조회 |    |
-| **GET** | /user/info | 마이페이지 유저 정보 조회 |    |
-| **PUT** | /user/password | 유저 비밀번호 수정 |    |
-| **PUT** | /user/region | 유저 거주지 수정 |    |
-| **PUT** | /user/profile | 유저 프로필 수정 |    |
-| **PUT** | /user/nickname | 유저 닉네임 수정 |    |
-| **GET** | /user/my-post | 마이페이지 유저 작성글 조회 |    |
+| POST | /members/signup | 자체 회원가입 |  |
+| POST | /members/signup/oauth2 | Oauth2 회원가입 |  |
+| GET | /members/id/duplicate | 아이디 중복 체크 |  |
+| GET | /members/nickname/duplicate | 닉네임 중복 체크 |  |
+| POST | /members/email | 인증 이메일 전송 |  |
+| POST | /members/login | 로그인 |  |
+| POST | /members/logout | 로그아웃 |  |
+| POST | /members/re-issue | 토큰 재발급 |  |
+| PUT | /members/delete | 회원탈퇴 |  |
+| GET | /members/region | 유저 거주지 조회 |  |
+| GET | /members/info | 마이페이지 유저 정보 조회 |  |
+| PUT | /members/password | 유저 비밀번호 수정 |  |
+| PUT | /members/region | 유저 거주지 수정 |  |
+| PUT | /members/profile | 유저 프로필 수정 |  |
+| PUT | /members/nickname | 유저 닉네임 수정 |  |
+| GET | /members/my-post | 마이페이지 유저 작성글 조회 |  |
+| GET | /members/like-post | 마이페이지 좋아요 게시글 조회 |  |
+
+### 게시글
+
+| 메소드 | URI | 설명 | 현재 구현 여부 ✔️ |
+| --- | --- | --- | --- |
+| POST | /posts | 게시글 등록 |  |
+| GET | /posts | 게시글 목록 조회(최신순) |  |
+| GET | /posts/hit | 게시글 목록 조회(좋아요순) |  |
+| PUT | /posts/{id} | 게시글 수정 |  |
+| DELETE | /posts/{id} | 게시글 삭제 |  |
+| POST | /posts/{postId}/comments | 댓글 등록 |  |
+| GET | /posts/{postId}/comments | 작성글 댓글 전체 조회 |  |
+| PUT | /posts/{postId}/comments/{id} | 댓글 수정 |  |
+| DELETE | /posts/{postId}/comment/{id} | 댓글 삭제 |  |
+| FETCH | /posts/{postId}/like | 게시글 좋아요 선택 |  |
+| GET | /posts/{postId}/like | 게시글 좋아요 조회 |  |
+| FETCH | /posts/{postId}/like | 게시글 좋아요 취소 |  |
+| POST | /posts/{postId}/vote | 투표 등록 |  |
+| GET | /posts/{postId}/vote | 투표 조회 |  |
+| DELETE | /posts/{postId}/vote/{voteId} | 투표 삭제 |  |
+| GET | /search | 게시글 검색 |  |
+
+### 댓글
+
+| 메소드 | URI | 설명 | 현재 구현 여부 ✔️ |
+| --- | --- | --- | --- |
+| POST | /posts/{postId}/comments | 댓글 등록 |  |
+| GET | /posts/{postId}/comments | 작성글 댓글 전체 조회 |  |
+| PUT | /posts/{postId}/comments/{id} | 댓글 수정 |  |
+| DELETE | /posts/{postId}/comments/{id} | 댓글 삭제 |  |
+| POST | /posts/{postId}/comments/{id}/replies | 답글 등록 |  |
+| PUT | /posts/{postId}/comments/{id}/replies/{id} | 답글 수정 |  |
+| DELETE | /posts/{postId}/comments/{id}/replies/{id} | 답글 삭제 |  |
 
 
   <br/>
