@@ -1,0 +1,56 @@
+spring:
+  datasource:
+    url: jdbc:h2:~/test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/sidenow_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#    username: root
+#    password: 1234
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+#        dialect: org.hibernate.dialect.MySQL57Dialect
+        format_sql: true
+        show_sql: true
+
+  redis:
+    host: localhost
+    port: 6379
+
+  profiles:
+    include: oauth
+
+  jwt:
+    header: Authorization
+    secret: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9eyJzdWIiOiI2MDAzMTEiLCJuYW1lIjoiSGFuIEpvbmdTZXVuZyIsImlhdCI6MjMwODA2MTAwNX0Jd30Ub8zjl0VZgSW1egy8F9vKLmWTBurmIYNhAhzrKPvyGjr34rbNwrBbSvrwjzlde0oshN4kutjURqqQ9gQ
+    access-token-validity-in-seconds: 60480
+    refresh-token-validity-in-seconds: 86400
+
+  aws:
+    ses:
+      access-key: AKIAU5GCOHQL7OAOEH2F
+      secret-key: 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
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAU5GCOHQL7OAOEH2F
+      secretKey: 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
+    s3:
+      bucket: lifiabucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

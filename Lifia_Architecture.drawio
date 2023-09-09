@@ -1,0 +1,174 @@
+<mxfile host="app.diagrams.net" modified="2023-08-04T17:25:09.951Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="WUhVKIisuV5rR7TM3C-K" version="21.6.6" type="device">
+  <diagram name="페이지-1" id="Qe-_5NJDYfm2JjSAHNzm">
+    <mxGraphModel dx="1687" dy="892" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FOKYOlc2peMPIZlh_83t-85" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;container=0;" vertex="1" parent="1">
+          <mxGeometry x="449" y="214" width="150" height="166" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;" edge="1" parent="1" source="FOKYOlc2peMPIZlh_83t-24">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="447" y="297" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-11" value="1. master 브랜치 Merge" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="265" y="264.5" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-24" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;container=0;" vertex="1" parent="1">
+          <mxGeometry x="125" y="214" width="150" height="166" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-5" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-social-github-128.png;imageBorder=none;container=0;" vertex="1" parent="1">
+          <mxGeometry x="139.5" y="219" width="121" height="121" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-27" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Local&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;container=0;fontStyle=1;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="160" y="335" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-40" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;container=0;" vertex="1" parent="1">
+          <mxGeometry x="881.5" y="170" width="600" height="490" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-19" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn3.iconfinder.com/data/icons/dompicon-glyph-file-format-2/256/file-jar-format-type-128.png" vertex="1" parent="1">
+          <mxGeometry x="685" y="180" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.018;entryY=0.635;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="FOKYOlc2peMPIZlh_83t-41" target="FOKYOlc2peMPIZlh_83t-54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-41" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;container=0;" vertex="1" parent="1">
+          <mxGeometry x="966.5" y="248" width="430" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-15" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.ec2;fillColor=#F58534;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="955" y="214" width="76.5" height="93" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-17" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.rds;fillColor=#2E73B8;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1405" y="270" width="72" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-45" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1115" y="441" width="169.99999999999994" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-43" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;strokeColor=#2ed5ff;" vertex="1" parent="FOKYOlc2peMPIZlh_83t-45">
+          <mxGeometry width="130" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-42" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://godbell.kr/content/images/2022/11/20220607_001840_0001.png;" vertex="1" parent="FOKYOlc2peMPIZlh_83t-45">
+          <mxGeometry x="12.819999999999936" y="5" width="107.36" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-62" value="green server: 8082" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=13;" vertex="1" parent="FOKYOlc2peMPIZlh_83t-45">
+          <mxGeometry x="-5" y="79" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-20" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Docker.svg;" vertex="1" parent="FOKYOlc2peMPIZlh_83t-45">
+          <mxGeometry x="-10" y="-21" width="47.56" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-75" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;3. 새 컨테이너 실행&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=13;" vertex="1" parent="FOKYOlc2peMPIZlh_83t-45">
+          <mxGeometry x="23.999999999999936" y="-25" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-46" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1115" y="270" width="142.81999999999994" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-47" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;strokeColor=#2ed5ff;" vertex="1" parent="FOKYOlc2peMPIZlh_83t-46">
+          <mxGeometry width="130" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-48" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://godbell.kr/content/images/2022/11/20220607_001840_0001.png;" vertex="1" parent="FOKYOlc2peMPIZlh_83t-46">
+          <mxGeometry x="12.819999999999936" y="5" width="107.36" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-56" value="blue server: 8081" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=13;" vertex="1" parent="FOKYOlc2peMPIZlh_83t-46">
+          <mxGeometry y="80" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-35" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;strokeColor=#2ED5FF;" vertex="1" parent="1">
+          <mxGeometry x="1275" y="441" width="110" height="89" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-16" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Cache_Redis_Product.svg;" vertex="1" parent="1">
+          <mxGeometry x="1305" y="460" width="50" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-51" value="Redis" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="500" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-54" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://quiksite.com/wp-content/uploads/2016/09/Nginx-Logo-02.png;" vertex="1" parent="1">
+          <mxGeometry x="994" y="380" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-55" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Docker.svg;" vertex="1" parent="1">
+          <mxGeometry x="1285" y="420" width="47.56" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-63" value="Nginx: 80" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="989" y="443" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-65" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1055" y="380" as="sourcePoint" />
+            <mxPoint x="1105" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-66" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1255" y="320" as="sourcePoint" />
+            <mxPoint x="1385" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-67" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1241.47" y="390" as="sourcePoint" />
+            <mxPoint x="1285" y="430.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-68" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="603" y="297.90000000000003" as="sourcePoint" />
+            <mxPoint x="955" y="296.1" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="793" y="296.40000000000003" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-70" value="&lt;b style=&quot;font-size: 15px;&quot;&gt;2. Build 후 jar 파일 EC2에 전송&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="615" y="270" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-71" value="&lt;span style=&quot;font-size: 13px;&quot;&gt;RDS&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1416" y="350" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-73" value="EC2" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="1025" y="219" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-74" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;strokeColor=#969595;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1055" y="481" as="sourcePoint" />
+            <mxPoint x="1105" y="521" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-52" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Docker.svg;" vertex="1" parent="1">
+          <mxGeometry x="1105" y="250" width="47.56" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-76" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;4. 이전 컨테이너 종료&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="245" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-78" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="120" y="480" width="160" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-81" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="285" y="550" as="sourcePoint" />
+            <mxPoint x="875" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-82" value="Rest Api" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="519" y="507" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-83" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://images.velog.io/images/jini_eun/post/107f5cfb-e97c-4c4c-b997-06098062e5b3/image.png;clipPath=inset(10% 33.33% 21.43% 33.33%);" vertex="1" parent="1">
+          <mxGeometry x="139.5" y="487.5" width="116.67" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-84" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://miro.medium.com/v2/resize:fit:1075/1*VtWbCHhIw6MMMXCil7lZ0g.png;clipPath=inset(1.63% 19.33% 3.59% 17%);" vertex="1" parent="1">
+          <mxGeometry x="455.5" y="245" width="137" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-88" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="829.87" y="300" as="sourcePoint" />
+            <mxPoint x="1005.87" y="413" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="829.87" y="413" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FOKYOlc2peMPIZlh_83t-91" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png;clipPath=inset(6.33% 21.67% 12.66% 22%);" vertex="1" parent="1">
+          <mxGeometry x="887.28" y="140" width="79.22" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

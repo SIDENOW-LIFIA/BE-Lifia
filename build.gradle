@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
+//	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.sidenow'
@@ -28,17 +29,89 @@ jar {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	testImplementation 'org.mockito:mockito-inline:5.2.0'
+
+	// @Nullable 어노테이션을 사용할 때 발생하는 문제 해결
+	// javax.annotation.meta.When 프로젝트 런타임에서 열거형을 사용할 수 없기 때문에 발생
+	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+	// Swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+	// AWS
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'com.amazonaws:aws-java-sdk-ses:1.12.408'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// oauth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	implementation 'com.google.code.gson:gson'
+
+//	// QueryDSL
+//	implementation 'com.querydsl:querydsl-jpa' // QueryDSL 내부 클래스는 사용 가능하나, 실제 쿼리를 위해 사용되는 Q 클래스는 생성 X
+//	implementation 'com.querydsl:querydsl-apt' // Q 클래스를 생성
+//
+//	// @Entity 어노테이션을 선언한 클래스를 탐색하고 Q 클래스를 생성 (뒤에 jakarta 붙여서 querydsl오류: java.lang.noclassdeffounderror: javax/persistence/entity 해결)
+//	annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta")
+//
+//	// Q 파일을 못해서 발생하는 오류인 java.lang.NoClassDefFoundError 에러 발생 대응을 위한 코드
+//	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+//	annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+
+//	implementation 'org.springframework.security:spring-security-test'
+//	testImplementation ('org.springframework.boot:spring-boot-starter-test')
+//			{
+//				exclude group: 'org.mockito', module: 'mockito-core'
+//			}
+//	testImplementation 'org.mockito:mockito-inline:4.6.1'
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//// Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
+//clean {
+//	delete file('src/main/generated')
+//}
+
+//def querydslDir = "$buildDir/generated/querydsl"
+//querydsl {
+//	library = "com.querydsl:querydsl-apt"
+//	jpa = true
+//	querydslSourcesDir = querydslDir
+//}
+
+//sourceSets{
+//	main.java.srcDir querydslDir
+//}
+
+//configurations {
+//	querydsl.extendsFrom compileClasspath
+//}
+
+//compileQuerydsl {
+//	options.annotationProcessorPath = configurations.querydsl
+//}

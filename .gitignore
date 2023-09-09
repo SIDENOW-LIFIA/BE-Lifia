@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Secret-Key ###
+#Base64_jwt_HS512.png
+#application.yml
+#application-oauth.yml
+#LIFIA-SES_credentials.csv
+#team1_accessKeys.csv
