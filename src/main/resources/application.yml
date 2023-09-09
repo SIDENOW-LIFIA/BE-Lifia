@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://lifia-db-instance.cbsuxxf8jes5.ap-northeast-2.rds.amazonaws.com:3306/lifia_db?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://lifia-db-instance.cbsuxxf8jes5.ap-northeast-2.rds.amazonaws.com:3306/lifia_database?serverTimezone=UTC&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: admin
     password: fkdlvldk
@@ -19,8 +19,8 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-#        dialect: org.hibernate.dialect.MySQL57Dialect
+#        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL57Dialect
         format_sql: true
         show_sql: true
 
