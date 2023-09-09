@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+//	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.sidenow'
@@ -68,16 +68,16 @@ dependencies {
 
 	implementation 'com.google.code.gson:gson'
 
-	// QueryDSL
-	implementation 'com.querydsl:querydsl-jpa' // QueryDSL 내부 클래스는 사용 가능하나, 실제 쿼리를 위해 사용되는 Q 클래스는 생성 X
-	implementation 'com.querydsl:querydsl-apt' // Q 클래스를 생성
-
-	// @Entity 어노테이션을 선언한 클래스를 탐색하고 Q 클래스를 생성 (뒤에 jakarta 붙여서 querydsl오류: java.lang.noclassdeffounderror: javax/persistence/entity 해결)
-	annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta")
-
-	// Q 파일을 못해서 발생하는 오류인 java.lang.NoClassDefFoundError 에러 발생 대응을 위한 코드
-	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
-	annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+//	// QueryDSL
+//	implementation 'com.querydsl:querydsl-jpa' // QueryDSL 내부 클래스는 사용 가능하나, 실제 쿼리를 위해 사용되는 Q 클래스는 생성 X
+//	implementation 'com.querydsl:querydsl-apt' // Q 클래스를 생성
+//
+//	// @Entity 어노테이션을 선언한 클래스를 탐색하고 Q 클래스를 생성 (뒤에 jakarta 붙여서 querydsl오류: java.lang.noclassdeffounderror: javax/persistence/entity 해결)
+//	annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta")
+//
+//	// Q 파일을 못해서 발생하는 오류인 java.lang.NoClassDefFoundError 에러 발생 대응을 위한 코드
+//	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+//	annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 
 //	implementation 'org.springframework.security:spring-security-test'
 //	testImplementation ('org.springframework.boot:spring-boot-starter-test')
@@ -92,26 +92,26 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-// Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
-clean {
-	delete file('src/main/generated')
-}
+//// Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
+//clean {
+//	delete file('src/main/generated')
+//}
 
-def querydslDir = "$buildDir/generated/querydsl"
-querydsl {
-	library = "com.querydsl:querydsl-apt"
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
+//def querydslDir = "$buildDir/generated/querydsl"
+//querydsl {
+//	library = "com.querydsl:querydsl-apt"
+//	jpa = true
+//	querydslSourcesDir = querydslDir
+//}
 
-sourceSets{
-	main.java.srcDir querydslDir
-}
+//sourceSets{
+//	main.java.srcDir querydslDir
+//}
 
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
+//configurations {
+//	querydsl.extendsFrom compileClasspath
+//}
 
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
-}
+//compileQuerydsl {
+//	options.annotationProcessorPath = configurations.querydsl
+//}
