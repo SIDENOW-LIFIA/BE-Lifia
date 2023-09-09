@@ -29,24 +29,29 @@ public class FreeBoard extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content; // 게시글 내용
 
-    @Column
-    private String imageUrl;
-
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int hits; // 게시글 조회 수
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer default 0")
     private int likes; // 게시글 좋아요 수
+
+    @Column(nullable = false)
+    private String apartment; // 거주 아파트
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime createdAt; // 게시글 생성일자
+    private LocalDateTime regDate; // 게시글 생성일자
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt; // 게시글 수정일자
+    private LocalDateTime updatedDate; // 게시글 수정일자
 
-    @OneToMany(mappedBy = "freeBoard")
-    List<FreeBoardComment> freeBoardComments;
+    // 게시글 삭제 시 첨부파일 모두 삭제
+    @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardFile> freeBoardFiles;
+
+    // 게시글 삭제 시 달려있는 댓글 모두 삭제
+    @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardComment> freeBoardComments;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

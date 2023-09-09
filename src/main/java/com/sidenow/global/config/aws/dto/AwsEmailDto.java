@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailDto {
+public class AwsEmailDto {
 
     public static final String FROM_EMAIL = "kusitms.hjs@gmail.com"; // 보내는 사람
 

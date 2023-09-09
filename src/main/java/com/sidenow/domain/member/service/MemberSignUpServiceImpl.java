@@ -1,8 +1,6 @@
 package com.sidenow.domain.member.service;
 
-import com.sidenow.domain.member.dto.req.MemberRequest;
 import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
-import com.sidenow.domain.member.dto.res.MemberResponse;
 import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailDuplicateException;
@@ -37,7 +35,7 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
                 .password(passwordEncoder.encode(signUpMemberRequest.getPassword()))
                 .name(signUpMemberRequest.getName())
                 .nickname(signUpMemberRequest.getNickname())
-                .address(signUpMemberRequest.getAddress())
+                .apartment(signUpMemberRequest.getApartment())
                 .role(Role_USER)
                 .build();
         memberRepository.save(newMember);

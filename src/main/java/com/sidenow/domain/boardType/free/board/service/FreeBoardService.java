@@ -1,46 +1,20 @@
 package com.sidenow.domain.boardType.free.board.service;
 
-import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.CreateFreeBoardPostRequest;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.CreateFreeBoardPostResponse;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.ReadFreeBoardPostDetailResponse;
-import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
-import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostIdException;
-import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
-import com.sidenow.domain.member.entity.Member;
-import com.sidenow.domain.member.exception.MemberNotExistException;
-import com.sidenow.domain.member.repository.MemberRepository;
-import com.sidenow.global.config.security.util.SecurityUtils;
-import com.sidenow.global.exception.NoExistMemberException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest;
+import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardRegisterPostRequest;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.AllFreeBoards;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardCheck;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardGetPostListResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardGetPostResponse;
+import org.springframework.web.multipart.MultipartFile;
 
-@RequiredArgsConstructor
-@Slf4j
-@Transactional
-@Service
-public class FreeBoardService {
+import java.util.List;
 
-    private final MemberRepository memberRepository;
-    private final FreeBoardRepository freeBoardRepository;
-    private final SecurityUtils securityUtils;
-
-    // 자유게시판 글 등록
-    public CreateFreeBoardPostResponse createFreeBoardPost(CreateFreeBoardPostRequest requestDto) {
-        Member findMember = memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(() -> new ClassCastException("Not Login"))
-                .getMemberId()).get();
-        FreeBoard freeBoard = CreateFreeBoardPostRequest.to(requestDto, findMember);
-        freeBoardRepository.save(freeBoard);
-        return new CreateFreeBoardPostResponse(freeBoard.getFreeBoardPostId());
-    }
-
-    // 자유게시판 게시글 상세 조회
-    public ReadFreeBoardPostDetailResponse readFreeBoardPostDetail(Long postId) {
-        FreeBoard freeBoard = freeBoardRepository.findByFreeBoardPostId(postId).orElseThrow(NotFoundFreeBoardPostIdException::new);
-        return ReadFreeBoardPostDetailResponse.from(freeBoard);
-    }
-
-    // 자유게시판 게시글 전체 조회
+public interface FreeBoardService {
+    FreeBoardCheck registerFreeBoardPost(List<MultipartFile> multipartFile, FreeBoardRegisterPostRequest createFreeBoardPostRequest);
+    AllFreeBoards getFreeBoardPostList(Integer page);
+    FreeBoardGetPostResponse getFreeBoardPost(Long freeBoardPostId);
+    FreeBoardCheck updateFreeBoardPost(List<MultipartFile> multipartFile, Long freeBoardPostId, FreeBoardRequest.FreeBoardUpdatePostRequest freeBoardUpdatePostRequest);
+    FreeBoardCheck deleteFreeBoardPost(Long freeBoardPostId);
 }

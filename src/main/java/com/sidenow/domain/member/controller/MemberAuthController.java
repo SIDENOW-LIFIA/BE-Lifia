@@ -21,7 +21,7 @@ import static com.sidenow.domain.member.constant.MemberConstant.MemberSuccessMes
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/auth")
-@Tag(name = "회원 인증 API", description = "회원 인증 API입니다.")
+@Tag(name = "회원 인증 API", description = "Login, Logout, Refresh Token")
 public class MemberAuthController {
 
     private final MemberAuthService memberAuthService;

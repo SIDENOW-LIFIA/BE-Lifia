@@ -39,7 +39,7 @@ public class FreeBoardComment extends BaseTimeEntity {
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime createdAt; // 댓글 작성일자
+    private LocalDateTime regDate; // 댓글 작성일자
 
     @UpdateTimestamp
     private LocalDateTime updatedAt; // 댓글 수정일자

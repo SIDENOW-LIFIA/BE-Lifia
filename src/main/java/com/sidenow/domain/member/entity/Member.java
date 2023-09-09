@@ -38,7 +38,7 @@ public class Member {
     private String nickname;
 
     @Column(nullable = false, length = 50)
-    private String address;
+    private String apartment;
 
     @Enumerated(EnumType.STRING)
     private Role role;
