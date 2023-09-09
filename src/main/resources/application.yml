@@ -49,7 +49,7 @@ cloud:
       accessKey: AKIAU5GCOHQL7OAOEH2F
       secretKey: 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
     s3:
-      bucket: # 버킷 이름
+      bucket: lifiabucket
     region:
       static: ap-northeast-2
     stack:
