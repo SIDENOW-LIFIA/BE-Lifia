@@ -1,6 +1,6 @@
  #!/bin/bash
 
-PROJECT_ROOT_PATH="/home/ubuntu/app/deploy"
+PROJECT_ROOT_PATH="/home/ubuntu/app/deploy/"
 PROJECT_NAME="Lifia"
 JAR_FILE="$PROJECT_ROOT_PATH/${PROJECT_NAME}.jar"
 STOP_LOG="$PROJECT_ROOT_PATH/stop.log"
