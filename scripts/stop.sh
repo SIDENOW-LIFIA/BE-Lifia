@@ -1,8 +1,8 @@
  #!/bin/bash
 
-PROJECT_ROOT_PATH="/home/ubuntu/lifia-github-action"
+PROJECT_ROOT_PATH="/home/ubuntu/app/deploy"
 PROJECT_NAME="Lifia"
-JAR_FILE="$PROJECT_ROOT_PATH/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar"
+JAR_FILE="$PROJECT_ROOT_PATH/${PROJECT_NAME}.jar"
 STOP_LOG="$PROJECT_ROOT_PATH/stop.log"
 
 TIME_NOW=$(date +%c)
