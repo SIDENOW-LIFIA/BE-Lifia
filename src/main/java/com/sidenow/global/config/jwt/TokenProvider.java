@@ -288,7 +288,7 @@ public class TokenProvider implements InitializingBean {
 
         String memberId = String.valueOf(claims.get(MEMBER_ID));
         Member member = this.memberRepository.findById(Long.parseLong(memberId)).orElseThrow(MemberNotExistException::new);
-        log.info("getAuthentication 진입");
+        log.info("getAuthentication 종료");
 
         return new UsernamePasswordAuthenticationToken(new CustomMemberDetails(member), token, authorities);
     }

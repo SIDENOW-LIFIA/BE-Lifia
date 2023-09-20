@@ -30,15 +30,30 @@ public class JwtFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final TokenProvider tokenProvider;
+    private final String NO_CHECK_URL = "/login";
 
     // 실제 필터링 로직을 수행
     // 가입/로그인/재발급을 제외한 모든 Request 요청은 이 필터를 거치므로, 토큰 정보가 없거나 유효하지 않으면 정상적으로 수행되지 않음.
     // 요청이 정상적으로 Controller까지 도착했다면, SecurityContext에 MemberId가 존재한다는 것이 보장됨.
     // 인증 실패 시 아무런 과정 없이 다음 필터로 넘어감
+
+    /**
+     * 1. RefreshToken이 오는 경우 -> 유효하면 AccessToken 재발급 후 필터 진행 X, 바로 튕겨버리기
+     * 2. RefreshToken이 없고, AccessToken만 오는 경우 -> 유저 정보 저장 후 필터 계속 진행
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, JwtException {
 
         log.info("JWT Filter 진입");
+        if (request.getRequestURI().equals(NO_CHECK_URL)){
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
+
+        /*log.info("JWT Filter 진입");
         String jwt = resolveToken(request);
         String requestURI = request.getRequestURI();
 
@@ -78,7 +93,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 throw new UnknownException();
             }
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response);*/
     }
 
     // Http Request로부터 토큰을 가져오는 메서드
