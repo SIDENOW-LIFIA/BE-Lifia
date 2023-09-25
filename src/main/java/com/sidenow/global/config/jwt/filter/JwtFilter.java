@@ -44,16 +44,12 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, JwtException {
 
+//        log.info("JWT Filter 진입");
+//        if (request.getRequestURI().equals(NO_CHECK_URL)){
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
         log.info("JWT Filter 진입");
-        if (request.getRequestURI().equals(NO_CHECK_URL)){
-
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-
-
-        /*log.info("JWT Filter 진입");
         String jwt = resolveToken(request);
         String requestURI = request.getRequestURI();
 
@@ -93,7 +89,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 throw new UnknownException();
             }
         }
-        filterChain.doFilter(request, response);*/
+        filterChain.doFilter(request, response);
     }
 
     // Http Request로부터 토큰을 가져오는 메서드

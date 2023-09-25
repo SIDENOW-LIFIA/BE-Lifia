@@ -47,9 +47,7 @@ public class MemberAuthServiceImpl implements MemberAuthService{
             String memberEmail = memberLoginRequest.getEmail();
             Member member = memberRepository.findByEmail(memberEmail).orElseThrow(MemberEmailNotFoundException::new);
             LocalDate now = LocalDate.now();
-
             member.updateLoginAt(now);
-
             log.info("Login Service End");
             return MemberLoginResponse.from(tokenInfoResponse);
         } catch (AuthenticationException e) {

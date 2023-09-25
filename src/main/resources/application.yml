@@ -1,43 +1,20 @@
 spring:
-  datasource:
-    hikari:
-      maximum-pool-size: 4
-#    url: jdbc:mysql://lifia-db-instance.cbsuxxf8jes5.ap-northeast-2.rds.amazonaws.com:3306/lifia_database?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    username: admin
-#    password: fkdlvldk
-    url: jdbc:h2:~/test
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/sidenow_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-#    username: root
-#    password: 1234
-  jpa:
-    show-sql: true
-    generate-ddl: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-#        dialect: org.hibernate.dialect.MySQL57Dialect
-        format_sql: true
-        show_sql: true
+  profiles:
+    include:
+      - local
+
+  jwt:
+    secret: ZG9uZ2h1bi1zaGFycC1kYnJ1YS13ZWItcHJvamVjdC11c2luZy1qd3Qtc2VjcmV0LURvbmdodW4tc3ByaW5nLWJvb3Qtand0LWJhY2stZW5kLWFuZC1qcy1jb2xsYWJv
+    access:
+      expiration: 60480
+      header: Authorization
+    refresh:
+      expiration: 86400
+      header: Authorization-refresh
 
   redis:
     host: localhost
     port: 6379
-
-  profiles:
-    include: oauth
-
-#  jwt:
-#    header: Authorization
-#    secret: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9eyJzdWIiOiI2MDAzMTEiLCJuYW1lIjoiSGFuIEpvbmdTZXVuZyIsImlhdCI6MjMwODA2MTAwNX0Jd30Ub8zjl0VZgSW1egy8F9vKLmWTBurmIYNhAhzrKPvyGjr34rbNwrBbSvrwjzlde0oshN4kutjURqqQ9gQ
-#    access-token-validity-in-seconds: 60480
-#    refresh-token-validity-in-seconds: 86400
 
   aws:
     ses:
