@@ -1,7 +1,7 @@
 spring:
   profiles:
     include:
-      - local
+      - prod
 
   jwt:
     secret: ZG9uZ2h1bi1zaGFycC1kYnJ1YS13ZWItcHJvamVjdC11c2luZy1qd3Qtc2VjcmV0LURvbmdodW4tc3ByaW5nLWJvb3Qtand0LWJhY2stZW5kLWFuZC1qcy1jb2xsYWJv
@@ -16,11 +16,6 @@ spring:
     host: localhost
     port: 6379
 
-  aws:
-    ses:
-      access-key: AKIAU5GCOHQL7OAOEH2F
-      secret-key: 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
-
   servlet:
     multipart:
       max-file-size: 10MB
@@ -28,6 +23,9 @@ spring:
 
 cloud:
   aws:
+    ses:
+      access-key: AKIAU5GCOHQL7OAOEH2F
+      secret-key: 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
     credentials:
       accessKey: AKIAU5GCOHQL7OAOEH2F
       secretKey: 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

@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AwsSesConfig {
-    @Value("${spring.aws.ses.access-key}")
+    @Value("${cloud.aws.ses.access-key}")
     private String accessKey;
 
-    @Value("${spring.aws.ses.secret-key}")
+    @Value("${cloud.aws.ses.secret-key}")
     private String secretKey;
 
     @Value("${cloud.aws.region.static}")
