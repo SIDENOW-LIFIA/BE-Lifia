@@ -23,14 +23,14 @@ import static com.sidenow.domain.member.constant.MemberConstant.MemberSuccessMes
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/member")
+@RequestMapping("/members")
 @Tag(name = "회원 가입", description = "Sign Up")
 public class MemberSignUpController {
 
     private final MemberSignUpService memberSignUpService;
     private final AwsSesService awsSesService;
 
-    @PostMapping("/signup")
+    @PostMapping("/sign-up")
     @Operation(summary = "회원가입")
     public ResponseEntity<ResponseDto<MemberCheck>> signUp(@Valid @RequestBody SignUpMemberRequest signUpMemberRequest) {
         log.info("Sign Up Api Start");
@@ -39,7 +39,7 @@ public class MemberSignUpController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_SIGN_UP_SUCCESS.getMessage(), memberCheck));
     }
 
-    @PostMapping("/email/duplicate")
+    @PostMapping("/check-duplicate/email")
     @Operation(summary = "이메일 중복체크")
     public ResponseEntity<ResponseDto<Boolean>> checkEmailDuplicate(String email) {
         log.info("Check Email Duplicate Api Start");
@@ -48,7 +48,7 @@ public class MemberSignUpController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_CHECK_EMAIL_DUPLICATE_SUCCESS.getMessage(), isEmailDuplicate));
     }
 
-    @PostMapping("/nickname/duplicate")
+    @PostMapping("/check-duplicate/nickname")
     @Operation(summary = "닉네임 중복체크")
     public ResponseEntity<ResponseDto<Boolean>> checkNicknameDuplicate(String nickname) {
         log.info("Check Nickname Duplicate Api Start");
@@ -57,7 +57,7 @@ public class MemberSignUpController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_CHECK_NICKNAME_DUPLICATE_SUCCESS.getMessage(), isNicknameDuplicate));
     }
 
-    @PostMapping("/mail")
+    @PostMapping("/email-verification")
     @Operation(summary = "이메일 인증코드 전송")
     public ResponseEntity<ResponseDto<String>> sendAuthMail(String email) {
         log.info("Send Auth Mail Api Start");
@@ -71,11 +71,11 @@ public class MemberSignUpController {
         }
     }
 
-    @PostMapping("/mail/auth")
+    @PostMapping("/check-code")
     @Operation(summary = "이메일 인증코드 검증")
-    public ResponseEntity<ResponseDto<Boolean>> checkAuthCode(String email, String authCode) {
+    public ResponseEntity<ResponseDto<Boolean>> checkAuthCode(String authCode) {
         log.info("Verify Mail Code Api Start");
-        boolean isAuthCodeVerified = awsSesService.verifyEmailCode(email, authCode);
+        boolean isAuthCodeVerified = awsSesService.verifyEmailCode(authCode);
         if (!isAuthCodeVerified) {
             throw new MemberEmailAuthCodeException();
         }

@@ -61,8 +61,9 @@ public class SecurityConfig {
 
                 // 요청에 대한 인가 설정
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/api/auth/**").permitAll() // 로그인, 회원가입 API는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
-                        .requestMatchers("/api/member/**").permitAll()
+//                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/auth/**").permitAll() // 로그인, 회원가입 API는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
+                        .requestMatchers("/members/**").permitAll()
                         .requestMatchers(toH2Console()).permitAll() // h2-console 접속시키기
                         .anyRequest().authenticated()) // 그 외 나머지 API는 전부 인증 필요
 

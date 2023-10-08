@@ -2,6 +2,7 @@ package com.sidenow.global.config.aws.service;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.model.SendEmailResult;
+import com.sidenow.domain.member.exception.MemberEmailAuthCodeException;
 import com.sidenow.global.config.aws.dto.AwsEmailDto;
 import com.sidenow.global.config.redis.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +17,8 @@ import java.util.Random;
 public class AwsSesServiceImpl implements AwsSesService{
 
     private final AmazonSimpleEmailService amazonSimpleEmailService;
-    private final RedisUtil redisUtil;
-    private final String content = createContent();
-    private final String code = createCode();
+//    private final RedisUtil redisUtil;
+    private String code;
 
     // 이메일 인증 코드 전송
     @Override
@@ -27,29 +27,26 @@ public class AwsSesServiceImpl implements AwsSesService{
         AwsEmailDto emailDto = AwsEmailDto.builder()
                 .receiver(receiver)
                 .subject(subject)
-                .content(content)
+                .content(createContent())
                 .build();
 
-        if (redisUtil.existData(receiver)) {
-            redisUtil.deleteData(receiver);
-        }
+//        if (redisUtil.existData(receiver)) {
+//            redisUtil.deleteData(receiver);
+//        }
         SendEmailResult sendEmailResult = amazonSimpleEmailService.sendEmail(emailDto.toSendRequestDto());
-        redisUtil.setDataExpire(receiver, code, 60 * 5L);
+//        redisUtil.setDataExpire(receiver, code, 60 * 5L);
         return sendEmailResult.getSdkResponseMetadata().toString();
     }
 
     // 이메일 인증 코드 검증
     @Override
-    public boolean verifyEmailCode(String email, String code) {
-        String codeFoundByEmail = redisUtil.getData(email);
-        if (codeFoundByEmail == null) {
-            return false;
-        }
-        return redisUtil.getData(email).equals(code);
+    public boolean verifyEmailCode(String code) {
+        return this.code.equals(code);
     }
 
     // 이메일 내용 생성
     private String createContent() {
+        createCode();
         String content="";
         content+= "<div style='margin:20px;'>";
         content+= "<h1> LIFIA </h1>";
@@ -66,14 +63,14 @@ public class AwsSesServiceImpl implements AwsSesService{
     }
 
     // 이메일 인증코드 생성
-    private String createCode() {
+    private void createCode() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
         for (int i = 0; i < 8; i++) { // 인증코드 8자리
             int index = rnd.nextInt(3); // 0~2 까지 랜덤
 
-            switch (index) {
+              switch (index) {
                 case 0:
                     key.append((char) ((int) (rnd.nextInt(26)) + 97));
                     //  a~z  (ex. 1+97=98 => (char)98 = 'b')
@@ -83,11 +80,11 @@ public class AwsSesServiceImpl implements AwsSesService{
                     //  A~Z
                     break;
                 case 2:
-                    key.append((rnd.nextInt(10)));
+                      key.append((rnd.nextInt(10)));
                     // 0~9
                     break;
             }
         }
-        return key.toString();
+        this.code = key.toString();
     }
 }
