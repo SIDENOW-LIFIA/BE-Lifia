@@ -50,6 +50,7 @@ public class AwsS3ServiceImpl implements AwsS3Service{
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
             }
 
+            // 원본파일 이름과 변경된 파일 이름을 DB에 저장 -> 다운로드 시 필요
             FreeBoardFile freeBoardFile = FreeBoardFile.builder()
                     .newFileName(fileName)
                     .originFileName(file.getOriginalFilename())
