@@ -27,7 +27,7 @@ public class MemberAuthController {
     private final MemberAuthService memberAuthService;
 
     @PostMapping("/login")
-    @Operation(summary = "유저 로그인")
+    @Operation(summary = "자체 로그인")
     public ResponseEntity<ResponseDto<MemberLoginResponse>> login(@Valid @RequestBody MemberLoginRequest memberLoginRequest){
 
         log.info("Member Login Api Start");
