@@ -20,8 +20,7 @@ public class FreeBoard extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "free_board_post_id")
-    private Long freeBoardPostId; // 게시글 고유 ID
+    private Long id; // 게시글 고유 ID
 
     @Column(nullable = false)
     private String title; // 게시글 제목

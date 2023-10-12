@@ -1,6 +1,5 @@
 package com.sidenow.domain.boardType.free.board.entity;
 
-import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -15,7 +14,7 @@ public class FreeBoardFile extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long freeBoardFileId;
+    private Long id;
 
     private String originFileName;
     private String newFileName;
@@ -25,7 +24,7 @@ public class FreeBoardFile extends BaseTimeEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "free_board_post_id")
+    @JoinColumn(name = "freeBoard_id")
     private FreeBoard freeBoard;
 
     @Builder

@@ -55,7 +55,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
     public List<FreeBoardGetCommentListResponse> getFreeBoardCommentList(Long freeBoardPostId) {
         log.info("Read FreeBoard Comment Service Start");
         FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
-        List<FreeBoardComment> freeBoardCommentsList = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardPostIdOrderByCreatedAtAsc(findFreeBoardPost.getFreeBoardPostId());
+        List<FreeBoardComment> freeBoardCommentsList = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardPostIdOrderByCreatedAtAsc(findFreeBoardPost.getId());
         List<FreeBoardGetCommentListResponse> readFreeBoardCommentDto = new ArrayList<>();
         freeBoardCommentsList.forEach(s -> readFreeBoardCommentDto.add(FreeBoardGetCommentListResponse.from(s))); // 댓글 전체 조회 핵심 코드 (람다식 forEach 사용)
         log.info("Read FreeBoard Comment Service Start");

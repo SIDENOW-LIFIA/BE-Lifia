@@ -47,7 +47,7 @@ public abstract class FreeBoardResponse {
         public static FreeBoardGetPostResponse from(FreeBoard freeBoard, Map<String, String> files) {
             Member member = freeBoard.getMember();
             return FreeBoardGetPostResponse.builder()
-                    .freeBoardPostId(freeBoard.getFreeBoardPostId())
+                    .freeBoardPostId(freeBoard.getId())
                     .memberId(member.getMemberId())
                     .title(freeBoard.getTitle())
                     .content(freeBoard.getContent())
@@ -90,7 +90,7 @@ public abstract class FreeBoardResponse {
 
         public static FreeBoardGetPostListResponse from(FreeBoard freeBoard) {
             return FreeBoardGetPostListResponse.builder()
-                    .freeBoardPostId(freeBoard.getFreeBoardPostId())
+                    .freeBoardPostId(freeBoard.getId())
                     .nickname(freeBoard.getMember().getNickname())
                     .title(freeBoard.getTitle())
                     .hits(freeBoard.getHits())

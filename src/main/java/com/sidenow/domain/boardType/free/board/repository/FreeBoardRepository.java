@@ -12,6 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface FreeBoardRepository extends JpaRepository<FreeBoard, Long> {
-    Optional<FreeBoard> findByFreeBoardPostId(Long freeBoardPostId);
     Page<FreeBoard> findByOrderByRegDateDesc(Pageable pageable);
 }
