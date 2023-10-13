@@ -7,7 +7,6 @@ import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.board.entity.FreeBoardLike;
 import com.sidenow.domain.boardType.free.board.exception.FreeBoardIdNotFoundException;
 import com.sidenow.domain.boardType.free.board.exception.FreeBoardLikeHistoryNotFoundException;
-import com.sidenow.domain.boardType.free.board.repository.FreeBoardImageRepository;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardLikeRepository;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
 import com.sidenow.domain.member.entity.Member;
@@ -26,9 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -41,7 +38,6 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 
     private final MemberRepository memberRepository;
     private final FreeBoardRepository freeBoardRepository;
-    private final FreeBoardImageRepository freeBoardFileRepository;
     private final FreeBoardLikeRepository freeBoardLikeRepository;
     private final AwsS3Service awsS3Service;
     private final SecurityUtils securityUtils;

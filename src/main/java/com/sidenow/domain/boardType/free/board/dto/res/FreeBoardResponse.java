@@ -2,14 +2,12 @@ package com.sidenow.domain.boardType.free.board.dto.res;
 
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
-import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 public abstract class FreeBoardResponse {
 
@@ -38,7 +36,7 @@ public abstract class FreeBoardResponse {
         private String content;
 
         public static FreeBoardCreateResponse from(FreeBoard freeBoard) {
-            return new FreeBoardCreateResponse(freeBoard.getId(), freeBoard.getTitle(), freeBoard.getContent());
+            return new FreeBoardCreateResponse(freeBoard.getFreeBoardId(), freeBoard.getTitle(), freeBoard.getContent());
         }
     }
 
@@ -52,7 +50,7 @@ public abstract class FreeBoardResponse {
         private LocalDateTime updateDate;
 
         public static FreeBoardUpdateResponse from(FreeBoard freeBoard) {
-            return new FreeBoardUpdateResponse(freeBoard.getId(), freeBoard.getTitle(), freeBoard.getContent(), freeBoard.getUpdatedDate());
+            return new FreeBoardUpdateResponse(freeBoard.getFreeBoardId(), freeBoard.getTitle(), freeBoard.getContent(), freeBoard.getUpdatedDate());
         }
     }
     @Getter
@@ -74,7 +72,7 @@ public abstract class FreeBoardResponse {
 
         public static FreeBoardGetResponse from(FreeBoard freeBoard) {
             return FreeBoardGetResponse.builder()
-                    .id(freeBoard.getId())
+                    .id(freeBoard.getFreeBoardId())
                     .title(freeBoard.getTitle())
                     .content(freeBoard.getContent())
                     .image(freeBoard.getImage())
@@ -117,7 +115,7 @@ public abstract class FreeBoardResponse {
 
         public static FreeBoardGetListResponse from(FreeBoard freeBoard) {
             return FreeBoardGetListResponse.builder()
-                    .freeBoardPostId(freeBoard.getId())
+                    .freeBoardPostId(freeBoard.getFreeBoardId())
                     .nickname(freeBoard.getMember().getNickname())
                     .title(freeBoard.getTitle())
                     .hits(freeBoard.getHits())

@@ -11,7 +11,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,7 +22,8 @@ public class FreeBoard extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 게시글 고유 ID
+    @Column(name = "free_board_id")
+    private Long freeBoardId; // 게시글 고유 ID
 
     @Column(nullable = false)
     private String title; // 게시글 제목

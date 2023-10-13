@@ -33,16 +33,16 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
     @Override
     // 자유게시판 게시글 댓글 등록
-    public FreeBoardCommentCheck registerFreeBoardComment(Long freeBoardPostId, RegisterFreeBoardCommentRequest registerFreeBoardCommentRequest) {
+    public FreeBoardCommentCheck registerFreeBoardComment(Long freeBoardId, RegisterFreeBoardCommentRequest req) {
         log.info("Create FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
-        Member findMember = memberRepository.findById(registerFreeBoardCommentRequest.getMemberId()).orElseThrow(MemberNotExistException::new);
-        FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(FreeBoardIdNotFoundException::new);
+        Member findMember = memberRepository.findById(req.getMemberId()).orElseThrow(MemberNotExistException::new);
+        FreeBoard freeBoard = freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
         FreeBoardComment freeBoardComments;
-        if (registerFreeBoardCommentRequest.getParentId() == null) {
-            freeBoardComments = createFreeBoardParentComments(registerFreeBoardCommentRequest, findMember, findFreeBoardPost);
+        if (req.getParentId() == null) {
+            freeBoardComments = createFreeBoardParentComments(req, findMember, freeBoard);
         } else {
-            freeBoardComments = createFreeBoardChildComments(registerFreeBoardCommentRequest, findMember, findFreeBoardPost);
+            freeBoardComments = createFreeBoardChildComments(req, findMember, freeBoard);
         }
         freeBoardCommentRepository.save(freeBoardComments);
         freeBoardCommentCheck.setSaved(true);
@@ -52,10 +52,10 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
     @Override
     // 자유게시판 게시글의 댓글 전체 조회
-    public List<FreeBoardGetCommentListResponse> getFreeBoardCommentList(Long freeBoardPostId) {
+    public List<FreeBoardGetCommentListResponse> getFreeBoardCommentList(Long freeBoardId) {
         log.info("Read FreeBoard Comment Service Start");
-        FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(FreeBoardIdNotFoundException::new);
-        List<FreeBoardComment> freeBoardCommentsList = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardPostIdOrderByCreatedAtAsc(findFreeBoardPost.getId());
+        FreeBoard freeBoard = freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
+        List<FreeBoardComment> freeBoardCommentsList = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardIdOrderByCreatedAtAsc(freeBoard.getFreeBoardId());
         List<FreeBoardGetCommentListResponse> readFreeBoardCommentDto = new ArrayList<>();
         freeBoardCommentsList.forEach(s -> readFreeBoardCommentDto.add(FreeBoardGetCommentListResponse.from(s))); // 댓글 전체 조회 핵심 코드 (람다식 forEach 사용)
         log.info("Read FreeBoard Comment Service Start");
@@ -64,10 +64,10 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
     @Override
     // 자유게시판 게시글의 댓글 삭제
-    public FreeBoardCommentCheck deleteFreeBoardComment(Long freeBoardPostId, Long freeBoardCommentId) {
+    public FreeBoardCommentCheck deleteFreeBoardComment(Long freeBoardId, Long freeBoardCommentId) {
         log.info("Delete FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
-        freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(FreeBoardIdNotFoundException::new);
+        freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
         FreeBoardComment findFreeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
         findFreeBoardComment.changeIsDeleted(true);
         freeBoardCommentRepository.deleteById(findFreeBoardComment.getCommentId()); // 댓글 삭제
@@ -78,11 +78,11 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
     @Override
     // 자유게시판 게시글의 댓글 수정
-    public FreeBoardCommentCheck modifyFreeBoardComment(Long freeBoardPostId, Long freeBoardCommentId, RegisterFreeBoardCommentRequest registerFreeBoardCommentRequest) {
+    public FreeBoardCommentCheck modifyFreeBoardComment(Long freeBoardId, Long freeBoardCommentId, RegisterFreeBoardCommentRequest req) {
         log.info("Modify FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
-        Member findMember = memberRepository.findById(registerFreeBoardCommentRequest.getMemberId()).orElseThrow(MemberNotExistException::new);
-        freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(FreeBoardIdNotFoundException::new);
+        Member findMember = memberRepository.findById(req.getMemberId()).orElseThrow(MemberNotExistException::new);
+        freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
         FreeBoardComment findFreeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
         if (findFreeBoardComment.getIsDeleted()) {
             throw new NotFoundFreeBoardCommentIdException();
@@ -90,7 +90,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         if (!findFreeBoardComment.getMember().getMemberId().equals(findMember.getMemberId())){
             throw new FreeBoardCommentAuthErrorException();
         }
-        FreeBoardComment newFreeBoardComment = findFreeBoardComment.updateContent(registerFreeBoardCommentRequest.getContent());
+        FreeBoardComment newFreeBoardComment = findFreeBoardComment.updateContent(req.getContent());
         newFreeBoardComment.setUpdatedAt(LocalDateTime.now());
         freeBoardCommentRepository.save(newFreeBoardComment);
         freeBoardCommentCheck.setUpdated(true);

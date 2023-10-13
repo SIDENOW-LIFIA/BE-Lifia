@@ -16,10 +16,11 @@ public class FreeBoardLike extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "free_board_like_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "freeBoard_id", nullable = false)
+    @JoinColumn(name = "free_board_id", nullable = false)
     private FreeBoard freeBoard;
 
     @ManyToOne(fetch = FetchType.LAZY)
