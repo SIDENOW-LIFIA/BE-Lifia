@@ -1,14 +1,14 @@
 package com.sidenow.domain.boardType.free.board.service;
 
-import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardRegisterPostRequest;
-import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardUpdatePostRequest;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.AllFreeBoards;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardCheck;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardGetPostListResponse;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardGetPostResponse;
+import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardCreateRequest;
+import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardUpdateRequest;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.*;
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
-import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostIdException;
-import com.sidenow.domain.boardType.free.board.repository.FreeBoardFileRepository;
+import com.sidenow.domain.boardType.free.board.entity.FreeBoardLike;
+import com.sidenow.domain.boardType.free.board.exception.FreeBoardIdNotFoundException;
+import com.sidenow.domain.boardType.free.board.exception.FreeBoardLikeHistoryNotFoundException;
+import com.sidenow.domain.boardType.free.board.repository.FreeBoardImageRepository;
+import com.sidenow.domain.boardType.free.board.repository.FreeBoardLikeRepository;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberNotExistException;
@@ -25,64 +25,67 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 @Service
 public class FreeBoardServiceImpl implements FreeBoardService{
 
+    private static final String SUCCESS_LIKE_BOARD = "좋아요 처리 완료";
+    private static final String SUCCESS_UNLIKE_BOARD = "좋아요 취소 완료";
+    private static final int FREE_BOARD_PAGE_SIZE = 10;
+
     private final MemberRepository memberRepository;
     private final FreeBoardRepository freeBoardRepository;
-    private final FreeBoardFileRepository freeBoardFileRepository;
+    private final FreeBoardImageRepository freeBoardFileRepository;
+    private final FreeBoardLikeRepository freeBoardLikeRepository;
     private final AwsS3Service awsS3Service;
     private final SecurityUtils securityUtils;
-    private final int FREE_BOARD_PAGE_SIZE = 10;
 
     // 자유게시판 게시글 등록
     @Override
-    public FreeBoardCheck registerFreeBoardPost(List<MultipartFile> multipartFile, FreeBoardRegisterPostRequest createFreeBoardPostRequest) {
-        log.info("Register FreeBoard Post Service Start");
-        FreeBoardCheck freeBoardCheck = new FreeBoardCheck();
+    @Transactional
+    public FreeBoardCreateResponse createFreeBoard(FreeBoardCreateRequest req, MultipartFile image) {
+        log.info("Create FreeBoard Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
                 .getMemberId()).get();
-        FreeBoard freeBoard = FreeBoardRegisterPostRequest.to(createFreeBoardPostRequest, member);
-        freeBoardRepository.save(freeBoard);
-        if (multipartFile != null) {
-            List<String> fileList = awsS3Service.uploadFile(member, freeBoard, multipartFile);
-            log.info("업로드 된 파일 리스트: "+fileList);
-        }
-        freeBoardCheck.setSaved(true);
-        log.info("Register FreeBoard Post Service End");
 
-        return freeBoardCheck;
+        String imgUrl = awsS3Service.uploadFile(image);
+        log.info("업로드 된 파일: "+imgUrl);
+
+        FreeBoard freeBoard = FreeBoardCreateRequest.to(req, imgUrl, member);
+        freeBoardRepository.save(freeBoard);
+
+        log.info("Create FreeBoard Service 종료");
+
+        return FreeBoardCreateResponse.from(freeBoard);
     }
 
     // 자유게시판 게시글 단건 조회
     @Override
-    public FreeBoardGetPostResponse getFreeBoardPost(Long freeBoardPostId){
-        log.info("Get FreeBoard Post Service Start");
-        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+    @Transactional
+    public FreeBoardGetResponse getFreeBoard(Long id){
+        log.info("Get FreeBoard Service 진입");
+        FreeBoard freeBoard = freeBoardRepository.findById(id).orElseThrow(FreeBoardIdNotFoundException::new);
         memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new).getMemberId());
-        Map<String, String> files = new HashMap<>();
-        freeBoardFileRepository.findByFreeBoard(freeBoard).forEach(freeBoardFile -> {
-            String fileUrl = awsS3Service.getFilePath(freeBoardFile.getNewFileName());
-            files.put(freeBoardFile.getOriginFileName(), fileUrl);
-        });
 
         freeBoard.increaseHits();
 
-        FreeBoardGetPostResponse freeBoardGetPostResponse = FreeBoardGetPostResponse.from(freeBoard, files);
+        FreeBoardGetResponse freeBoardGetResponse = FreeBoardGetResponse.from(freeBoard);
         log.info("Get FreeBoard Post Service End");
-        return freeBoardGetPostResponse;
+        return freeBoardGetResponse;
     }
 
     // 자유게시판 게시글 전체 조회
     @Override
-    public AllFreeBoards getFreeBoardPostList(Integer page){
+    @Transactional
+    public AllFreeBoards getFreeBoardList(Integer page){
 
         log.info("Get FreeBoard Post List Service 진입");
         memberRepository.findById(securityUtils.getLoggedInMember()
@@ -94,9 +97,9 @@ public class FreeBoardServiceImpl implements FreeBoardService{
         Pageable pageable = PageRequest.of(page-1, FREE_BOARD_PAGE_SIZE);
 
         Page<FreeBoard> freeBoardPage = freeBoardRepository.findByOrderByRegDateDesc(pageable);
-        List<FreeBoardGetPostListResponse> freeBoardGetPostList = new ArrayList<>();
+        List<FreeBoardGetListResponse> freeBoardGetPostList = new ArrayList<>();
         for (int i = 0; i < freeBoardPage.getContent().size(); i++) {
-            freeBoardGetPostList.add(FreeBoardGetPostListResponse.from(freeBoardPage.getContent().get(i)));
+            freeBoardGetPostList.add(FreeBoardGetListResponse.from(freeBoardPage.getContent().get(i)));
         }
         log.info("Get FreeBoard Post List Service 종료");
 
@@ -107,74 +110,95 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 
     // 자유게시판 게시글 수정
     @Override
-    public FreeBoardCheck updateFreeBoardPost(List<MultipartFile> multipartFile, Long freeBoardPostId, FreeBoardUpdatePostRequest freeBoardUpdatePostRequest){
-        log.info("Update FreeBoard Post Service 진입");
-        FreeBoardCheck freeBoardCheck = new FreeBoardCheck();
+    @Transactional
+    public FreeBoardUpdateResponse updateFreeBoard(Long id, FreeBoardUpdateRequest req, MultipartFile image){
+        log.info("Update FreeBoard Service 진입");
 
         // 게시글 존재여부 확인
-        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardPostId)
-                .orElseThrow(NotFoundFreeBoardPostIdException::new);
-
-        // 게시글 작성자가 맞는지 확인
-        Member member = memberRepository.findById(freeBoard.getMember().getMemberId())
-                .orElseThrow(MemberNotExistException::new);
-
-        // S3 저장소 기존 첨부파일 삭제
-        awsS3Service.deleteFreeBoardFile(freeBoard);
-
-        if (multipartFile != null) {
-            List<String> fileList = awsS3Service.uploadFile(member, freeBoard, multipartFile);
-            log.info("업로드된 파일리스트: "+fileList);
-        }
-
-        FreeBoard updateFreeBoard = FreeBoardUpdatePostRequest.to(freeBoardUpdatePostRequest, member);
-
-        freeBoardRepository.save(updateFreeBoard);
-
-        freeBoardCheck.setUpdated(true);
-        log.info("Update FreeBoard Post Service 종료");
-
-        return freeBoardCheck;
-    }
-
-    // 자유게시판 게시글 삭제
-    @Override
-    public FreeBoardCheck deleteFreeBoardPost(Long freeBoardPostId){
-        log.info("Delete FreeBoard Post Service 진입");
-        FreeBoardCheck freeBoardCheck = new FreeBoardCheck();
-
-        // 게시글 존재여부 확인
-        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+        FreeBoard freeBoard = freeBoardRepository.findById(id)
+                .orElseThrow(FreeBoardIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
         memberRepository.findById(freeBoard.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
 
-        // S3 저장소 기존 첨부파일 삭제
-        awsS3Service.deleteFreeBoardFile(freeBoard);
+        if (image != null){
+            // 기존 이미지 파일 삭제
+            awsS3Service.deleteFile(image.getOriginalFilename());
+            String imgUrl = awsS3Service.uploadFile(image);
+            log.info("업로드된 파일: "+imgUrl);
+            freeBoard.updateImage(imgUrl);
+        }
+
+        if (req.getTitle() != null){
+            freeBoard.updateTitle(req.getTitle());
+        }
+
+        if (req.getContent() != null) {
+            freeBoard.updateContent(req.getContent());
+        }
+
+        if (req.getRegDate() != null) {
+            freeBoard.updateRegDate(req.getRegDate());
+        }
+
+        log.info("Update FreeBoard Service 종료");
+
+        return FreeBoardUpdateResponse.from(freeBoard);
+    }
+
+    // 자유게시판 게시글 삭제
+    @Override
+    @Transactional
+    public void deleteFreeBoard(Long id){
+        log.info("Delete FreeBoard Post Service 진입");
+
+        // 게시글 존재여부 확인
+        FreeBoard freeBoard = freeBoardRepository.findById(id).orElseThrow(FreeBoardIdNotFoundException::new);
+
+        // 게시글 작성자가 맞는지 확인
+        memberRepository.findById(freeBoard.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
 
         freeBoardRepository.delete(freeBoard);
 
-        freeBoardCheck.setDeleted(true);
         log.info("Delete FreeBoard Post Service 종료");
-
-        return freeBoardCheck;
     }
 
     // 자유게시판 게시글 좋아요
-    public FreeBoardCheck likeFreeBoardPost(Long freeBoardPostId, Member member) {
-        log.info("Like FreeBoard Post Service 진입");
-        FreeBoardCheck freeBoardCheck = new FreeBoardCheck();
-
-        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+    @Override
+    @Transactional
+    public String updateLikeOfFreeBoard(Long id) {
+        log.info("Update Like Of FreeBoard Service 진입");
+        Member member = memberRepository.findById(securityUtils.getLoggedInMember()
+                .orElseThrow(MemberNotLoginException::new)
+                .getMemberId()).get();
+        FreeBoard freeBoard = freeBoardRepository.findById(id).orElseThrow(FreeBoardIdNotFoundException::new);
         
         if (!hasLikeFreeBoard(freeBoard, member)){
-            
+            freeBoard.increaseLikes();
+            return createLikeFreeBoard(freeBoard, member);
         }
 
-        log.info("Like FreeBoard Post Service 종료");
+        freeBoard.decreaseLikes();
+        return removeLikeFreeBoard(freeBoard, member);
     }
     
     public boolean hasLikeFreeBoard(FreeBoard freeBoard, Member member){
-        
+        return freeBoardLikeRepository.findByFreeBoardAndMember(freeBoard, member).isPresent();
+    }
+
+    public String createLikeFreeBoard(FreeBoard freeBoard, Member member) {
+        FreeBoardLike freeBoardLike = new FreeBoardLike(freeBoard, member);
+        freeBoardLikeRepository.save(freeBoardLike);
+        log.info("좋아요 완료");
+        return SUCCESS_LIKE_BOARD;
+    }
+
+    public String removeLikeFreeBoard(FreeBoard freeBoard, Member member) {
+        FreeBoardLike freeBoardLike = freeBoardLikeRepository.findByFreeBoardAndMember(freeBoard, member)
+                        .orElseThrow(FreeBoardLikeHistoryNotFoundException::new);
+        freeBoardLikeRepository.delete(freeBoardLike);
+        log.info("좋아요 취소 완료");
+
+        return SUCCESS_UNLIKE_BOARD;
     }
 }

@@ -1,7 +1,7 @@
 package com.sidenow.domain.boardType.free.comment.service;
 
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
-import com.sidenow.domain.boardType.free.board.exception.NotFoundFreeBoardPostIdException;
+import com.sidenow.domain.boardType.free.board.exception.FreeBoardIdNotFoundException;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
 import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.RegisterFreeBoardCommentRequest;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardCommentCheck;
@@ -37,7 +37,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         log.info("Create FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
         Member findMember = memberRepository.findById(registerFreeBoardCommentRequest.getMemberId()).orElseThrow(MemberNotExistException::new);
-        FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+        FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(FreeBoardIdNotFoundException::new);
         FreeBoardComment freeBoardComments;
         if (registerFreeBoardCommentRequest.getParentId() == null) {
             freeBoardComments = createFreeBoardParentComments(registerFreeBoardCommentRequest, findMember, findFreeBoardPost);
@@ -54,7 +54,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
     // 자유게시판 게시글의 댓글 전체 조회
     public List<FreeBoardGetCommentListResponse> getFreeBoardCommentList(Long freeBoardPostId) {
         log.info("Read FreeBoard Comment Service Start");
-        FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+        FreeBoard findFreeBoardPost = freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(FreeBoardIdNotFoundException::new);
         List<FreeBoardComment> freeBoardCommentsList = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardPostIdOrderByCreatedAtAsc(findFreeBoardPost.getId());
         List<FreeBoardGetCommentListResponse> readFreeBoardCommentDto = new ArrayList<>();
         freeBoardCommentsList.forEach(s -> readFreeBoardCommentDto.add(FreeBoardGetCommentListResponse.from(s))); // 댓글 전체 조회 핵심 코드 (람다식 forEach 사용)
@@ -67,7 +67,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
     public FreeBoardCommentCheck deleteFreeBoardComment(Long freeBoardPostId, Long freeBoardCommentId) {
         log.info("Delete FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
-        freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+        freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(FreeBoardIdNotFoundException::new);
         FreeBoardComment findFreeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
         findFreeBoardComment.changeIsDeleted(true);
         freeBoardCommentRepository.deleteById(findFreeBoardComment.getCommentId()); // 댓글 삭제
@@ -82,7 +82,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         log.info("Modify FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
         Member findMember = memberRepository.findById(registerFreeBoardCommentRequest.getMemberId()).orElseThrow(MemberNotExistException::new);
-        freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(NotFoundFreeBoardPostIdException::new);
+        freeBoardRepository.findByFreeBoardPostId(freeBoardPostId).orElseThrow(FreeBoardIdNotFoundException::new);
         FreeBoardComment findFreeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
         if (findFreeBoardComment.getIsDeleted()) {
             throw new NotFoundFreeBoardCommentIdException();

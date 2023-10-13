@@ -6,6 +6,7 @@ import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -27,36 +28,62 @@ public abstract class FreeBoardResponse {
         @Schema(description = "자유게시판 게시글의 수정 여부 확인")
         private boolean updated;
     }
+
+    @Data
+    @AllArgsConstructor
+    @Schema(description = "자유게시판 생성 응답 객체")
+    public static class FreeBoardCreateResponse {
+        private Long id;
+        private String title;
+        private String content;
+
+        public static FreeBoardCreateResponse from(FreeBoard freeBoard) {
+            return new FreeBoardCreateResponse(freeBoard.getId(), freeBoard.getTitle(), freeBoard.getContent());
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    @Schema(description = "자유게시판 수정 응답 객체")
+    public static class FreeBoardUpdateResponse {
+        private Long id;
+        private String title;
+        private String content;
+        private LocalDateTime updateDate;
+
+        public static FreeBoardUpdateResponse from(FreeBoard freeBoard) {
+            return new FreeBoardUpdateResponse(freeBoard.getId(), freeBoard.getTitle(), freeBoard.getContent(), freeBoard.getUpdatedDate());
+        }
+    }
     @Getter
     @Builder
     @RequiredArgsConstructor
     @Schema(description = "단일 게시글 조회 응답 객체")
-    public static class FreeBoardGetPostResponse {
-        private final Long freeBoardPostId;
-        private final Long memberId;
+    public static class FreeBoardGetResponse {
+        private final Long id;
         private final String title;
         private final String content;
+        private final String image;
         private final String nickname;
+        private final String regDate;
+        private final String updatedDate;
         private final int hits;
         private final int likes;
         private final int commentsCount;
-        private final String regDate;
-        private final Map<String, String> files;
         private final List<FreeBoardComment> comments;
 
-        public static FreeBoardGetPostResponse from(FreeBoard freeBoard, Map<String, String> files) {
-            Member member = freeBoard.getMember();
-            return FreeBoardGetPostResponse.builder()
-                    .freeBoardPostId(freeBoard.getId())
-                    .memberId(member.getMemberId())
+        public static FreeBoardGetResponse from(FreeBoard freeBoard) {
+            return FreeBoardGetResponse.builder()
+                    .id(freeBoard.getId())
                     .title(freeBoard.getTitle())
                     .content(freeBoard.getContent())
-                    .nickname(member.getNickname())
+                    .image(freeBoard.getImage())
+                    .nickname(freeBoard.getMember().getNickname())
+                    .regDate(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                    .updatedDate(freeBoard.getUpdatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                     .hits(freeBoard.getHits())
                     .likes(freeBoard.getLikes())
                     .commentsCount(freeBoard.getFreeBoardComments().size())
-                    .regDate(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                    .files(files)
                     .comments(freeBoard.getFreeBoardComments())
                     .build();
         }
@@ -66,7 +93,7 @@ public abstract class FreeBoardResponse {
     @Builder
     @RequiredArgsConstructor
     @Schema(description = "게시글 전체 조회 응답 객체")
-    public static class FreeBoardGetPostListResponse {
+    public static class FreeBoardGetListResponse {
         @Schema(description = "자유게시판 게시글 ID")
         private final Long freeBoardPostId;
 
@@ -88,8 +115,8 @@ public abstract class FreeBoardResponse {
         @Schema(description = "자유게시판 게시글 등록일자")
         private final String regDate;
 
-        public static FreeBoardGetPostListResponse from(FreeBoard freeBoard) {
-            return FreeBoardGetPostListResponse.builder()
+        public static FreeBoardGetListResponse from(FreeBoard freeBoard) {
+            return FreeBoardGetListResponse.builder()
                     .freeBoardPostId(freeBoard.getId())
                     .nickname(freeBoard.getMember().getNickname())
                     .title(freeBoard.getTitle())
@@ -106,7 +133,7 @@ public abstract class FreeBoardResponse {
     @RequiredArgsConstructor
     @Schema(description = "자유게시판 게시글 전체 조회")
     public static class AllFreeBoards {
-        private final List<FreeBoardGetPostListResponse> freeBoards;
+        private final List<FreeBoardGetListResponse> freeBoards;
     }
 
 }
