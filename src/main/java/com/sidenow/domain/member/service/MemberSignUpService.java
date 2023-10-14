@@ -1,9 +1,6 @@
 package com.sidenow.domain.member.service;
 
-import com.sidenow.domain.member.dto.req.MemberRequest;
 import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
-import com.sidenow.domain.member.dto.res.MemberResponse;
-import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 import com.sidenow.domain.member.entity.Member;
 
 public interface MemberSignUpService {

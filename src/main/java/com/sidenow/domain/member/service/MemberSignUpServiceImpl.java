@@ -1,7 +1,6 @@
 package com.sidenow.domain.member.service;
 
 import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
-import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailDuplicateException;
 import com.sidenow.domain.member.exception.MemberNicknameDuplicateException;
@@ -30,7 +29,6 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
     @Override
     public Member signUp(SignUpMemberRequest req) {
         log.info("Sign Up Member Service 진입");
-        MemberCheck memberCheck = new MemberCheck();
         LocalDate now = LocalDate.now();
         Member newMember = Member.builder()
                 .email(req.getEmail())
