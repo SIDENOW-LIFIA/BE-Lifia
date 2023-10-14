@@ -133,10 +133,6 @@ public class FreeBoardServiceImpl implements FreeBoardService{
             freeBoard.updateContent(req.getContent());
         }
 
-        if (req.getRegDate() != null) {
-            freeBoard.updateRegDate(req.getRegDate());
-        }
-
         log.info("Update FreeBoard Service 종료");
 
         return FreeBoardUpdateResponse.from(freeBoard);
