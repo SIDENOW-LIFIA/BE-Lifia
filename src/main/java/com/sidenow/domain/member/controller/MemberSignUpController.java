@@ -1,7 +1,6 @@
 package com.sidenow.domain.member.controller;
 
 import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
-import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailAuthCodeException;
 import com.sidenow.domain.member.service.MemberSignUpService;
