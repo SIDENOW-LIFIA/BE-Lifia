@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum FreeBoardExceptionList {
-    NOT_FOUND_FREE_BOARD_POST_ID_ERROR("FB0001", HttpStatus.NOT_FOUND, "해당 postId인 자유게시판 게시글이 존재하지 않습니다."),
-    NOT_FOUND_FREE_BOARD_POST_BY_MEMBER_ERROR("FB0002", HttpStatus.NOT_FOUND, "해당 유저의 자유게시판 게시글이 존재하지 않습니다.");
+    FREE_BOARD_ID_NOT_FOUND_ERROR("FB0001", HttpStatus.NOT_FOUND, "해당 postId인 게시글이 존재하지 않습니다."),
+    FREE_BOARD_MEMBER_NOT_FOUND_ERROR("FB0002", HttpStatus.NOT_FOUND, "해당 유저의 게시글이 존재하지 않습니다."),
+    FREE_BOARD_LIKE_HISTORY_NOT_FOUND_ERROR("FB0002", HttpStatus.NOT_FOUND, "해당 유저의 게시글 좋아요 이력이 존재하지 않습니다.");
+
     private final String errorCode;
     private final HttpStatus httpStatus;
     private final String message;

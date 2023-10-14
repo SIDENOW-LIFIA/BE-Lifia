@@ -2,7 +2,9 @@ package com.sidenow.domain.member.controller;
 
 import com.sidenow.domain.member.constant.MemberConstant;
 import com.sidenow.domain.member.constant.MemberConstant.MemberSuccessMessage;
+import com.sidenow.domain.member.dto.req.MemberRequest;
 import com.sidenow.domain.member.dto.req.MemberRequest.MemberLoginRequest;
+import com.sidenow.domain.member.dto.req.MemberRequest.MemberTokenRequest;
 import com.sidenow.domain.member.dto.res.MemberResponse.MemberLoginResponse;
 import com.sidenow.domain.member.service.MemberAuthService;
 import com.sidenow.global.dto.ResponseDto;
@@ -27,7 +29,7 @@ public class MemberAuthController {
     private final MemberAuthService memberAuthService;
 
     @PostMapping("/login")
-    @Operation(summary = "유저 로그인")
+    @Operation(summary = "자체 로그인")
     public ResponseEntity<ResponseDto<MemberLoginResponse>> login(@Valid @RequestBody MemberLoginRequest memberLoginRequest){
 
         log.info("Member Login Api Start");
@@ -50,10 +52,10 @@ public class MemberAuthController {
 
     @PostMapping("/re-issue")
     @Operation(summary = "토큰 재발급", description = "Refresh Token을 보내주세요.")
-    public ResponseEntity<ResponseDto<MemberLoginResponse>> reIssueToken() {
+    public ResponseEntity<ResponseDto<MemberLoginResponse>> reIssueToken(@RequestBody MemberTokenRequest req) {
 
         log.info("Member Reissue Token Api Start");
-        MemberLoginResponse memberLoginResponse = memberAuthService.reIssueToken();
+        MemberLoginResponse memberLoginResponse = memberAuthService.reIssueToken(req);
         log.info("Member Reissue Token Api End");
 
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_TOKEN_REFRESH_SUCCESS.getMessage(), memberLoginResponse));

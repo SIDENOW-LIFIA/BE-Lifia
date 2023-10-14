@@ -1,10 +1,10 @@
 spring:
   profiles:
     include:
-      - prod
+      - local
 
   jwt:
-    secret: ZG9uZ2h1bi1zaGFycC1kYnJ1YS13ZWItcHJvamVjdC11c2luZy1qd3Qtc2VjcmV0LURvbmdodW4tc3ByaW5nLWJvb3Qtand0LWJhY2stZW5kLWFuZC1qcy1jb2xsYWJv
+    secret: 6e8093a0d65ae3f9d193a04ac378858a76abf71ef73e3e2f74b078c6459d82c9800a299331b1227574c049a489771c128e3e6eed7b4057c44c5c5c119eed3f42
     access:
       expiration: 60480
       header: Authorization

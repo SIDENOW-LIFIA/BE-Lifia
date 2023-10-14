@@ -1,10 +1,18 @@
 package com.sidenow.domain.member.dto.req;
 
+import com.sidenow.domain.member.constant.MemberConstant;
+import com.sidenow.domain.member.constant.MemberConstant.Role;
+import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public abstract class MemberRequest {
 
@@ -50,5 +58,27 @@ public abstract class MemberRequest {
         @NotBlank(message = "비밀번호를 입력하세요.")
         @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력하세요.")
         private String password;
+
+        public Member toMember(PasswordEncoder passwordEncoder) {
+            return Member.builder()
+                    .email(email)
+                    .password(passwordEncoder.encode(password))
+                    .role(Role.Role_USER)
+                    .build();
+        }
+        public UsernamePasswordAuthenticationToken toAuthentication() {
+            return new UsernamePasswordAuthenticationToken(email, password);
+        }
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema(description = "토큰 요청 객체")
+    public static class MemberTokenRequest{
+
+        private String accessToken;
+        private String refreshToken;
     }
 }

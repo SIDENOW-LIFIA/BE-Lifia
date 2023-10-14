@@ -1,6 +1,6 @@
 package com.sidenow.global.config.redis.dto;
 
-import com.sidenow.global.config.jwt.TokenInfoResponse;
+import com.sidenow.global.config.jwt.TokenResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,10 +35,10 @@ public abstract class RefreshTokenDto {
         private String accessToken;
         private String refreshToken;
 
-        public static RefreshTokenResponse from(TokenInfoResponse tokenInfoResponse) {
+        public static RefreshTokenResponse from(TokenResponse tokenResponse) {
             return RefreshTokenResponse.builder()
-                    .accessToken(tokenInfoResponse.getAccessToken())
-                    .refreshToken(tokenInfoResponse.getRefreshToken())
+                    .accessToken(tokenResponse.getAccessToken())
+                    .refreshToken(tokenResponse.getRefreshToken())
                     .build();
         }
     }
