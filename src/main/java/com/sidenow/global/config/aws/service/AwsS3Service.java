@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface AwsS3Service {
 
-    List<String> uploadFile(Member member, FreeBoard freeBoard, List<MultipartFile> multipartFile);
-    void deleteFreeBoardFile(FreeBoard freeBoard);
+    String uploadFile(MultipartFile image);
+    void deleteFile(String fileName);
     String createFileName(String fileName);
     String getFileExtension(String fileName);
     String getFilePath(String newFileName);

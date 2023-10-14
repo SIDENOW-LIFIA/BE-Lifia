@@ -1,6 +1,6 @@
 package com.sidenow.domain.member.dto.res;
 
-import com.sidenow.global.config.jwt.TokenInfoResponse;
+import com.sidenow.global.config.jwt.TokenResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -30,10 +30,10 @@ public abstract class MemberResponse {
         private final String accessToken;
         private final String refreshToken;
 
-        public static MemberLoginResponse from(TokenInfoResponse tokenInfoResponse) {
+        public static MemberLoginResponse from(TokenResponse tokenResponse) {
             return MemberLoginResponse.builder()
-                    .accessToken(tokenInfoResponse.getAccessToken())
-                    .refreshToken(tokenInfoResponse.getRefreshToken())
+                    .accessToken(tokenResponse.getAccessToken())
+                    .refreshToken(tokenResponse.getRefreshToken())
                     .build();
         }
     }

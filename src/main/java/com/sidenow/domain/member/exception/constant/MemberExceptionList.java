@@ -13,7 +13,8 @@ public enum MemberExceptionList {
     MEMBER_NICKNAME_ALREADY_EXIST_ERROR("M0003", HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
     MEMBER_EMAIL_NOT_FOUND_ERROR("M0004", HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다."),
     MEMBER_EMAIL_AUTH_CODE_ERROR("M0005", HttpStatus.BAD_REQUEST, "이메일 인증코드가 일치하지 않습니다."),
-    MEMBER_NOT_LOGIN("M0006", HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스입니다.");
+    MEMBER_NOT_LOGIN("M0006", HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스입니다."),
+    MEMBER_LOGIN_FAILURE_ERROR("M0007", HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 일치하지 않습니다.");
 
     private final String errorCode;
     private final HttpStatus httpStatus;

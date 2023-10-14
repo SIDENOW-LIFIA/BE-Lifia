@@ -30,7 +30,7 @@ public class FreeBoardComment extends BaseTimeEntity {
     private String content; // 댓글 내용
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "free_board_post_id", nullable = false) // 댓글의 게시글 (자유게시판)
+    @JoinColumn(name = "free_board_id", nullable = false) // 댓글의 게시글 (자유게시판)
     private FreeBoard freeBoard;
 
     @ManyToOne(fetch = FetchType.LAZY)

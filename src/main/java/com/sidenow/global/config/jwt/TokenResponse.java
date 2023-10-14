@@ -7,18 +7,18 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class TokenInfoResponse {
+public class TokenResponse {
     private String grantType;
     private String accessToken;
     private String refreshToken;
-    private Long accessTokenExpirationTime;
+    private Long accessTokenExpiresIn;
 
-    public static TokenInfoResponse from(String grantType, String accessToken, String refreshToken, Long accessTokenExpirationTime){
-        return TokenInfoResponse.builder()
+    public static TokenResponse from(String grantType, String accessToken, Long accessTokenExpirationTime, String refreshToken){
+        return TokenResponse.builder()
                 .grantType(grantType)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .accessTokenExpirationTime(accessTokenExpirationTime)
+                .accessTokenExpiresIn(accessTokenExpirationTime)
                 .build();
     }
 }

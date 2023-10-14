@@ -1,11 +1,9 @@
 package com.sidenow.domain.boardType.free.board.controller;
 
-import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardRegisterPostRequest;
-import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardUpdatePostRequest;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.AllFreeBoards;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardCheck;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardGetPostResponse;
-import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
+import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardCreateRequest;
+import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardUpdateRequest;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.*;
 import com.sidenow.domain.boardType.free.board.service.FreeBoardService;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,60 +23,70 @@ import static com.sidenow.domain.boardType.free.board.constant.FreeBoardConstant
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/freeBoard")
+@RequestMapping("/freeBoards")
 @Tag(name = "자유게시판 API", description = "FreeBoard")
 public class FreeBoardController {
 
     private final FreeBoardService freeBoardService;
 
-    @PostMapping(value = "/post", consumes = {"multipart/form-data"})
-    @Operation(summary = "자유게시판 글 등록", description = "로그인 필수 / 미로그인 시 접근 불가")
-    public ResponseEntity<ResponseDto<FreeBoardCheck>> registerFreeBoardPost(@RequestPart(required = false)List<MultipartFile> multipartFile, @RequestBody FreeBoardRegisterPostRequest freeBoardRegisterPostRequest) {
-        log.info("Register FreeBoard Post Controller 진입");
-        FreeBoardCheck result = freeBoardService.registerFreeBoardPost(multipartFile, freeBoardRegisterPostRequest);
-        log.info("Register FreeBoard Post Controller 종료");
+    @PostMapping(value = "/board") // consumes = {"multipart/form-data"})
+    @Operation(summary = "자유게시판 게시글 등록", description = "게시글을 등록합니다.")
+    public ResponseEntity<ResponseDto<FreeBoardCreateResponse>> createFreeBoard(@RequestPart FreeBoardCreateRequest req, @RequestPart(required = false) MultipartFile image) {
+        log.info("Register FreeBoard Controller 진입");
+        FreeBoardCreateResponse result = freeBoardService.createFreeBoard(req, image);
+        log.info("Register FreeBoard Controller 종료");
 
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), REGISTER_FREE_BOARD_POST_SUCCESS.getMessage(), result));
     }
 
-    @GetMapping("/post/{postId}")
-    @Operation(summary = "자유게시판 게시글 단건 조회", description = "로그인 필수 / 미로그인 시 접근 불가")
-    public ResponseEntity<ResponseDto<FreeBoardGetPostResponse>> getFreeBoardPost(@PathVariable Long postId) {
-        log.info("Get FreeBoard Post Controller 진입");
-        FreeBoardGetPostResponse result = freeBoardService.getFreeBoardPost(postId);
-        log.info("Get FreeBoard Post Controller 종료");
+    @GetMapping("/board/{id}")
+    @Operation(summary = "자유게시판 게시글 단건 조회", description = "게시글을 단건 조회합니다.")
+    public ResponseEntity<ResponseDto<FreeBoardGetResponse>> getFreeBoard(@PathVariable Long id) {
+        log.info("Get FreeBoard Controller 진입");
+        FreeBoardGetResponse result = freeBoardService.getFreeBoard(id);
+        log.info("Get FreeBoard Controller 종료");
 
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), GET_FREE_BOARD_POST_SUCCESS.getMessage(), result));
     }
 
     @GetMapping("/{page}")
-    @Operation(summary = "자유게시판 게시글 전체 조회", description = "로그인 필수 / 미로그인 시 접근 불가")
+    @Operation(summary = "자유게시판 게시글 목록 조회", description = "게시글 목록을 조회합니다.")
     public ResponseEntity<ResponseDto<AllFreeBoards>> getAllFreeBoard(@PathVariable @Nullable Integer page) {
         log.info("Get All FreeBoard Controller 진입");
-        AllFreeBoards result = freeBoardService.getFreeBoardPostList(page);
+        AllFreeBoards result = freeBoardService.getFreeBoardList(page);
         log.info("Get All FreeBoard Controller 종료");
 
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), GET_FREE_BOARD_POST_LIST_SUCCESS.getMessage(), result));
     }
 
-    @PostMapping(value = "/post/{postId}", consumes = {"multipart/form-data"})
-    @Operation(summary = "자유게시판 글 수정", description = "로그인 필수 / 미로그인 시 접근 불가")
-    public ResponseEntity<ResponseDto<FreeBoardCheck>> updateFreeBoardPost(@PathVariable Long postId, @RequestPart(required = false)List<MultipartFile> multipartFile, @RequestBody FreeBoardUpdatePostRequest freeBoardUpdatePostRequest) {
-        log.info("Update FreeBoard Post Controller 진입");
-        FreeBoardCheck result = freeBoardService.updateFreeBoardPost(multipartFile, postId, freeBoardUpdatePostRequest);
-        log.info("Update FreeBoard Post Controller 종료");
+    @PostMapping(value = "/board/{id}", consumes = {"multipart/form-data"})
+    @Operation(summary = "자유게시판 게시글 수정", description = "게시글을 수정합니다.")
+    public ResponseEntity<ResponseDto<FreeBoardUpdateResponse>> updateFreeBoard(@PathVariable Long id, @RequestPart FreeBoardUpdateRequest req, @RequestPart(required = false) MultipartFile image) {
+        log.info("Update FreeBoard Controller 진입");
+        FreeBoardUpdateResponse result = freeBoardService.updateFreeBoard(id, req, image);
+        log.info("Update FreeBoard Controller 종료");
 
         return ResponseEntity.ok(ResponseDto.update(HttpStatus.OK.value(), UPDATE_FREE_BOARD_POST_SUCCESS.getMessage(), result));
     }
 
-    @DeleteMapping(value = "/post/{postId}")
-    @Operation(summary = "자유게시판 글 삭제")
-    public ResponseEntity<ResponseDto<FreeBoardCheck>> deleteFreeBoardPost(@PathVariable Long postId) {
-        log.info("Delete FreeBoard Post Controller 진입");
-        FreeBoardCheck result = freeBoardService.deleteFreeBoardPost(postId);
-        log.info("Delete FreeBoard Post Controller 종료");
+    @DeleteMapping(value = "/board/{id}")
+    @Operation(summary = "자유게시판 게시글 삭제", description = "게시글을 삭제합니다.")
+    public ResponseEntity<ResponseDto> deleteFreeBoard(@PathVariable Long id) {
+        log.info("Delete FreeBoard Controller 진입");
+        freeBoardService.deleteFreeBoard(id);
+        log.info("Delete FreeBoard Controller 종료");
 
-        return ResponseEntity.ok(ResponseDto.delete(HttpStatus.OK.value(), DELETE_FREE_BOARD_POST_SUCCESS.getMessage(), result));
+        return ResponseEntity.ok(ResponseDto.delete(HttpStatus.OK.value(), DELETE_FREE_BOARD_POST_SUCCESS.getMessage()));
+    }
+
+    @PostMapping("/board/{id}")
+    @Operation(summary = "자유게시판 게시글 좋아요", description = "사용자가 게시글 좋아요를 누릅니다.")
+    public ResponseEntity<ResponseDto<String>> likeFreeBoard(@PathVariable Long id) {
+        log.info("Like FreeBoard Controller 진입");
+        String result = freeBoardService.updateLikeOfFreeBoard(id);
+        log.info("Like FreeBoard Controller 종료");
+
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LIKE_FREE_BOARD_SUCCESS.getMessage(), result));
     }
 
 }
