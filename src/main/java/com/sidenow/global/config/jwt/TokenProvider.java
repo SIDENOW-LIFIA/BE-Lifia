@@ -1,10 +1,7 @@
 package com.sidenow.global.config.jwt;
 
-import com.sidenow.domain.member.entity.Member;
-import com.sidenow.domain.member.exception.MemberNotExistException;
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.config.jwt.exception.*;
-import com.sidenow.global.config.jwt.service.CustomMemberDetails;
 import com.sidenow.global.config.redis.repository.RedisRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -17,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -41,8 +40,8 @@ public class TokenProvider implements InitializingBean {
     private static final String ACCESS = "Access";
     private static final String REFRESH = "Refresh";
     private static final String GRANT_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분 (1분 * 30)
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일 (1시간 * 24 * 7)
 
     @Value("${spring.jwt.secret}")
     private String secret;
@@ -58,7 +57,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     // 토큰 생성
-    public TokenInfoResponse createToken(Authentication authentication) {
+    public TokenResponse createToken(Authentication authentication) {
 
         log.info("createToken 진입");
 
@@ -69,15 +68,12 @@ public class TokenProvider implements InitializingBean {
 
         Date now = new Date();
 
-        CustomMemberDetails principal = (CustomMemberDetails) authentication.getPrincipal();
-        Long memberId = principal.getMember().getMemberId();
-        String accessToken = createAccessToken(authorities, now, memberId);
-        String refreshToken = createRefreshToken(authorities, now, memberId);
+        String accessToken = createAccessToken(authentication, authorities, now);
+        String refreshToken = createRefreshToken(now);
 
-        updateRefreshToken(memberId, refreshToken);
         log.info("createToken 종료");
 
-        return TokenInfoResponse.from(GRANT_TYPE, accessToken, refreshToken, ACCESS_TOKEN_EXPIRE_TIME);
+        return TokenResponse.from(GRANT_TYPE, accessToken, ACCESS_TOKEN_EXPIRE_TIME, refreshToken);
     }
 
     // Refresh Token 업데이트
@@ -204,41 +200,31 @@ public class TokenProvider implements InitializingBean {
     }
 
     // Access Token 생성
-    private String createAccessToken(String authorities, Date now, Long memberID) {
+    private String createAccessToken(Authentication authentication, String authorities, Date now) {
 
         log.info("createAccessToken 진입");
-        Date accessTokenValidity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
-
+        Date accessTokenExpiresIn = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
                 .setSubject(ACCESS)
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim(MEMBER_ID, memberID)
                 .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(accessTokenValidity)
+                .setExpiration(accessTokenExpiresIn)
                 .compact();
-
-        log.info("Access Token 생성 완료");
-        redisRepository.setValues(ACCESS + memberID.toString(), accessToken, Duration.ofSeconds(ACCESS_TOKEN_EXPIRE_TIME));
-        log.info("Access Token Redis에 저장 완료");
 
         log.info("createAccessToken 종료");
         return accessToken;
     }
 
     // Refresh Token 생성
-    private String createRefreshToken(String authorities, Date now, Long memberId) {
+    private String createRefreshToken(Date now) {
 
         log.info("createRefreshToken 진입");
-        Date refreshTokenValidity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
+        Date refreshTokenExpiresIn = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
 
         String refreshToken = Jwts.builder()
-                .setSubject(REFRESH)
-                .claim(AUTHORITIES_KEY, authorities)
-                .claim(MEMBER_ID, memberId)
-                .setIssuedAt(now)
+                .setExpiration(refreshTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(refreshTokenValidity)
                 .compact();
 
         log.info("createRefreshToken 종료");
@@ -266,9 +252,7 @@ public class TokenProvider implements InitializingBean {
         return claims.getSubject();
     }
 
-
-
-    // 인증하는 함수 (Token에 담겨있는 정보를 이용해 Authentication 객체 리턴)
+    // 인증하는 함수
     public Authentication getAuthentication(String token) {
 
         log.info("getAuthentication 진입");
@@ -286,14 +270,10 @@ public class TokenProvider implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        String memberId = String.valueOf(claims.get(MEMBER_ID));
-        Member member = this.memberRepository.findById(Long.parseLong(memberId)).orElseThrow(MemberNotExistException::new);
+        // UserDetails 객체를 만들어서 Authentication 리턴
+        UserDetails principal = new User(claims.getSubject(), "", authorities);
         log.info("getAuthentication 종료");
 
-        return new UsernamePasswordAuthenticationToken(new CustomMemberDetails(member), token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
-
-
-
-
 }
