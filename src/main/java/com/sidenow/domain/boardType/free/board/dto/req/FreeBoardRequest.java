@@ -4,12 +4,11 @@ import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class FreeBoardRequest {
 
@@ -26,15 +25,15 @@ public abstract class FreeBoardRequest {
         @Schema(name = "게시글 내용", description = "게시글 내용을 입력해주세요.")
         private final String content;
 
-        private final LocalDateTime regDate;
-
         public static FreeBoard to(FreeBoardCreateRequest req, String image, Member member) {
+
+            LocalDateTime now = LocalDateTime.now();
             return FreeBoard.builder()
                     .title(req.title)
                     .content(req.content)
                     .image(image)
                     .member(member)
-                    .regDate(req.getRegDate())
+                    .regDate(now)
                     .build();
         }
     }
@@ -52,16 +51,14 @@ public abstract class FreeBoardRequest {
         @Schema(description = "게시글 내용을 입력해주세요.")
         private final String content;
 
-        private final LocalDateTime regDate;
-
-
         public static FreeBoard to(FreeBoardUpdateRequest req, String image, Member member){
+            LocalDateTime now = LocalDateTime.now();
             return FreeBoard.builder()
                     .title(req.title)
                     .content(req.content)
                     .image(image)
                     .member(member)
-                    .updatedDate(req.regDate)
+                    .updatedDate(now)
                     .build();
         }
     }

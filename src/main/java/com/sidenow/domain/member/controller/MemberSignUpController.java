@@ -2,6 +2,7 @@ package com.sidenow.domain.member.controller;
 
 import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
 import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
+import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailAuthCodeException;
 import com.sidenow.domain.member.service.MemberSignUpService;
 import com.sidenow.global.config.aws.service.AwsSesService;
@@ -32,11 +33,11 @@ public class MemberSignUpController {
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원가입")
-    public ResponseEntity<ResponseDto<MemberCheck>> signUp(@Valid @RequestBody SignUpMemberRequest signUpMemberRequest) {
+    public ResponseEntity<ResponseDto<Member>> signUp(@Valid @RequestBody SignUpMemberRequest signUpMemberRequest) {
         log.info("Sign Up Api Start");
-        MemberCheck memberCheck = memberSignUpService.signUp(signUpMemberRequest);
+        Member member = memberSignUpService.signUp(signUpMemberRequest);
         log.info("Sign Up Api End");
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_SIGN_UP_SUCCESS.getMessage(), memberCheck));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_SIGN_UP_SUCCESS.getMessage(), member));
     }
 
     @PostMapping("/check-duplicate/email")
