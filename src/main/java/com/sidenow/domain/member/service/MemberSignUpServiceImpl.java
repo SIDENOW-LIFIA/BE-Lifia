@@ -1,7 +1,6 @@
 package com.sidenow.domain.member.service;
 
 import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
-import com.sidenow.domain.member.dto.res.MemberResponse.MemberCheck;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailDuplicateException;
 import com.sidenow.domain.member.exception.MemberNicknameDuplicateException;
@@ -12,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.sidenow.domain.member.constant.MemberConstant.Role.Role_USER;
@@ -27,21 +27,22 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
 
     // 회원가입
     @Override
-    public MemberCheck signUp(SignUpMemberRequest signUpMemberRequest) {
-        log.info("Sign Up Member Service Start");
-        MemberCheck memberCheck = new MemberCheck();
+    public Member signUp(SignUpMemberRequest req) {
+        log.info("Sign Up Member Service 진입");
+        LocalDate now = LocalDate.now();
         Member newMember = Member.builder()
-                .email(signUpMemberRequest.getEmail())
-                .password(passwordEncoder.encode(signUpMemberRequest.getPassword()))
-                .name(signUpMemberRequest.getName())
-                .nickname(signUpMemberRequest.getNickname())
-                .apartment(signUpMemberRequest.getApartment())
+                .email(req.getEmail())
+                .password(passwordEncoder.encode(req.getPassword()))
+                .name(req.getName())
+                .nickname(req.getNickname())
+                .apartment(req.getApartment())
                 .role(Role_USER)
+                .createdAt(now)
                 .build();
+
         memberRepository.save(newMember);
-        memberCheck.setSaved(true);
-        log.info("Sign Up Member Service End");
-        return memberCheck;
+        log.info("Sign Up Member Service 종료");
+        return newMember;
     }
 
     // 이메일 중복 체크
