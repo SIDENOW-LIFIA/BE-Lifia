@@ -1,7 +1,7 @@
 spring:
   profiles:
     include:
-      - prod
+      - local
 
   jwt:
     secret: 6e8093a0d65ae3f9d193a04ac378858a76abf71ef73e3e2f74b078c6459d82c9800a299331b1227574c049a489771c128e3e6eed7b4057c44c5c5c119eed3f42
