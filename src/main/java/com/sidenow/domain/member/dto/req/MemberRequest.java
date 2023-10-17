@@ -53,10 +53,12 @@ public abstract class MemberRequest {
 
         @NotBlank(message = "이메일을 입력하세요.")
         @Email(message = "올바른 이메일주소를 입력하세요.")
+        @Schema(description = "유저 이메일", example = "jongseunghan@naver.com")
         private String email;
 
         @NotBlank(message = "비밀번호를 입력하세요.")
         @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력하세요.")
+        @Schema(description = "유저 비밀번호", example = "hjs0324@")
         private String password;
 
         public Member toMember(PasswordEncoder passwordEncoder) {

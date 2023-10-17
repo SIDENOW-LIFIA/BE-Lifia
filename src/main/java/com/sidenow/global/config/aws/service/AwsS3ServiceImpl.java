@@ -37,7 +37,6 @@ public class AwsS3ServiceImpl implements AwsS3Service{
         objectMetadata.setContentType(image.getContentType());
 
         try (InputStream inputStream = image.getInputStream()){
-
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e){

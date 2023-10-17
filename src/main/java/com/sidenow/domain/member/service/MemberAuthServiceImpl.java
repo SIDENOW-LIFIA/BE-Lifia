@@ -63,26 +63,6 @@ public class MemberAuthServiceImpl implements MemberAuthService{
         return MemberLoginResponse.from(tokenResponse);
     }
 
-    // 로그아웃
-    @Override
-    public void logout(String authorization){
-        log.info("Logout Service Start");
-        String accessToken = authorization.substring(7);
-        String memberId = tokenProvider.getMemberId(accessToken);
-
-        try {
-            Long expiration = tokenProvider.getExpiration(accessToken);
-
-            // Access Token 남은 시간동안 블랙리스트
-            redisRepository.setValues("blackList:" + accessToken, accessToken, Duration.ofSeconds(expiration));
-            log.info("Logout Service End");
-
-        } catch (ExpiredJwtException e) {
-        } finally {
-            redisRepository.deleteValues(String.valueOf(memberId));
-        }
-    }
-
     // 토큰 만료 시 재발행
     @Override
     public MemberLoginResponse reIssueToken(MemberTokenRequest req){
