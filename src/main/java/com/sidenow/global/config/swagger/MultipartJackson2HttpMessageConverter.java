@@ -10,7 +10,6 @@ import java.lang.reflect.Type;
 @Component
 public class MultipartJackson2HttpMessageConverter extends AbstractJackson2HttpMessageConverter {
 
-
     /**
      * "Content-Type: multipart/form-data" 헤더를 지원하는 HTTP 요청 변환기
      */
