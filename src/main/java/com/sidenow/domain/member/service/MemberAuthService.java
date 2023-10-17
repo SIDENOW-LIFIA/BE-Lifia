@@ -9,6 +9,5 @@ import com.sidenow.domain.member.dto.res.MemberResponse.MemberLoginResponse;
 public interface MemberAuthService {
 
     MemberLoginResponse login(MemberLoginRequest memberLoginRequest);
-    void logout(String authorization);
     MemberLoginResponse reIssueToken(MemberTokenRequest req);
 }

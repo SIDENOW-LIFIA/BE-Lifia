@@ -51,11 +51,13 @@ public class FreeBoardServiceImpl implements FreeBoardService{
                 .orElseThrow(MemberNotLoginException::new)
                 .getMemberId()).get();
 
-        String imgUrl = awsS3Service.uploadFile(image);
-        log.info("업로드 된 파일: "+imgUrl);
-
-        FreeBoard freeBoard = FreeBoardCreateRequest.to(req, imgUrl, member);
+        FreeBoard freeBoard = FreeBoardCreateRequest.to(req, member);
         freeBoardRepository.save(freeBoard);
+
+        if (image != null){
+            String imgUrl = awsS3Service.uploadFile(image);
+            log.info("업로드 된 파일: "+imgUrl);
+        }
 
         log.info("Create FreeBoard Service 종료");
 

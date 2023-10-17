@@ -34,9 +34,10 @@ public abstract class FreeBoardResponse {
         private Long id;
         private String title;
         private String content;
+        private String image;
 
         public static FreeBoardCreateResponse from(FreeBoard freeBoard) {
-            return new FreeBoardCreateResponse(freeBoard.getFreeBoardId(), freeBoard.getTitle(), freeBoard.getContent());
+            return new FreeBoardCreateResponse(freeBoard.getFreeBoardId(), freeBoard.getTitle(), freeBoard.getContent(), freeBoard.getImage());
         }
     }
 

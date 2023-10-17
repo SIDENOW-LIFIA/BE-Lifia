@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,10 @@ public class FreeBoardController {
 
     private final FreeBoardService freeBoardService;
 
-    @PostMapping(value = "/board") // consumes = {"multipart/form-data"})
+    @PostMapping(value = "/board", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "자유게시판 게시글 등록", description = "게시글을 등록합니다.")
-    public ResponseEntity<ResponseDto<FreeBoardCreateResponse>> createFreeBoard(@RequestPart FreeBoardCreateRequest req, @RequestPart(required = false) MultipartFile image) {
+    public ResponseEntity<ResponseDto<FreeBoardCreateResponse>> createFreeBoard(@RequestPart(required = false) MultipartFile image,
+                                                                                @RequestPart FreeBoardCreateRequest req) {
         log.info("Register FreeBoard Controller 진입");
         FreeBoardCreateResponse result = freeBoardService.createFreeBoard(req, image);
         log.info("Register FreeBoard Controller 종료");

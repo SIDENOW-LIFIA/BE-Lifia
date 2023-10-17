@@ -2,10 +2,14 @@ package com.sidenow.global.config.jwt;
 
 import com.sidenow.domain.member.repository.MemberRepository;
 import com.sidenow.global.config.jwt.exception.*;
+import com.sidenow.global.config.jwt.service.CustomMemberDetails;
+import com.sidenow.global.config.jwt.service.CustomMemberDetailsService;
 import com.sidenow.global.config.redis.repository.RedisRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -17,6 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.time.Duration;
@@ -29,17 +34,19 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-// JWT 토큰 관련 암호화, 복호화, 검증 로직
+// JWT 토큰 생성, 토큰 복호화 및 정보 추출, 토큰 유효성 검증의 기능이 구현된 클래스
 public class TokenProvider implements InitializingBean {
 
-    private final MemberRepository memberRepository;
     private final RedisRepository redisRepository;
+    private final CustomMemberDetailsService customMemberDetailsService;
     private Key key;
     private static final String AUTHORITIES_KEY = "auth";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String MEMBER_ID = "memberId";
-    private static final String ACCESS = "Access";
-    private static final String REFRESH = "Refresh";
+    private static final String ACCESS = "Access ";
+    private static final String REFRESH = "Refresh ";
     private static final String GRANT_TYPE = "Bearer";
+    private static final String TOKEN_ISSUER = "Lifia";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분 (1분 * 30)
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일 (1시간 * 24 * 7)
 
@@ -59,7 +66,7 @@ public class TokenProvider implements InitializingBean {
     // 토큰 생성
     public TokenResponse createToken(Authentication authentication) {
 
-        log.info("createToken 진입");
+        log.info("createToken 진입, name: "+authentication.getName());
 
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
@@ -76,89 +83,67 @@ public class TokenProvider implements InitializingBean {
         return TokenResponse.from(GRANT_TYPE, accessToken, ACCESS_TOKEN_EXPIRE_TIME, refreshToken);
     }
 
-    // Refresh Token 업데이트
-    public void updateRefreshToken(Long memberId, String refreshToken) {
-        log.info("updateRefreshToken 진입");
-        try {
-            redisRepository.setValues(String.valueOf(memberId), refreshToken, Duration.ofSeconds(REFRESH_TOKEN_EXPIRE_TIME));
-            log.info("updateRefreshToken 종료");
-        } catch (NoSuchElementException e) {
-            log.error("일치하는 회원이 없습니다.");
-            throw e;
+    // JWT 토큰에서 인증 정보 조회
+    public Authentication getAuthentication(String token) {
+
+        log.info("getAuthentication 진입");
+
+        UserDetails userDetails = customMemberDetailsService.loadUserByUsername(getUsername(token));
+
+        log.info("userDetails: "+userDetails);
+        log.info("userDetails.getAuth: "+userDetails.getAuthorities());
+
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    // 토큰에서 회원정보 추출
+    private String getUsername(String token) {
+        log.info("getUsername 진입");
+
+        String subject = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+        log.info("subject: "+subject);
+        return subject;
+    }
+
+    // Http Request의 Header에서 토큰 값을 가져오는 메서드
+    public String resolveToken(HttpServletRequest request) {
+        log.info("Resolve Token 진입");
+
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        log.info("BearerToken: "+bearerToken);
+
+        if (bearerToken != null && bearerToken.startsWith(GRANT_TYPE)) {
+            log.info("Claim 추출: "+bearerToken.substring(7));
+            return bearerToken.substring(7); // "Bearer " 7글자 빼고 나머지 부분(Access Token) 추출 / 앞부분은 type임. 요청헤더의 구성은 Authorization: <type> <credentials>임
+        } else {
+            log.info("Request Header에 토큰 없음");
+            return null;
         }
     }
 
+    // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String token) {
 
         log.info("validateToken 진입");
+
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             log.info("validateToken 종료");
+
             return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
-            throw new MalformedException();
-        } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
-            throw new ExpiredException();
+        } catch (SignatureException e){
+            log.info("잘못된 JWT 서명입니다. "+e.getMessage());
+        } catch (MalformedJwtException e){
+            log.info("잘못된 JWT 토큰입니다. "+e.getMessage());
+        } catch (ExpiredJwtException e){
+            log.info("만료된 JWT 토큰입니다."+e.getMessage());
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
-            throw new UnsupportedException();
+            log.info("지원되지 않는 JWT 토큰입니다."+e.getMessage());
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
-            throw new IllegalException();
-        } catch (NoSuchElementException e) {
-            log.error("유효하지 않은 JWT입니다.");
-            throw e;
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw e;
+            log.info("JWT 클레임이 비어있습니다."+e.getMessage());
         }
-    }
 
-    // Refresh Token 검증 함수
-    public void validateRefreshToken(String token) {
-
-        log.info("validateRefreshToken 진입");
-        if (!getSubject(token).equals(REFRESH)) {
-            throw new IllegalArgumentException("Refresh Token이 아닙니다.");
-        }
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            String memberId = getMemberId(token);
-            String redisToken = redisRepository.getValues(memberId).orElseThrow();
-            if (!redisToken.equals(token)) {
-                throw new IllegalArgumentException("요청 Refresh Token이 서버의 Refresh Token과 다릅니다.");
-            }
-            log.info("validateRefreshToken 종료");
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
-            throw e;
-        } catch (ExpiredJwtException e) {
-            log.info("만료된  JWT 토큰입니다.");
-            throw e;
-        } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
-            throw e;
-        } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
-            throw e;
-        } catch (NoSuchElementException e) {
-            log.error("유효하지 않은 JWT입니다.");
-            throw e;
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw e;
-        }
-    }
-
-    public String getMemberId(String accessToken) {
-
-        log.info("getMemberId 진입");
-        Claims claims = parseClaims(accessToken);
-        log.info("getMemberId 종료");
-
-        return claims.get(MEMBER_ID).toString();
+        return false;
     }
 
     // JWT 토큰에서 만료시간을 확인하고, 현재 시간과 비교하여 남은 시간을 반환
@@ -172,44 +157,18 @@ public class TokenProvider implements InitializingBean {
         return (expiration.getTime() - now);
     }
 
-    // redis blackList 확인
-    public boolean checkBlackList(String token) {
-
-        log.info("checkBlackList 진입");
-        if (redisRepository.checkBlackList(token).isPresent()) {
-            throw new IllegalArgumentException("이미 로그아웃된 유저입니다.");
-        }
-        log.info("checkBlackList 종료");
-
-        return true;
-    }
-
-    public void checkMultiLogin(String token) {
-
-        log.info("checkMultiLogin 진입");
-        Claims claims = parseClaims(token);
-        String memberId = claims.get(MEMBER_ID).toString();
-
-        if (!redisRepository.getValues(ACCESS + memberId)
-                .orElseThrow()
-                .equals(token)) {
-            throw new RemovedAccessTokenException();
-        } else {
-            log.info("checkMultiLogin 종료");
-        }
-    }
-
     // Access Token 생성
     private String createAccessToken(Authentication authentication, String authorities, Date now) {
 
         log.info("createAccessToken 진입");
         Date accessTokenExpiresIn = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(ACCESS)
+                .setSubject(authentication.getName()) // 정보 저장
                 .claim(AUTHORITIES_KEY, authorities)
-                .setIssuedAt(now)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(accessTokenExpiresIn)
+                .setIssuer(TOKEN_ISSUER) // 토큰 발급자
+                .setIssuedAt(now) // 토큰 발행시간 정보
+                .setExpiration(accessTokenExpiresIn) // 만료시간
+                .signWith(key, SignatureAlgorithm.HS512) // 사용할 암호화 알고리즘과 signature에 들어갈 secret값 세팅
                 .compact();
 
         log.info("createAccessToken 종료");
@@ -250,30 +209,5 @@ public class TokenProvider implements InitializingBean {
         log.info("getSubject 종료");
 
         return claims.getSubject();
-    }
-
-    // 인증하는 함수
-    public Authentication getAuthentication(String token) {
-
-        log.info("getAuthentication 진입");
-
-        // 토큰 복호화
-        Claims claims = parseClaims(token);
-
-        if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
-
-        // 클레임에서 권한 정보 가져오기
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
-        // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-        log.info("getAuthentication 종료");
-
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 }

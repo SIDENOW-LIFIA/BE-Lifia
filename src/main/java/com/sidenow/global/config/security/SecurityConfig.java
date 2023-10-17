@@ -2,7 +2,7 @@ package com.sidenow.global.config.security;
 
 import com.sidenow.global.config.jwt.filter.JwtAccessDeniedHandler;
 import com.sidenow.global.config.jwt.filter.JwtAuthenticationEntryPoint;
-import com.sidenow.global.config.jwt.filter.JwtFilter;
+import com.sidenow.global.config.jwt.filter.JwtAuthenticationFilter;
 import com.sidenow.global.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(jwtAccessDeniedHandler))
 
                 // JWT 필터 추가
-                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
 
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(

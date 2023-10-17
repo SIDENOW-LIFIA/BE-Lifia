@@ -39,17 +39,6 @@ public class MemberAuthController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MemberSuccessMessage.MEMBER_LOGIN_SUCCESS.getMessage(), memberLoginResponse));
     }
 
-    @PostMapping("/logout")
-    @Operation(summary = "유저 로그아웃", description = "Access Token 또는 Refresh Token이 필요합니다.")
-    public ResponseEntity<ResponseDto> logout(@RequestHeader("Authorization") String authorization){
-
-        log.info("Member Logout Api Start");
-        memberAuthService.logout(authorization);
-        log.info("Member Logout Api End");
-
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MemberSuccessMessage.MEMBER_LOGOUT_SUCCESS.getMessage()));
-    }
-
     @PostMapping("/re-issue")
     @Operation(summary = "토큰 재발급", description = "Refresh Token을 보내주세요.")
     public ResponseEntity<ResponseDto<MemberLoginResponse>> reIssueToken(@RequestBody MemberTokenRequest req) {
