@@ -1,11 +1,13 @@
 package com.sidenow.domain.boardType.free.comment.dto.res;
 
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
+import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public abstract class FreeBoardCommentResponse {
 
@@ -23,6 +25,19 @@ public abstract class FreeBoardCommentResponse {
 
         @Schema(description = "자유게시판 게시글의 댓글 수정 여부 확인")
         private boolean updated;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @Schema(description = "자유게시판 게시글 댓글 생성 응답 객체")
+    public static class FreeBoardCommentCreateResponse {
+        private Long id;
+        private Member writer;
+        private String content;
+
+        public static FreeBoardCommentCreateResponse from(FreeBoardComment freeBoardComment) {
+            return new FreeBoardCommentCreateResponse(freeBoardComment.getCommentId(), freeBoardComment.getMember(), freeBoardComment.getContent());
+        }
     }
 
     @Getter
@@ -47,8 +62,8 @@ public abstract class FreeBoardCommentResponse {
             return FreeBoardGetCommentListResponse.builder()
                     .nickname(member.getNickname())
                     .content(freeBoardComments.getContent())
-                    .reqDate(freeBoardComments.getRegDate()
-                            .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
+//                    .reqDate(freeBoardComments.getRegDate()
+//                            .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .isDeleted(freeBoardComments.getIsDeleted())
                     .build();
         }
@@ -62,7 +77,7 @@ public abstract class FreeBoardCommentResponse {
         private final String nickname;
         private final String content;
         private final boolean isDeleted;
-        private final String regDate;
+        private final LocalDateTime createdAt;
         private final Long parentId;
 
         public static ReadFreeBoardChildCommentResponse from(FreeBoardComment freeBoardComments) {
@@ -70,8 +85,7 @@ public abstract class FreeBoardCommentResponse {
             return ReadFreeBoardChildCommentResponse.builder()
                     .nickname(member.getNickname())
                     .content(freeBoardComments.getContent())
-                    .regDate(freeBoardComments.getRegDate()
-                            .format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
+                    .createdAt(freeBoardComments.getCreatedAt())
                     .isDeleted(freeBoardComments.getIsDeleted())
                     .build();
         }

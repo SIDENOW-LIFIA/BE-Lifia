@@ -1,6 +1,7 @@
 package com.sidenow.domain.boardType.free.comment.controller;
 
 import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest;
+import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardCommentCheck;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardGetCommentListResponse;
 import com.sidenow.domain.boardType.free.comment.service.FreeBoardCommentServiceImpl;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.sidenow.domain.boardType.free.comment.constant.FreeBoardCommentConstants.FreeBoardCommentSuccessMessage.*;
+import static com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,12 +31,12 @@ public class FreeBoardCommentController {
 
     @PostMapping("/{postId}/comments")
     @Operation(summary = "자유게시판 게시글의 댓글 작성")
-    public ResponseEntity<ResponseDto<FreeBoardCommentCheck>> createFreeBoardComment(@PathVariable("postId") Long freeBoardPostId,
+    public ResponseEntity<ResponseDto<FreeBoardCommentCreateResponse>> createFreeBoardComment(@PathVariable("postId") Long freeBoardPostId,
                                                                                      @RequestBody @Valid FreeBoardCommentRequest.RegisterFreeBoardCommentRequest createFreeBoardCommentRequest) {
         log.info("Create FreeBoard Comment Api Start");
-        FreeBoardCommentCheck freeBoardCommentCheck = freeBoardCommentService.registerFreeBoardComment(freeBoardPostId, createFreeBoardCommentRequest);
+        FreeBoardCommentCreateResponse result = freeBoardCommentService.createFreeBoardComment(freeBoardPostId, createFreeBoardCommentRequest);
         log.info("Create FreeBoard Comment Api End");
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), CREATE_FREE_BOARD_COMMENT_SUCCESS.getMessage(), freeBoardCommentCheck));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), CREATE_FREE_BOARD_COMMENT_SUCCESS.getMessage(), result));
     }
 
     @GetMapping("/{postId}/comments")
