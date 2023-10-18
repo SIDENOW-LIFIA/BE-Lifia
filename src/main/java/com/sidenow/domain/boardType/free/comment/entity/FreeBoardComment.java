@@ -7,11 +7,7 @@ import com.sidenow.domain.member.entity.Member;
 import com.sidenow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -37,12 +33,8 @@ public class FreeBoardComment extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @CreationTimestamp
-    @Column(nullable = false)
-    private LocalDateTime regDate; // 댓글 작성일자
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt; // 댓글 수정일자
+//    @UpdateTimestamp
+//    private LocalDateTime updatedAt; // 댓글 수정일자
 
     @Column(nullable = false)
     private Boolean isDeleted; // 댓글 삭제 여부

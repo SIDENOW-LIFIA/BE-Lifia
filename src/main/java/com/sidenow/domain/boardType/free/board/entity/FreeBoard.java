@@ -41,13 +41,6 @@ public class FreeBoard extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int likes; // 게시글 좋아요 수
 
-    @CreationTimestamp
-    @Column(nullable = false)
-    private LocalDateTime regDate; // 게시글 생성일자
-
-    @UpdateTimestamp
-    private LocalDateTime updatedDate; // 게시글 수정일자
-
     // 게시글 삭제 시 달려있는 댓글 모두 삭제
     @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FreeBoardComment> freeBoardComments;
@@ -67,10 +60,6 @@ public class FreeBoard extends BaseTimeEntity {
 
     public void updateImage(String image) {
         this.image = image;
-    }
-
-    public void updateRegDate(LocalDateTime updatedDate){
-        this.updatedDate = updatedDate;
     }
 
     public void increaseHits() {
