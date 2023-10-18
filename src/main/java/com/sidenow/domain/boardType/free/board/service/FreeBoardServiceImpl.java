@@ -51,13 +51,16 @@ public class FreeBoardServiceImpl implements FreeBoardService{
                 .orElseThrow(MemberNotLoginException::new)
                 .getMemberId()).get();
 
-        FreeBoard freeBoard = FreeBoardCreateRequest.to(req, member);
-        freeBoardRepository.save(freeBoard);
+        log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
+        String imgUrl = "";
         if (image != null){
-            String imgUrl = awsS3Service.uploadFile(image);
+            imgUrl = awsS3Service.uploadFile(image);
             log.info("업로드 된 파일: "+imgUrl);
         }
+
+        FreeBoard freeBoard = FreeBoardCreateRequest.to(req, member, imgUrl);
+        freeBoardRepository.save(freeBoard);
 
         log.info("Create FreeBoard Service 종료");
 
@@ -94,7 +97,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 
         Pageable pageable = PageRequest.of(page-1, FREE_BOARD_PAGE_SIZE);
 
-        Page<FreeBoard> freeBoardPage = freeBoardRepository.findByOrderByRegDateDesc(pageable);
+        Page<FreeBoard> freeBoardPage = freeBoardRepository.findByOrderByCreatedAtDesc(pageable);
         List<FreeBoardGetListResponse> freeBoardGetPostList = new ArrayList<>();
         for (int i = 0; i < freeBoardPage.getContent().size(); i++) {
             freeBoardGetPostList.add(FreeBoardGetListResponse.from(freeBoardPage.getContent().get(i)));
