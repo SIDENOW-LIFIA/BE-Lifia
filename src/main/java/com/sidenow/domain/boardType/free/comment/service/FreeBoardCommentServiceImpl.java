@@ -4,6 +4,7 @@ import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.board.exception.FreeBoardIdNotFoundException;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
 import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.RegisterFreeBoardCommentRequest;
+import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardCommentCheck;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardGetCommentListResponse;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
@@ -21,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.*;
+
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
@@ -33,7 +36,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
     @Override
     // 자유게시판 게시글 댓글 등록
-    public FreeBoardCommentCheck registerFreeBoardComment(Long freeBoardId, RegisterFreeBoardCommentRequest req) {
+    public FreeBoardCommentCreateResponse createFreeBoardComment(Long freeBoardId, RegisterFreeBoardCommentRequest req) {
         log.info("Create FreeBoard Comment Service Start");
         FreeBoardCommentCheck freeBoardCommentCheck = new FreeBoardCommentCheck();
         Member findMember = memberRepository.findById(req.getMemberId()).orElseThrow(MemberNotExistException::new);
@@ -45,9 +48,8 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
             freeBoardComments = createFreeBoardChildComments(req, findMember, freeBoard);
         }
         freeBoardCommentRepository.save(freeBoardComments);
-        freeBoardCommentCheck.setSaved(true);
         log.info("Create FreeBoard Comment Service End");
-        return freeBoardCommentCheck;
+        return FreeBoardCommentCreateResponse.from(freeBoardComments);
     }
 
     @Override
@@ -104,7 +106,6 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
         return FreeBoardComment.builder()
                 .member(member)
-                .regDate(LocalDateTime.now())
                 .freeBoard(freeBoard)
                 .isDeleted(false)
                 .content(createFreeBoardCommentRequest.getContent())
@@ -117,7 +118,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
         return FreeBoardComment.builder()
                 .member(member)
-                .regDate(LocalDateTime.now())
+//                .regDate(LocalDateTime.now())
                 .freeBoard(freeBoard)
                 .isDeleted(false)
                 .content(createFreeBoardCommentRequest.getContent())

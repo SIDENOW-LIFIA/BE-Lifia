@@ -2,8 +2,10 @@ package com.sidenow.domain.boardType.free.board.controller;
 
 import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardCreateRequest;
 import com.sidenow.domain.boardType.free.board.dto.req.FreeBoardRequest.FreeBoardUpdateRequest;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse;
-import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.*;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.AllFreeBoards;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardCreateResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardGetResponse;
+import com.sidenow.domain.boardType.free.board.dto.res.FreeBoardResponse.FreeBoardUpdateResponse;
 import com.sidenow.domain.boardType.free.board.service.FreeBoardService;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 import static com.sidenow.domain.boardType.free.board.constant.FreeBoardConstants.FreeBoardResponseMessage.*;
 
@@ -61,7 +61,7 @@ public class FreeBoardController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), GET_FREE_BOARD_POST_LIST_SUCCESS.getMessage(), result));
     }
 
-    @PostMapping(value = "/board/{id}", consumes = {"multipart/form-data"})
+    @PutMapping(value = "/board/{id}", consumes = {"multipart/form-data"})
     @Operation(summary = "자유게시판 게시글 수정", description = "게시글을 수정합니다.")
     public ResponseEntity<ResponseDto<FreeBoardUpdateResponse>> updateFreeBoard(@PathVariable Long id, @RequestPart FreeBoardUpdateRequest req, @RequestPart(required = false) MultipartFile image) {
         log.info("Update FreeBoard Controller 진입");

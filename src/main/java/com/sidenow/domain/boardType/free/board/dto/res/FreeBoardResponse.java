@@ -6,26 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public abstract class FreeBoardResponse {
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @Schema(description = "자유게시판 게시글의 생성, 삭제, 업데이트 응답 객체")
-    public static class FreeBoardCheck {
-
-        @Schema(description = "자유게시판 게시글의 생성 여부 확인")
-        private boolean saved;
-
-        @Schema(description = "자유게시판 게시글의 삭제 여부 확인")
-        private boolean deleted;
-
-        @Schema(description = "자유게시판 게시글의 수정 여부 확인")
-        private boolean updated;
-    }
 
     @Data
     @AllArgsConstructor
@@ -48,10 +31,9 @@ public abstract class FreeBoardResponse {
         private Long id;
         private String title;
         private String content;
-        private LocalDateTime updateDate;
 
         public static FreeBoardUpdateResponse from(FreeBoard freeBoard) {
-            return new FreeBoardUpdateResponse(freeBoard.getFreeBoardId(), freeBoard.getTitle(), freeBoard.getContent(), freeBoard.getUpdatedDate());
+            return new FreeBoardUpdateResponse(freeBoard.getFreeBoardId(), freeBoard.getTitle(), freeBoard.getContent());
         }
     }
     @Getter
@@ -64,8 +46,7 @@ public abstract class FreeBoardResponse {
         private final String content;
         private final String image;
         private final String nickname;
-        private final String regDate;
-        private final String updatedDate;
+        private final LocalDateTime createAt;
         private final int hits;
         private final int likes;
         private final int commentsCount;
@@ -78,8 +59,7 @@ public abstract class FreeBoardResponse {
                     .content(freeBoard.getContent())
                     .image(freeBoard.getImage())
                     .nickname(freeBoard.getMember().getNickname())
-                    .regDate(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                    .updatedDate(freeBoard.getUpdatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                    .createAt(freeBoard.getCreatedAt())
                     .hits(freeBoard.getHits())
                     .likes(freeBoard.getLikes())
                     .commentsCount(freeBoard.getFreeBoardComments().size())
@@ -111,8 +91,8 @@ public abstract class FreeBoardResponse {
         @Schema(description = "자유게시판 게시글 댓글 수")
         private final int commentsCount;
 
-        @Schema(description = "자유게시판 게시글 등록일자")
-        private final String regDate;
+        @Schema(description = "자유게시판 게시글 생성 일시")
+        private final LocalDateTime createdAt;
 
         public static FreeBoardGetListResponse from(FreeBoard freeBoard) {
             return FreeBoardGetListResponse.builder()
@@ -122,7 +102,7 @@ public abstract class FreeBoardResponse {
                     .hits(freeBoard.getHits())
                     .likes(freeBoard.getLikes())
                     .commentsCount(freeBoard.getFreeBoardComments().size())
-                    .regDate(freeBoard.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .createdAt(freeBoard.getCreatedAt())
                     .build();
         }
     }

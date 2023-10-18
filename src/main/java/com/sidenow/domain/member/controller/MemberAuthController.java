@@ -1,8 +1,6 @@
 package com.sidenow.domain.member.controller;
 
-import com.sidenow.domain.member.constant.MemberConstant;
 import com.sidenow.domain.member.constant.MemberConstant.MemberSuccessMessage;
-import com.sidenow.domain.member.dto.req.MemberRequest;
 import com.sidenow.domain.member.dto.req.MemberRequest.MemberLoginRequest;
 import com.sidenow.domain.member.dto.req.MemberRequest.MemberTokenRequest;
 import com.sidenow.domain.member.dto.res.MemberResponse.MemberLoginResponse;
@@ -15,7 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static com.sidenow.domain.member.constant.MemberConstant.MemberSuccessMessage.MEMBER_TOKEN_REFRESH_SUCCESS;
 

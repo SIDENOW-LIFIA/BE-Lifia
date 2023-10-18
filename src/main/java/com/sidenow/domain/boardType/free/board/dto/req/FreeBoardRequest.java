@@ -4,9 +4,10 @@ import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public abstract class FreeBoardRequest {
 
@@ -17,21 +18,20 @@ public abstract class FreeBoardRequest {
     @Schema(description = "게시글 작성 요청 객체")
     public static class FreeBoardCreateRequest {
         @NotBlank(message = "자유게시판 게시글 제목 입력")
-        @Schema(name = "게시글 제목", description = "게시글 제목을 입력해주세요.", example = "Test Title")
+        @Schema(description = "게시글 제목을 입력해주세요.", example = "Test Title")
         private String title;
 
         @NotBlank(message = "자유게시판 게시글 내용 입력")
-        @Schema(name = "게시글 내용", description = "게시글 내용을 입력해주세요.", example = "Test Content")
+        @Schema(description = "게시글 내용을 입력해주세요.", example = "Test Content")
         private String content;
 
-        public static FreeBoard to(FreeBoardCreateRequest req, Member member) {
+        public static FreeBoard to(FreeBoardCreateRequest req, Member member, String image) {
 
-            LocalDateTime now = LocalDateTime.now();
             return FreeBoard.builder()
                     .title(req.title)
                     .content(req.content)
                     .member(member)
-                    .regDate(now)
+                    .image(image)
                     .build();
         }
     }
@@ -51,13 +51,11 @@ public abstract class FreeBoardRequest {
         private String content;
 
         public static FreeBoard to(FreeBoardUpdateRequest req, String image, Member member){
-            LocalDateTime now = LocalDateTime.now();
             return FreeBoard.builder()
                     .title(req.title)
                     .content(req.content)
                     .image(image)
                     .member(member)
-                    .updatedDate(now)
                     .build();
         }
     }
