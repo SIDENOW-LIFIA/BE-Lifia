@@ -42,10 +42,10 @@ public class SecurityConfig {
 
         log.info("webSecurityCustomizer 진입");
 
-        return web -> web.ignoring()
+        return web -> web.ignoring().requestMatchers("/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**");
 //                .requestMatchers("/h2-console/**",
 //                        "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**");
-                .requestMatchers("/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**");
+
     }
 
     @Bean
@@ -77,11 +77,11 @@ public class SecurityConfig {
                         .accessDeniedHandler(jwtAccessDeniedHandler))
 
                 // JWT 필터 추가
-                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
 
-//                .headers((headers) -> headers
-//                        .addHeaderWriter(new XFrameOptionsHeaderWriter(
-//                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))); //헤더의 값으로 sameorigin을 설정하면 frame에 포함된 페이지가 페이지를 제공하는 사이트와 동일한 경우에는 계속 사용 가능
+                .headers((headers) -> headers
+                        .addHeaderWriter(new XFrameOptionsHeaderWriter(
+                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))); //헤더의 값으로 sameorigin을 설정하면 frame에 포함된 페이지가 페이지를 제공하는 사이트와 동일한 경우에는 계속 사용 가능
         log.info("filterChain 종료");
 
         return http.build();
