@@ -24,20 +24,25 @@ public abstract class MemberRequest {
     public static class SignUpMemberRequest {
         @NotBlank(message = "이메일을 입력하세요.")
         @Email(message = "올바른 이메일주소를 입력하세요.")
+        @Schema(description = "이메일 주소를 입력해주세요.", example = "jongseunghan@naver.com")
         private String email;
 
         @NotBlank(message = "비밀번호를 입력하세요.")
         @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력하세요.")
+        @Schema(description = "비밀번호를 입력해주세요.", example = "hjs0324@")
         private String password;
 
         @NotBlank(message = "이름을 입력하세요.")
+        @Schema(description = "이름을 입력해주세요.", example = "한종승")
         private String name;
 
         @NotBlank(message = "닉네임을 입력하세요.")
         @Size(min = 2, max = 10, message = "닉네임은 2자 이상 10자 이하로 입력하세요.")
+        @Schema(description = "닉네임을 입력해주세요.", example = "bellwin")
         private String nickname;
 
         @NotBlank(message = "아파트를 선택하세요.")
+        @Schema(description = "거주 아파트를 선택해주세요.", example = "우성아파트")
         private String apartment;
 
 //        @NotBlank(message = "신분증을 첨부하세요.")
