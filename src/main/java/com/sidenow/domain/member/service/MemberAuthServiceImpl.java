@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -57,8 +58,7 @@ public class MemberAuthServiceImpl implements MemberAuthService{
         TokenResponse tokenResponse = tokenProvider.createToken(authentication);
         RefreshToken refreshToken = buildRefreshToken(authentication, tokenResponse);
         refreshTokenRepository.save(refreshToken);
-        LocalDate now = LocalDate.now();
-        member.updateLoginAt(now);
+        member.updateLoginAt(LocalDateTime.now());
         log.info("Login Service 종료");
         return MemberLoginResponse.from(tokenResponse);
     }

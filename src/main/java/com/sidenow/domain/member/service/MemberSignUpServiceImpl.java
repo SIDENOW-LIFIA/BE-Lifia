@@ -29,7 +29,7 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
     @Override
     public Member signUp(SignUpMemberRequest req) {
         log.info("Sign Up Member Service 진입");
-        LocalDate now = LocalDate.now();
+//        LocalDate now = LocalDate.now();
         Member newMember = Member.builder()
                 .email(req.getEmail())
                 .password(passwordEncoder.encode(req.getPassword()))
@@ -37,7 +37,7 @@ public class MemberSignUpServiceImpl implements MemberSignUpService {
                 .nickname(req.getNickname())
                 .apartment(req.getApartment())
                 .role(Role_USER)
-                .createdAt(now)
+//                .createdAt(now)
                 .build();
 
         memberRepository.save(newMember);

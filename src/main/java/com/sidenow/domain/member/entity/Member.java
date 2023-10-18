@@ -4,11 +4,13 @@ import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.constant.MemberConstant.Provider;
 import com.sidenow.domain.member.constant.MemberConstant.Role;
+import com.sidenow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,8 +46,7 @@ public class Member {
     private Role role;
 
     @CreationTimestamp
-    private LocalDate createdAt;
-    private LocalDate loginAt;
+    private LocalDateTime loginAt;
 
     // Kakao, Google, Naver 등
     private Provider provider;
@@ -59,7 +60,7 @@ public class Member {
     private List<FreeBoardComment> freeBoardComments = new ArrayList<>();
 
     // 유저 로그인 시간 업데이트
-    public void updateLoginAt(LocalDate now) {
+    public void updateLoginAt(LocalDateTime now) {
         this.loginAt = now;
     }
 
