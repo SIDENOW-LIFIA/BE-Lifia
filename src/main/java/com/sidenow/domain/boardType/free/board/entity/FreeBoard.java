@@ -45,6 +45,10 @@ public class FreeBoard extends BaseTimeEntity {
     @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FreeBoardComment> freeBoardComments;
 
+    // 게시글 삭제 시 달려있는 좋아요 모두 삭제
+    @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardLike> freeBoardLikes;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE) // 작성자가 제거되면 게시글도 제거됨
