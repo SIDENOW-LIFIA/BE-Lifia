@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -65,7 +66,8 @@ public class SecurityConfig {
 //                        .requestMatchers("/").permitAll()
                         .requestMatchers("/auth/**").permitAll() // 로그인, 회원가입 API는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                         .requestMatchers("/members/**").permitAll()
-                        .requestMatchers(toH2Console()).permitAll() // h2-console 접속시키기
+//                        .requestMatchers(toH2Console()).permitAll() // h2-console 접속시키기
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                         .anyRequest().authenticated()) // 그 외 나머지 API는 전부 인증 필요
 
                 // JWT를 활용하면 세션이 필요 없으므로, STATELESS 설정 (Security는 기본적으로 세션을 사용함)
