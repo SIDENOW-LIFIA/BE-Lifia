@@ -2,7 +2,7 @@ spring:
   datasource:
     hikari:
       maximum-pool-size: 4
-    url: jdbc:mysql://lifia-db-instance.cbsuxxf8jes5.ap-northeast-2.rds.amazonaws.com:3306/lifia_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://lifia-db-instance.cbsuxxf8jes5.ap-northeast-2.rds.amazonaws.com:3306/lifia_database?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: admin
     password: fkdlvldk
