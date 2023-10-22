@@ -1,7 +1,10 @@
 package com.sidenow.domain.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
+import com.sidenow.domain.boardType.free.board.entity.FreeBoardLike;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
+import com.sidenow.domain.boardType.free.comment.entity.FreeBoardCommentLike;
 import com.sidenow.domain.member.constant.MemberConstant.Provider;
 import com.sidenow.domain.member.constant.MemberConstant.Role;
 import com.sidenow.global.entity.BaseTimeEntity;
@@ -9,7 +12,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +53,25 @@ public class Member extends BaseTimeEntity {
     // Kakao, Google, Naver 등
     private Provider provider;
 
-    // 작성한 자유게시판 게시글
-    @OneToMany(mappedBy = "member")
+    // 게시글 작성자가 삭제되면 게시글도 삭제됨
+    @JsonIgnore // 무한 순환 참조 방지
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FreeBoard> freeBoards = new ArrayList<>();
 
-    // 작성한 자유게시판 게시글의 댓글
-    @OneToMany(mappedBy = "member")
+    // 유저가 삭제되면 게시글 좋아요도 삭제됨
+    @JsonIgnore // 무한 순환 참조 방지
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardLike> freeBoardLikes = new ArrayList<>();
+
+    // 댓글 작성자가 제거되면 댓글도 제거됨
+    @JsonIgnore // 무한 순환 참조 방지
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FreeBoardComment> freeBoardComments = new ArrayList<>();
+
+    // 유저가 삭제되면 댓글 좋아요도 삭제됨
+    @JsonIgnore // 무한 순환 참조 방지
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardCommentLike> freeBoardCommentLikes = new ArrayList<>();
 
     // 유저 로그인 시간 업데이트
     public void updateLoginAt(LocalDateTime now) {
