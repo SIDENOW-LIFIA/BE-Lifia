@@ -1,6 +1,7 @@
 package com.sidenow.domain.boardType.free.comment.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
 import com.sidenow.domain.member.entity.Member;
@@ -25,6 +26,9 @@ public class FreeBoardComment extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content; // 댓글 내용
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int likes; // 댓글 좋아요 수
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "free_board_id", nullable = false) // 댓글의 게시글 (자유게시판)
     private FreeBoard freeBoard;
@@ -32,9 +36,6 @@ public class FreeBoardComment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-
-//    @UpdateTimestamp
-//    private LocalDateTime updatedAt; // 댓글 수정일자
 
     @Column(nullable = false)
     private Boolean isDeleted; // 댓글 삭제 여부
@@ -44,12 +45,15 @@ public class FreeBoardComment extends BaseTimeEntity {
     @JoinColumn(name = "parent_id")
     private FreeBoardComment parent; // 부모 댓글
 
+    // 부모 댓글 삭제 시 남아있는 자식 댓글 모두 삭제
     @JsonManagedReference
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FreeBoardComment> children; // 자식 댓글 (부모 댓글 삭제돼도 삭제 안됨)
+    private List<FreeBoardComment> children;
 
     // 댓글 좋아요
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "freeBoardComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore // 무한 순환 참조 방지
+    @OneToMany(mappedBy = "freeBoardComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FreeBoardCommentLike> freeBoardCommentLikes;
 
     // 댓글 삭제 여부 확인
     public void changeIsDeleted(Boolean isDeleted) {
@@ -57,8 +61,15 @@ public class FreeBoardComment extends BaseTimeEntity {
     }
 
     // 댓글 내용 수정
-    public FreeBoardComment updateContent(String content) {
+    public void updateContent(String content) {
         this.content = content;
-        return this;
+    }
+
+    public void increaseLikes() {
+        this.likes++;
+    }
+
+    public void decreaseLikes() {
+        this.likes--;
     }
 }

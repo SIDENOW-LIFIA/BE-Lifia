@@ -1,23 +1,44 @@
 package com.sidenow.domain.boardType.free.comment.dto.req;
 
+import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
+import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
+import com.sidenow.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 public abstract class FreeBoardCommentRequest {
+
     @Getter
     @Builder
-    @RequiredArgsConstructor
-    @Schema(description = "자유게시판 게시글의 댓글 생성 요청 객체")
-    public static class RegisterFreeBoardCommentRequest {
-        @Schema(description = "댓글 작성자 id")
-        private final Long memberId;
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(description = "자유게시판 게시글 댓글 생성 요청 객체")
+    public static class FreeBoardCommentCreateRequest {
 
-        @Schema(description = "댓글 내용")
-        private final String content;
+        @NotBlank(message = "자유게시판 게시글 댓글 내용 입력")
+        @Schema(description = "댓글 내용", example = "Test Comment")
+        private String content;
 
-        @Schema(description = "부모 댓글")
-        private final Long parentId;
+        public static FreeBoardComment to(FreeBoardCommentCreateRequest req, Member member, FreeBoard freeBoard){
+
+            return FreeBoardComment.builder()
+                    .content(req.content)
+                    .member(member)
+                    .freeBoard(freeBoard)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(description = "자유게시판 게시글 댓글 수정 요청 객체")
+    public static class FreeBoardCommentUpdateRequest {
+
+        @NotBlank(message = "자유게시판 게시글 댓글 내용 수정")
+        @Schema(description = "댓글 내용", example = "Test Updated Comment")
+        private String content;
     }
 }
