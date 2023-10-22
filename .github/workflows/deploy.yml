@@ -27,10 +27,10 @@ jobs: # job들을 정의하는 곳
 
     steps:
     # (1) 기본 체크아웃
-    - name: dev 브랜치로 이동
+    - name: master 브랜치로 이동
       uses: actions/checkout@v3
       with:
-        ref: dev
+        ref: master
 
     # (2) JDK 17 세팅
     - name: JDK 17 설치
