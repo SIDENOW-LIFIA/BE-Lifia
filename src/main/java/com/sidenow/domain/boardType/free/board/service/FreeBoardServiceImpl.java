@@ -138,6 +138,8 @@ public class FreeBoardServiceImpl implements FreeBoardService{
             freeBoard.updateContent(req.getContent());
         }
 
+        freeBoardRepository.save(freeBoard);
+
         log.info("Update FreeBoard Service 종료");
 
         return FreeBoardUpdateResponse.from(freeBoard);
@@ -179,22 +181,22 @@ public class FreeBoardServiceImpl implements FreeBoardService{
         return removeLikeFreeBoard(freeBoard, member);
     }
     
-    public boolean hasLikeFreeBoard(FreeBoard freeBoard, Member member){
+    private boolean hasLikeFreeBoard(FreeBoard freeBoard, Member member){
         return freeBoardLikeRepository.findByFreeBoardAndMember(freeBoard, member).isPresent();
     }
 
-    public String createLikeFreeBoard(FreeBoard freeBoard, Member member) {
+    private String createLikeFreeBoard(FreeBoard freeBoard, Member member) {
         FreeBoardLike freeBoardLike = new FreeBoardLike(freeBoard, member);
         freeBoardLikeRepository.save(freeBoardLike);
-        log.info("좋아요 완료");
+        log.info("게시글 좋아요 완료");
         return SUCCESS_LIKE_BOARD;
     }
 
-    public String removeLikeFreeBoard(FreeBoard freeBoard, Member member) {
+    private String removeLikeFreeBoard(FreeBoard freeBoard, Member member) {
         FreeBoardLike freeBoardLike = freeBoardLikeRepository.findByFreeBoardAndMember(freeBoard, member)
                         .orElseThrow(FreeBoardLikeHistoryNotFoundException::new);
         freeBoardLikeRepository.delete(freeBoardLike);
-        log.info("좋아요 취소 완료");
+        log.info("게시글 좋아요 취소 완료");
 
         return SUCCESS_UNLIKE_BOARD;
     }

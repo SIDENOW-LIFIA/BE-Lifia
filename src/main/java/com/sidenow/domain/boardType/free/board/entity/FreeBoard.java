@@ -1,5 +1,6 @@
 package com.sidenow.domain.boardType.free.board.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.global.entity.BaseTimeEntity;
@@ -42,16 +43,17 @@ public class FreeBoard extends BaseTimeEntity {
     private int likes; // 게시글 좋아요 수
 
     // 게시글 삭제 시 달려있는 댓글 모두 삭제
+    @JsonIgnore // 무한 순환 참조 방지
     @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FreeBoardComment> freeBoardComments;
 
     // 게시글 삭제 시 달려있는 좋아요 모두 삭제
+    @JsonIgnore // 무한 순환 참조 방지
     @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FreeBoardLike> freeBoardLikes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE) // 작성자가 제거되면 게시글도 제거됨
     private Member member; // 게시글 작성자
 
     public void updateTitle(String title) {

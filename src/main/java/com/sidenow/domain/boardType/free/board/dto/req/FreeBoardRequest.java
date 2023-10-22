@@ -17,6 +17,7 @@ public abstract class FreeBoardRequest {
     @AllArgsConstructor
     @Schema(description = "게시글 작성 요청 객체")
     public static class FreeBoardCreateRequest {
+
         @NotBlank(message = "자유게시판 게시글 제목 입력")
         @Schema(description = "게시글 제목을 입력해주세요.", example = "Test Title")
         private String title;
@@ -49,14 +50,5 @@ public abstract class FreeBoardRequest {
         @NotBlank(message = "자유게시판 게시글 내용 입력")
         @Schema(description = "게시글 내용을 입력해주세요.")
         private String content;
-
-        public static FreeBoard to(FreeBoardUpdateRequest req, String image, Member member){
-            return FreeBoard.builder()
-                    .title(req.title)
-                    .content(req.content)
-                    .image(image)
-                    .member(member)
-                    .build();
-        }
     }
 }
