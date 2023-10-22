@@ -66,13 +66,6 @@ public abstract class MemberRequest {
         @Schema(description = "유저 비밀번호", example = "hjs0324@")
         private String password;
 
-        public Member toMember(PasswordEncoder passwordEncoder) {
-            return Member.builder()
-                    .email(email)
-                    .password(passwordEncoder.encode(password))
-                    .role(Role.Role_USER)
-                    .build();
-        }
         public UsernamePasswordAuthenticationToken toAuthentication() {
             return new UsernamePasswordAuthenticationToken(email, password);
         }
