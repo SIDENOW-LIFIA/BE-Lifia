@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Builder
+@Getter
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
