@@ -24,7 +24,7 @@ import static com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardComment
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/board/free")
-@Tag(name = "FreeBoard Comment API", description = "자유게시판 게시글의 댓글 API 입니다.")
+@Tag(name = "자유게시판 댓글 API", description = "FreeBoardComment")
 public class FreeBoardCommentController {
 
     private final FreeBoardCommentService freeBoardCommentService;
