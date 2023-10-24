@@ -12,7 +12,7 @@ public abstract class ChildcareResponse {
 
     @Data
     @AllArgsConstructor
-    @Schema(description = "자유게시판 생성 응답 객체")
+    @Schema(description = "육아해요 생성 응답 객체")
     public static class ChildcareCreateResponse {
         private Long id;
         private String title;
@@ -26,7 +26,7 @@ public abstract class ChildcareResponse {
 
     @Data
     @AllArgsConstructor
-    @Schema(description = "자유게시판 수정 응답 객체")
+    @Schema(description = "육아해요 수정 응답 객체")
     public static class ChildcareUpdateResponse {
         private Long id;
         private String title;
@@ -73,25 +73,25 @@ public abstract class ChildcareResponse {
     @RequiredArgsConstructor
     @Schema(description = "게시글 전체 조회 응답 객체")
     public static class ChildcareGetListResponse {
-        @Schema(description = "자유게시판 게시글 ID")
+        @Schema(description = "육아해요 게시글 ID")
         private final Long childcarePostId;
 
-        @Schema(description = "자유게시판 게시글 작성자 닉네임")
+        @Schema(description = "육아해요 게시글 작성자 닉네임")
         private final String nickname;
 
-        @Schema(description = "자유게시판 게시글 제목")
+        @Schema(description = "육아해요 게시글 제목")
         private final String title;
 
-        @Schema(description = "자유게시판 게시글 조회수")
+        @Schema(description = "육아해요 게시글 조회수")
         private final int hits;
 
-        @Schema(description = "자유게시판 게시글 좋아요 수")
+        @Schema(description = "육아해요 게시글 좋아요 수")
         private final int likes;
 
-        @Schema(description = "자유게시판 게시글 댓글 수")
+        @Schema(description = "육아해요 게시글 댓글 수")
         private final int commentsCount;
 
-        @Schema(description = "자유게시판 게시글 생성 일시")
+        @Schema(description = "육아해요 게시글 생성 일시")
         private final LocalDateTime createdAt;
 
         public static ChildcareGetListResponse from(Childcare childcare) {
@@ -110,7 +110,7 @@ public abstract class ChildcareResponse {
     @Getter
     @Builder
     @RequiredArgsConstructor
-    @Schema(description = "자유게시판 게시글 전체 조회")
+    @Schema(description = "육아해요 게시글 전체 조회")
     public static class AllChildcares {
         private final List<ChildcareGetListResponse> childcares;
     }

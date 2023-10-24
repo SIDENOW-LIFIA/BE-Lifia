@@ -6,7 +6,7 @@ import com.sidenow.domain.boardType.childcare.board.repository.ChildcareReposito
 import com.sidenow.domain.boardType.childcare.comment.entity.ChildcareComment;
 import com.sidenow.domain.boardType.childcare.comment.entity.ChildcareCommentLike;
 import com.sidenow.domain.boardType.childcare.comment.exception.ChildcareCommentLikeHistoryNotFoundException;
-import com.sidenow.domain.boardType.childcare.comment.exception.NotFoundChildcareCommentIdException;
+import com.sidenow.domain.boardType.childcare.comment.exception.ChildcareCommentIdNotFoundException;
 import com.sidenow.domain.boardType.childcare.comment.repository.ChildcareCommentLikeRepository;
 import com.sidenow.domain.boardType.childcare.comment.repository.ChildcareCommentRepository;
 import com.sidenow.domain.boardType.childcare.comment.dto.req.ChildcareCommentRequest.ChildcareCommentCreateRequest;
@@ -88,7 +88,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
         childcareRepository.findByChildcareId(childcareId).orElseThrow(ChildcareIdNotFoundException::new);
 
         // 댓글 존재여부 확인
-        ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(NotFoundChildcareCommentIdException::new);
+        ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(ChildcareCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
         memberRepository.findById(childcareComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
@@ -112,7 +112,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
         Childcare childcare = childcareRepository.findByChildcareId(childcareId).orElseThrow(ChildcareIdNotFoundException::new);
 
         // 댓글 존재여부 확인
-        ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(NotFoundChildcareCommentIdException::new);
+        ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(ChildcareCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
         memberRepository.findById(childcareComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
@@ -129,7 +129,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
 
     // 자식 댓글 등록 (대댓글)
     private ChildcareComment createChildcareChildComments(ChildcareCommentCreateRequest req, Member member, Childcare childcare) {
-        ChildcareComment parent = childcareCommentRepository.findById(req.getParentId()).orElseThrow(NotFoundChildcareCommentIdException::new);
+        ChildcareComment parent = childcareCommentRepository.findById(req.getParentId()).orElseThrow(ChildcareCommentIdNotFoundException::new);
 
         return ChildcareComment.builder()
                 .member(member)
@@ -160,7 +160,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
                 .orElseThrow(MemberNotLoginException::new)
                 .getMemberId()).get();
         childcareRepository.findById(childcareId).orElseThrow(ChildcareIdNotFoundException::new);
-        ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(NotFoundChildcareCommentIdException::new);
+        ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(ChildcareCommentIdNotFoundException::new);
 
         if (!hasLikeChildcareComment(childcareComment, member)){
             childcareComment.increaseLikes();

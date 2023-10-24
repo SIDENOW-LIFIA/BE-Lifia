@@ -18,11 +18,11 @@ public abstract class ChildcareRequest {
     @Schema(description = "게시글 작성 요청 객체")
     public static class ChildcareCreateRequest {
 
-        @NotBlank(message = "자유게시판 게시글 제목 입력")
+        @NotBlank(message = "육아해요 게시글 제목 입력")
         @Schema(description = "게시글 제목을 입력해주세요.", example = "Test Title")
         private String title;
 
-        @NotBlank(message = "자유게시판 게시글 내용 입력")
+        @NotBlank(message = "육아해요 게시글 내용 입력")
         @Schema(description = "게시글 내용을 입력해주세요.", example = "Test Content")
         private String content;
 
@@ -43,11 +43,11 @@ public abstract class ChildcareRequest {
     @AllArgsConstructor
     @Schema(description = "게시글 수정 요청 객체")
     public static class ChildcareUpdateRequest {
-        @NotBlank(message = "자유게시판 게시글 제목 입력")
+        @NotBlank(message = "육아해요 게시글 제목 입력")
         @Schema(description = "게시글 제목을 입력해주세요.")
         private String title;
 
-        @NotBlank(message = "자유게시판 게시글 내용 입력")
+        @NotBlank(message = "육아해요 게시글 내용 입력")
         @Schema(description = "게시글 내용을 입력해주세요.")
         private String content;
     }
