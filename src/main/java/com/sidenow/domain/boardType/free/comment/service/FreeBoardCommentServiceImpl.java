@@ -103,8 +103,13 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
     public FreeBoardCommentUpdateResponse updateFreeBoardComment(Long freeBoardId, Long freeBoardCommentId, FreeBoardCommentUpdateRequest req) {
         log.info("Update FreeBoard Comment Service 진입");
 
+        Member member = memberRepository.findById(securityUtils.getLoggedInMember()
+                .orElseThrow(MemberNotLoginException::new)
+                .getMemberId()).get();
+        log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
+
         // 댓글이 작성된 게시글이 맞는지 확인
-        freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
+        FreeBoard freeBoard = freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
 
         // 댓글 존재여부 확인
         FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
