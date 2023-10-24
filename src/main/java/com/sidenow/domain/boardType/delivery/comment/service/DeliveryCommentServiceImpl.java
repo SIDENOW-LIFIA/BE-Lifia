@@ -9,7 +9,7 @@ import com.sidenow.domain.boardType.delivery.board.repository.DeliveryRepository
 import com.sidenow.domain.boardType.delivery.comment.entity.DeliveryComment;
 import com.sidenow.domain.boardType.delivery.comment.entity.DeliveryCommentLike;
 import com.sidenow.domain.boardType.delivery.comment.exception.DeliveryCommentLikeHistoryNotFoundException;
-import com.sidenow.domain.boardType.delivery.comment.exception.NotFoundDeliveryCommentIdException;
+import com.sidenow.domain.boardType.delivery.comment.exception.DeliveryCommentIdNotFoundException;
 import com.sidenow.domain.boardType.delivery.comment.repository.DeliveryCommentLikeRepository;
 import com.sidenow.domain.boardType.delivery.comment.repository.DeliveryCommentRepository;
 import com.sidenow.domain.member.entity.Member;
@@ -88,7 +88,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
         deliveryRepository.findByDeliveryId(deliveryId).orElseThrow(DeliveryIdNotFoundException::new);
 
         // 댓글 존재여부 확인
-        DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(NotFoundDeliveryCommentIdException::new);
+        DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(DeliveryCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
         memberRepository.findById(deliveryComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
@@ -112,7 +112,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
         Delivery delivery = deliveryRepository.findByDeliveryId(deliveryId).orElseThrow(DeliveryIdNotFoundException::new);
 
         // 댓글 존재여부 확인
-        DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(NotFoundDeliveryCommentIdException::new);
+        DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(DeliveryCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
         memberRepository.findById(deliveryComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
@@ -129,7 +129,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
 
     // 자식 댓글 등록 (대댓글)
     private DeliveryComment createDeliveryChildComments(DeliveryCommentCreateRequest req, Member member, Delivery delivery) {
-        DeliveryComment parent = deliveryCommentRepository.findById(req.getParentId()).orElseThrow(NotFoundDeliveryCommentIdException::new);
+        DeliveryComment parent = deliveryCommentRepository.findById(req.getParentId()).orElseThrow(DeliveryCommentIdNotFoundException::new);
 
         return DeliveryComment.builder()
                 .member(member)
@@ -160,7 +160,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
                 .orElseThrow(MemberNotLoginException::new)
                 .getMemberId()).get();
         deliveryRepository.findById(deliveryId).orElseThrow(DeliveryIdNotFoundException::new);
-        DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(NotFoundDeliveryCommentIdException::new);
+        DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(DeliveryCommentIdNotFoundException::new);
 
         if (!hasLikeDeliveryComment(deliveryComment, member)){
             deliveryComment.increaseLikes();
