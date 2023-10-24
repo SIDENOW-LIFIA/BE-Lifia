@@ -1,10 +1,10 @@
 package com.sidenow.domain.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
-import com.sidenow.domain.boardType.free.board.entity.FreeBoardLike;
-import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
-import com.sidenow.domain.boardType.free.comment.entity.FreeBoardCommentLike;
+import com.sidenow.domain.freeboard.board.entity.FreeBoard;
+import com.sidenow.domain.freeboard.board.entity.FreeBoardLike;
+import com.sidenow.domain.freeboard.comment.entity.FreeBoardComment;
+import com.sidenow.domain.freeboard.comment.entity.FreeBoardCommentLike;
 import com.sidenow.domain.member.constant.MemberConstant.Provider;
 import com.sidenow.domain.member.constant.MemberConstant.Role;
 import com.sidenow.global.entity.BaseTimeEntity;
