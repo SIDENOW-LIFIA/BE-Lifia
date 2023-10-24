@@ -24,14 +24,14 @@ import static com.sidenow.domain.boardType.childcare.board.constant.ChildcareCon
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/childcares")
-@Tag(name = "자유게시판 API", description = "Childcare")
+@RequestMapping("/childcare")
+@Tag(name = "육아해요 API", description = "Childcare")
 public class ChildcareController {
 
     private final ChildcareService childcareService;
 
     @PostMapping(value = "/board", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @Operation(summary = "자유게시판 게시글 등록", description = "게시글을 등록합니다.")
+    @Operation(summary = "육아해요 게시글 등록", description = "게시글을 등록합니다.")
     public ResponseEntity<ResponseDto<ChildcareCreateResponse>> createChildcare(@RequestPart(required = false) MultipartFile image,
                                                                                 @RequestPart ChildcareCreateRequest req) {
         log.info("Register Childcare Controller 진입");
@@ -42,7 +42,7 @@ public class ChildcareController {
     }
 
     @GetMapping("/board/{id}")
-    @Operation(summary = "자유게시판 게시글 단건 조회", description = "게시글을 단건 조회합니다.")
+    @Operation(summary = "육아해요 게시글 단건 조회", description = "게시글을 단건 조회합니다.")
     public ResponseEntity<ResponseDto<ChildcareGetResponse>> getChildcare(@PathVariable Long id) {
         log.info("Get Childcare Controller 진입");
         ChildcareGetResponse result = childcareService.getChildcare(id);
@@ -52,7 +52,7 @@ public class ChildcareController {
     }
 
     @GetMapping("/{page}")
-    @Operation(summary = "자유게시판 게시글 목록 조회", description = "게시글 목록을 조회합니다.")
+    @Operation(summary = "육아해요 게시글 목록 조회", description = "게시글 목록을 조회합니다.")
     public ResponseEntity<ResponseDto<AllChildcares>> getAllChildcare(@PathVariable @Nullable Integer page) {
         log.info("Get All Childcare Controller 진입");
         AllChildcares result = childcareService.getChildcareList(page);
@@ -62,7 +62,7 @@ public class ChildcareController {
     }
 
     @PutMapping(value = "/board/{id}", consumes = {"multipart/form-data"})
-    @Operation(summary = "자유게시판 게시글 수정", description = "게시글을 수정합니다.")
+    @Operation(summary = "육아해요 게시글 수정", description = "게시글을 수정합니다.")
     public ResponseEntity<ResponseDto<ChildcareUpdateResponse>> updateChildcare(@PathVariable Long id, @RequestPart ChildcareUpdateRequest req, @RequestPart(required = false) MultipartFile image) {
         log.info("Update Childcare Controller 진입");
         ChildcareUpdateResponse result = childcareService.updateChildcare(id, req, image);
@@ -72,7 +72,7 @@ public class ChildcareController {
     }
 
     @DeleteMapping(value = "/board/{id}")
-    @Operation(summary = "자유게시판 게시글 삭제", description = "게시글을 삭제합니다.")
+    @Operation(summary = "육아해요 게시글 삭제", description = "게시글을 삭제합니다.")
     public ResponseEntity<ResponseDto> deleteChildcare(@PathVariable Long id) {
         log.info("Delete Childcare Controller 진입");
         childcareService.deleteChildcare(id);
@@ -82,7 +82,7 @@ public class ChildcareController {
     }
 
     @PostMapping("/board/{id}")
-    @Operation(summary = "자유게시판 게시글 좋아요", description = "사용자가 게시글 좋아요를 누릅니다.")
+    @Operation(summary = "육아해요 게시글 좋아요", description = "사용자가 게시글 좋아요를 누릅니다.")
     public ResponseEntity<ResponseDto<String>> likeChildcare(@PathVariable Long id) {
         log.info("Like Childcare Controller 진입");
         String result = childcareService.updateLikeOfChildcare(id);

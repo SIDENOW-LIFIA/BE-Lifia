@@ -3,7 +3,7 @@ package com.sidenow.domain.boardType.childcare.board.constant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class ChildcareBoardConstants {
+public class ChildcareConstants {
 
     @Getter
     @RequiredArgsConstructor

@@ -24,7 +24,7 @@ import static com.sidenow.domain.boardType.childcare.comment.dto.res.ChildcareCo
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/board/childcare")
-@Tag(name = "Childcare Comment API", description = "육아해요 게시글의 댓글 API 입니다.")
+@Tag(name = "육아해요 댓글 API", description = "ChildcareComment")
 public class ChildcareCommentController {
 
     private final ChildcareCommentService childcareCommentService;
