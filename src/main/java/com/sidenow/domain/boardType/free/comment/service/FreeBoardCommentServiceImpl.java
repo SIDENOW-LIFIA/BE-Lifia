@@ -52,13 +52,12 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         FreeBoard freeBoard = freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
-//        FreeBoardComment freeBoardComments;
-//        if (req.getParentId() == null) {
-//            freeBoardComments = createFreeBoardParentComments(req, member, freeBoard);
-//        } else {
-//            freeBoardComments = createFreeBoardChildComments(req, member, freeBoard);
-//        }
-        FreeBoardComment freeBoardComment = FreeBoardCommentCreateRequest.to(req, member, freeBoard);
+        FreeBoardComment freeBoardComment;
+        if (req.getParentId() == null) {
+            freeBoardComment = createFreeBoardParentComments(req, member, freeBoard);
+        } else {
+            freeBoardComment = createFreeBoardChildComments(req, member, freeBoard);
+        }
         freeBoardCommentRepository.save(freeBoardComment);
         log.info("Create FreeBoard Comment Service 종료");
         return FreeBoardCommentCreateResponse.from(freeBoardComment);
@@ -68,6 +67,10 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
     // 자유게시판 게시글의 댓글 전체 조회
     public List<FreeBoardGetCommentListResponse> getFreeBoardCommentList(Long freeBoardId) {
         log.info("Read FreeBoard Comment Service Start");
+        Member member = memberRepository.findById(securityUtils.getLoggedInMember()
+                .orElseThrow(MemberNotLoginException::new)
+                .getMemberId()).get();
+        log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
         FreeBoard freeBoard = freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
         List<FreeBoardComment> freeBoardCommentsList = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardIdOrderByCreatedAtAsc(freeBoard.getFreeBoardId());
         List<FreeBoardGetCommentListResponse> readFreeBoardCommentDto = new ArrayList<>();
@@ -119,29 +122,29 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         return FreeBoardCommentUpdateResponse.from(freeBoardComment);
     }
 
-//    // 자식 댓글 등록 (대댓글)
-//    private FreeBoardComment createFreeBoardChildComments(FreeBoardCommentCreateRequest createFreeBoardCommentRequest, Member member, FreeBoard freeBoard) {
-//        FreeBoardComment parent = freeBoardCommentRepository.findById(createFreeBoardCommentRequest.getParentId()).orElseThrow(NotFoundFreeBoardCommentIdException::new);
-//
-//        return FreeBoardComment.builder()
-//                .member(member)
-//                .freeBoard(freeBoard)
-//                .isDeleted(false)
-//                .content(createFreeBoardCommentRequest.getContent())
-//                .parent(parent)
-//                .build();
-//    }
+    // 자식 댓글 등록 (대댓글)
+    private FreeBoardComment createFreeBoardChildComments(FreeBoardCommentCreateRequest req, Member member, FreeBoard freeBoard) {
+        FreeBoardComment parent = freeBoardCommentRepository.findById(req.getParentId()).orElseThrow(NotFoundFreeBoardCommentIdException::new);
 
-//    // 부모 댓글 등록 (댓글)
-//    private FreeBoardComment createFreeBoardParentComments(FreeBoardCommentCreateRequest createFreeBoardCommentRequest, Member member, FreeBoard freeBoard) {
-//
-//        return FreeBoardComment.builder()
-//                .member(member)
-//                .freeBoard(freeBoard)
-//                .isDeleted(false)
-//                .content(createFreeBoardCommentRequest.getContent())
-//                .build();
-//    }
+        return FreeBoardComment.builder()
+                .member(member)
+                .freeBoard(freeBoard)
+                .isDeleted(false)
+                .content(req.getContent())
+                .parent(parent)
+                .build();
+    }
+
+    // 부모 댓글 등록 (댓글)
+    private FreeBoardComment createFreeBoardParentComments(FreeBoardCommentCreateRequest req, Member member, FreeBoard freeBoard) {
+
+        return FreeBoardComment.builder()
+                .member(member)
+                .freeBoard(freeBoard)
+                .isDeleted(false)
+                .content(req.getContent())
+                .build();
+    }
 
     // 자유게시판 게시글 댓글 좋아요
     @Override

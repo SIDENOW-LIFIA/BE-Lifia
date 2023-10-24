@@ -16,18 +16,12 @@ public abstract class FreeBoardCommentRequest {
     @Schema(description = "자유게시판 게시글 댓글 생성 요청 객체")
     public static class FreeBoardCommentCreateRequest {
 
+        @Schema(description = "부모 댓글 id(대댓글 작성 시 기입)", example = "null")
+        private Long parentId;
+
         @NotBlank(message = "자유게시판 게시글 댓글 내용 입력")
         @Schema(description = "댓글 내용", example = "Test Comment")
         private String content;
-
-        public static FreeBoardComment to(FreeBoardCommentCreateRequest req, Member member, FreeBoard freeBoard){
-
-            return FreeBoardComment.builder()
-                    .content(req.content)
-                    .member(member)
-                    .freeBoard(freeBoard)
-                    .build();
-        }
     }
 
     @Getter
@@ -36,6 +30,9 @@ public abstract class FreeBoardCommentRequest {
     @AllArgsConstructor
     @Schema(description = "자유게시판 게시글 댓글 수정 요청 객체")
     public static class FreeBoardCommentUpdateRequest {
+
+        @Schema(description = "부모 댓글 id(대댓글 작성 시 기입)", example = "null")
+        private Long parentId;
 
         @NotBlank(message = "자유게시판 게시글 댓글 내용 수정")
         @Schema(description = "댓글 내용", example = "Test Updated Comment")

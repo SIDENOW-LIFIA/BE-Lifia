@@ -40,7 +40,8 @@ public abstract class FreeBoardCommentResponse {
     @RequiredArgsConstructor
     @Schema(description = "자유게시판 게시글의 댓글 전체 조회 응답 객체")
     public static class FreeBoardGetCommentListResponse {
-        private final Long freeBoardCommentId;
+        private final Long id;
+        private final Long parentId;
         private final String nickname; // 작성자 별명
         private final String content; // 내용
         private final LocalDateTime createdAt; // 생성일시
@@ -49,7 +50,7 @@ public abstract class FreeBoardCommentResponse {
             Member member = freeBoardComments.getMember();
 
             return FreeBoardGetCommentListResponse.builder()
-                    .freeBoardCommentId(freeBoardComments.getCommentId())
+                    .id(freeBoardComments.getCommentId())
                     .nickname(member.getNickname())
                     .content(freeBoardComments.getContent())
                     .createdAt(freeBoardComments.getCreatedAt())
