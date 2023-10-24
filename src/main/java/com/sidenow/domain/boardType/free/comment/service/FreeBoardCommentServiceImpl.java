@@ -1,17 +1,13 @@
 package com.sidenow.domain.boardType.free.comment.service;
 
 import com.sidenow.domain.boardType.free.board.entity.FreeBoard;
-import com.sidenow.domain.boardType.free.board.entity.FreeBoardLike;
 import com.sidenow.domain.boardType.free.board.exception.FreeBoardIdNotFoundException;
-import com.sidenow.domain.boardType.free.board.exception.FreeBoardLikeHistoryNotFoundException;
 import com.sidenow.domain.boardType.free.board.repository.FreeBoardRepository;
-import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest;
 import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.FreeBoardCommentCreateRequest;
 import com.sidenow.domain.boardType.free.comment.dto.req.FreeBoardCommentRequest.FreeBoardCommentUpdateRequest;
 import com.sidenow.domain.boardType.free.comment.dto.res.FreeBoardCommentResponse.FreeBoardGetCommentListResponse;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardComment;
 import com.sidenow.domain.boardType.free.comment.entity.FreeBoardCommentLike;
-import com.sidenow.domain.boardType.free.comment.exception.FreeBoardCommentAuthErrorException;
 import com.sidenow.domain.boardType.free.comment.exception.FreeBoardCommentLikeHistoryNotFoundException;
 import com.sidenow.domain.boardType.free.comment.exception.NotFoundFreeBoardCommentIdException;
 import com.sidenow.domain.boardType.free.comment.repository.FreeBoardCommentLikeRepository;
