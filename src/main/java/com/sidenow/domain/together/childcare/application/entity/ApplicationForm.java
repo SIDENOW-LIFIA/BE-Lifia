@@ -1,7 +1,7 @@
-package com.sidenow.domain.boardType.childcare.application.entity;
+package com.sidenow.domain.together.childcare.application.entity;
 
-import com.sidenow.domain.boardType.childcare.board.entity.Childcare;
 import com.sidenow.domain.member.entity.Member;
+import com.sidenow.domain.together.childcare.board.entity.Childcare;
 import com.sidenow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.sidenow.domain.boardType.childcare.application.controller;
+package com.sidenow.domain.together.childcare.application.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,4 +12,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/board/childcare")
 @Tag(name = "공동육아 신청폼 API", description = "Application")
 public class ApplicationController {
+
 }
