@@ -17,5 +17,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/members")
 @Tag(name = "마이페이지 API", description = "My Page")
 public class MemberMyPageController {
-    private final MemberMyPageService memberMyPageService;
+
 }
