@@ -26,7 +26,7 @@ public class ApplicationFormController {
 
     private final ApplicationFormService applicationFormService;
     @PostMapping(value = "/{postId}/application-forms")
-    public ResponseEntity<ResponseDto<ApplicationFormCreateResponse>> createApplicationForm(@PathVariable("postId") Long childcareId, @Valid @RequestBody ApplicationFormCreateRequest req){
+    public ResponseEntity<ResponseDto<ApplicationFormCreateResponse>> createApplicationForm(@PathVariable("postId") Long childcareId, @RequestBody ApplicationFormCreateRequest req){
         log.info("Create Application Form Controller 진입");
         ApplicationFormCreateResponse result = applicationFormService.createApplicationForm(childcareId, req);
         log.info("Create Application Form Controller 종료");
