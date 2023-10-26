@@ -48,7 +48,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
         log.info("Create Childcare Comment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         Childcare childcare = childcareRepository.findByChildcareId(childcareId).orElseThrow(ChildcareIdNotFoundException::new);
@@ -69,7 +69,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
         log.info("Read Childcare Comment Service Start");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
         Childcare childcare = childcareRepository.findByChildcareId(childcareId).orElseThrow(ChildcareIdNotFoundException::new);
         List<ChildcareComment> childcareCommentsList = childcareCommentRepository.findAllByChildcare_ChildcareIdOrderByCreatedAtAsc(childcare.getChildcareId());
@@ -91,7 +91,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
         ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(ChildcareCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(childcareComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(childcareComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         childcareComment.changeIsDeleted(true);
         childcareCommentRepository.deleteById(childcareComment.getCommentId()); // 댓글 삭제
@@ -105,7 +105,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
 
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         // 댓글이 작성된 게시글이 맞는지 확인
@@ -115,7 +115,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
         ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(ChildcareCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(childcareComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(childcareComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (req.getContent() != null){
             childcareComment.updateContent(req.getContent());
@@ -158,7 +158,7 @@ public class ChildcareCommentServiceImpl implements ChildcareCommentService {
         log.info("Update Like Of ChildcareComment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         childcareRepository.findById(childcareId).orElseThrow(ChildcareIdNotFoundException::new);
         ChildcareComment childcareComment = childcareCommentRepository.findById(childcareCommentId).orElseThrow(ChildcareCommentIdNotFoundException::new);
 

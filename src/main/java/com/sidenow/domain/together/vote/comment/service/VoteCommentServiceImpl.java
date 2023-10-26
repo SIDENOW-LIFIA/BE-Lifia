@@ -48,7 +48,7 @@ public class VoteCommentServiceImpl implements VoteCommentService {
         log.info("Create Vote Comment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         Vote vote = voteRepository.findByVoteId(voteId).orElseThrow(VoteIdNotFoundException::new);
@@ -69,7 +69,7 @@ public class VoteCommentServiceImpl implements VoteCommentService {
         log.info("Read Vote Comment Service Start");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
         Vote vote = voteRepository.findByVoteId(voteId).orElseThrow(VoteIdNotFoundException::new);
         List<VoteComment> voteCommentsList = voteCommentRepository.findAllByVote_VoteIdOrderByCreatedAtAsc(vote.getVoteId());
@@ -91,7 +91,7 @@ public class VoteCommentServiceImpl implements VoteCommentService {
         VoteComment voteComment = voteCommentRepository.findById(voteCommentId).orElseThrow(VoteCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(voteComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(voteComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         voteComment.changeIsDeleted(true);
         voteCommentRepository.deleteById(voteComment.getCommentId()); // 댓글 삭제
@@ -105,7 +105,7 @@ public class VoteCommentServiceImpl implements VoteCommentService {
 
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         // 댓글이 작성된 게시글이 맞는지 확인
@@ -115,7 +115,7 @@ public class VoteCommentServiceImpl implements VoteCommentService {
         VoteComment voteComment = voteCommentRepository.findById(voteCommentId).orElseThrow(VoteCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(voteComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(voteComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (req.getContent() != null){
             voteComment.updateContent(req.getContent());
@@ -158,7 +158,7 @@ public class VoteCommentServiceImpl implements VoteCommentService {
         log.info("Update Like Of VoteComment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         voteRepository.findById(voteId).orElseThrow(VoteIdNotFoundException::new);
         VoteComment voteComment = voteCommentRepository.findById(voteCommentId).orElseThrow(VoteCommentIdNotFoundException::new);
 

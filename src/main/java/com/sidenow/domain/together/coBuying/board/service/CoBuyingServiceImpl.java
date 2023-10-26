@@ -49,7 +49,7 @@ public class CoBuyingServiceImpl implements CoBuyingService {
         log.info("Create CoBuying Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
 
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
@@ -74,7 +74,7 @@ public class CoBuyingServiceImpl implements CoBuyingService {
         log.info("Get CoBuying Service 진입");
         CoBuying coBuying = coBuyingRepository.findById(id).orElseThrow(CoBuyingIdNotFoundException::new);
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
 
         coBuying.increaseHits();
 
@@ -90,7 +90,7 @@ public class CoBuyingServiceImpl implements CoBuyingService {
 
         log.info("Get CoBuying Post List Service 진입");
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
         if (page == null) {
             page = 1;
         }
@@ -120,7 +120,7 @@ public class CoBuyingServiceImpl implements CoBuyingService {
                 .orElseThrow(CoBuyingIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(coBuying.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(coBuying.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (image != null){
             // 기존 이미지 파일 삭제
@@ -155,7 +155,7 @@ public class CoBuyingServiceImpl implements CoBuyingService {
         CoBuying coBuying = coBuyingRepository.findById(id).orElseThrow(CoBuyingIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(coBuying.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(coBuying.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         coBuyingRepository.delete(coBuying);
 
@@ -169,7 +169,7 @@ public class CoBuyingServiceImpl implements CoBuyingService {
         log.info("Update Like Of CoBuying Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         CoBuying coBuying = coBuyingRepository.findById(id).orElseThrow(CoBuyingIdNotFoundException::new);
         
         if (!hasLikeCoBuying(coBuying, member)){

@@ -48,7 +48,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         log.info("Create FreeBoard Comment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         FreeBoard freeBoard = freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
@@ -69,7 +69,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         log.info("Read FreeBoard Comment Service Start");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
         FreeBoard freeBoard = freeBoardRepository.findByFreeBoardId(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
         List<FreeBoardComment> freeBoardCommentsList = freeBoardCommentRepository.findAllByFreeBoard_FreeBoardIdOrderByCreatedAtAsc(freeBoard.getFreeBoardId());
@@ -91,7 +91,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(freeBoardComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(freeBoardComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         freeBoardComment.changeIsDeleted(true);
         freeBoardCommentRepository.deleteById(freeBoardComment.getCommentId()); // 댓글 삭제
@@ -105,7 +105,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
 
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         // 댓글이 작성된 게시글이 맞는지 확인
@@ -115,7 +115,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(freeBoardComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(freeBoardComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (req.getContent() != null){
             freeBoardComment.updateContent(req.getContent());
@@ -158,7 +158,7 @@ public class FreeBoardCommentServiceImpl implements FreeBoardCommentService{
         log.info("Update Like Of FreeBoardComment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         freeBoardRepository.findById(freeBoardId).orElseThrow(FreeBoardIdNotFoundException::new);
         FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(freeBoardCommentId).orElseThrow(NotFoundFreeBoardCommentIdException::new);
 

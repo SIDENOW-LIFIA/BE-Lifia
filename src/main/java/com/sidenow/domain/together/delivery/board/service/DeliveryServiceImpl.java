@@ -49,7 +49,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         log.info("Create Delivery Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
 
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
@@ -74,7 +74,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         log.info("Get Delivery Service 진입");
         Delivery delivery = deliveryRepository.findById(id).orElseThrow(DeliveryIdNotFoundException::new);
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
 
         delivery.increaseHits();
 
@@ -90,7 +90,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
         log.info("Get Delivery Post List Service 진입");
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
         if (page == null) {
             page = 1;
         }
@@ -120,7 +120,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .orElseThrow(DeliveryIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(delivery.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(delivery.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (image != null){
             // 기존 이미지 파일 삭제
@@ -155,7 +155,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         Delivery delivery = deliveryRepository.findById(id).orElseThrow(DeliveryIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(delivery.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(delivery.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         deliveryRepository.delete(delivery);
 
@@ -169,7 +169,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         log.info("Update Like Of Delivery Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         Delivery delivery = deliveryRepository.findById(id).orElseThrow(DeliveryIdNotFoundException::new);
         
         if (!hasLikeDelivery(delivery, member)){

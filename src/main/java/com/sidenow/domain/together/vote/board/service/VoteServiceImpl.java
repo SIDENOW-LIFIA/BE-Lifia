@@ -49,7 +49,7 @@ public class VoteServiceImpl implements VoteService {
         log.info("Create Vote Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
 
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
@@ -74,7 +74,7 @@ public class VoteServiceImpl implements VoteService {
         log.info("Get Vote Service 진입");
         Vote vote = voteRepository.findById(id).orElseThrow(VoteIdNotFoundException::new);
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
 
         vote.increaseHits();
 
@@ -90,7 +90,7 @@ public class VoteServiceImpl implements VoteService {
 
         log.info("Get Vote Post List Service 진입");
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
         if (page == null) {
             page = 1;
         }
@@ -120,7 +120,7 @@ public class VoteServiceImpl implements VoteService {
                 .orElseThrow(VoteIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(vote.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(vote.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (image != null){
             // 기존 이미지 파일 삭제
@@ -155,7 +155,7 @@ public class VoteServiceImpl implements VoteService {
         Vote vote = voteRepository.findById(id).orElseThrow(VoteIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(vote.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(vote.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         voteRepository.delete(vote);
 
@@ -169,7 +169,7 @@ public class VoteServiceImpl implements VoteService {
         log.info("Update Like Of Vote Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         Vote vote = voteRepository.findById(id).orElseThrow(VoteIdNotFoundException::new);
         
         if (!hasLikeVote(vote, member)){

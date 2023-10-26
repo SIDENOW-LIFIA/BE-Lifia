@@ -48,7 +48,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
         log.info("Create Delivery Comment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         Delivery delivery = deliveryRepository.findByDeliveryId(deliveryId).orElseThrow(DeliveryIdNotFoundException::new);
@@ -69,7 +69,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
         log.info("Read Delivery Comment Service Start");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
         Delivery delivery = deliveryRepository.findByDeliveryId(deliveryId).orElseThrow(DeliveryIdNotFoundException::new);
         List<DeliveryComment> deliveryCommentsList = deliveryCommentRepository.findAllByDelivery_DeliveryIdOrderByCreatedAtAsc(delivery.getDeliveryId());
@@ -91,7 +91,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
         DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(DeliveryCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(deliveryComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(deliveryComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         deliveryComment.changeIsDeleted(true);
         deliveryCommentRepository.deleteById(deliveryComment.getCommentId()); // 댓글 삭제
@@ -105,7 +105,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
 
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         // 댓글이 작성된 게시글이 맞는지 확인
@@ -115,7 +115,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
         DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(DeliveryCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(deliveryComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(deliveryComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (req.getContent() != null){
             deliveryComment.updateContent(req.getContent());
@@ -158,7 +158,7 @@ public class DeliveryCommentServiceImpl implements DeliveryCommentService {
         log.info("Update Like Of DeliveryComment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         deliveryRepository.findById(deliveryId).orElseThrow(DeliveryIdNotFoundException::new);
         DeliveryComment deliveryComment = deliveryCommentRepository.findById(deliveryCommentId).orElseThrow(DeliveryCommentIdNotFoundException::new);
 

@@ -48,7 +48,7 @@ public class CautionCommentServiceImpl implements CautionCommentService {
         log.info("Create Caution Comment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         Caution caution = cautionRepository.findByCautionId(cautionId).orElseThrow(CautionIdNotFoundException::new);
@@ -69,7 +69,7 @@ public class CautionCommentServiceImpl implements CautionCommentService {
         log.info("Read Caution Comment Service Start");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
         Caution caution = cautionRepository.findByCautionId(cautionId).orElseThrow(CautionIdNotFoundException::new);
         List<CautionComment> cautionCommentsList = cautionCommentRepository.findAllByCaution_CautionIdOrderByCreatedAtAsc(caution.getCautionId());
@@ -91,7 +91,7 @@ public class CautionCommentServiceImpl implements CautionCommentService {
         CautionComment cautionComment = cautionCommentRepository.findById(cautionCommentId).orElseThrow(CautionCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(cautionComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(cautionComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         cautionComment.changeIsDeleted(true);
         cautionCommentRepository.deleteById(cautionComment.getCommentId()); // 댓글 삭제
@@ -105,7 +105,7 @@ public class CautionCommentServiceImpl implements CautionCommentService {
 
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         // 댓글이 작성된 게시글이 맞는지 확인
@@ -115,7 +115,7 @@ public class CautionCommentServiceImpl implements CautionCommentService {
         CautionComment cautionComment = cautionCommentRepository.findById(cautionCommentId).orElseThrow(CautionCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(cautionComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(cautionComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (req.getContent() != null){
             cautionComment.updateContent(req.getContent());
@@ -158,7 +158,7 @@ public class CautionCommentServiceImpl implements CautionCommentService {
         log.info("Update Like Of CautionComment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         cautionRepository.findById(cautionId).orElseThrow(CautionIdNotFoundException::new);
         CautionComment cautionComment = cautionCommentRepository.findById(cautionCommentId).orElseThrow(CautionCommentIdNotFoundException::new);
 

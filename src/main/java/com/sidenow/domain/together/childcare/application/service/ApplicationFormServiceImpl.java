@@ -31,7 +31,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         log.info("Create Application Form Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
         Childcare childcare = childcareRepository.findByChildcareId(childcareId)
                 .orElseThrow(ChildcareIdNotFoundException::new);

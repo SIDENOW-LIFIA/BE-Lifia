@@ -1,6 +1,5 @@
 package com.sidenow.domain.member.service;
 
-import com.sidenow.domain.member.dto.res.MemberResponse;
 import com.sidenow.domain.member.dto.res.MemberResponse.MemberInfoResponse;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberNotLoginException;
@@ -22,7 +21,7 @@ public class MemberMyPageServiceImpl implements MemberMyPageService{
     public MemberInfoResponse getMemberInfo() {
         log.info("Get Member Info Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId()).get();
+                .orElseThrow(MemberNotLoginException::new).getId()).get();
         log.info("Get Member Info Service 종료");
 
         return MemberInfoResponse.from(member);

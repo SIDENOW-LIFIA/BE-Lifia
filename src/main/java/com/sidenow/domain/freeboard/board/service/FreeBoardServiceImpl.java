@@ -49,7 +49,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
         log.info("Create FreeBoard Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
 
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
@@ -74,7 +74,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
         log.info("Get FreeBoard Service 진입");
         FreeBoard freeBoard = freeBoardRepository.findById(id).orElseThrow(FreeBoardIdNotFoundException::new);
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
 
         freeBoard.increaseHits();
 
@@ -90,7 +90,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 
         log.info("Get FreeBoard Post List Service 진입");
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
         if (page == null) {
             page = 1;
         }
@@ -120,7 +120,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
                 .orElseThrow(FreeBoardIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(freeBoard.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(freeBoard.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (image != null){
             // 기존 이미지 파일 삭제
@@ -155,7 +155,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
         FreeBoard freeBoard = freeBoardRepository.findById(id).orElseThrow(FreeBoardIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(freeBoard.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(freeBoard.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         freeBoardRepository.delete(freeBoard);
 
@@ -169,7 +169,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
         log.info("Update Like Of FreeBoard Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         FreeBoard freeBoard = freeBoardRepository.findById(id).orElseThrow(FreeBoardIdNotFoundException::new);
         
         if (!hasLikeFreeBoard(freeBoard, member)){

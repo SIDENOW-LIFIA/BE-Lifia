@@ -48,7 +48,7 @@ public class CoBuyingCommentServiceImpl implements CoBuyingCommentService {
         log.info("Create CoBuying Comment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         CoBuying coBuying = coBuyingRepository.findByCoBuyingId(coBuyingId).orElseThrow(CoBuyingIdNotFoundException::new);
@@ -69,7 +69,7 @@ public class CoBuyingCommentServiceImpl implements CoBuyingCommentService {
         log.info("Read CoBuying Comment Service Start");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
         CoBuying coBuying = coBuyingRepository.findByCoBuyingId(coBuyingId).orElseThrow(CoBuyingIdNotFoundException::new);
         List<CoBuyingComment> coBuyingCommentsList = coBuyingCommentRepository.findAllByCoBuying_CoBuyingIdOrderByCreatedAtAsc(coBuying.getCoBuyingId());
@@ -91,7 +91,7 @@ public class CoBuyingCommentServiceImpl implements CoBuyingCommentService {
         CoBuyingComment coBuyingComment = coBuyingCommentRepository.findById(coBuyingCommentId).orElseThrow(CoBuyingCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(coBuyingComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(coBuyingComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         coBuyingComment.changeIsDeleted(true);
         coBuyingCommentRepository.deleteById(coBuyingComment.getCommentId()); // 댓글 삭제
@@ -105,7 +105,7 @@ public class CoBuyingCommentServiceImpl implements CoBuyingCommentService {
 
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
         // 댓글이 작성된 게시글이 맞는지 확인
@@ -115,7 +115,7 @@ public class CoBuyingCommentServiceImpl implements CoBuyingCommentService {
         CoBuyingComment coBuyingComment = coBuyingCommentRepository.findById(coBuyingCommentId).orElseThrow(CoBuyingCommentIdNotFoundException::new);
 
         // 댓글 작성자가 맞는지 확인
-        memberRepository.findById(coBuyingComment.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(coBuyingComment.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (req.getContent() != null){
             coBuyingComment.updateContent(req.getContent());
@@ -158,7 +158,7 @@ public class CoBuyingCommentServiceImpl implements CoBuyingCommentService {
         log.info("Update Like Of CoBuyingComment Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         coBuyingRepository.findById(coBuyingId).orElseThrow(CoBuyingIdNotFoundException::new);
         CoBuyingComment coBuyingComment = coBuyingCommentRepository.findById(coBuyingCommentId).orElseThrow(CoBuyingCommentIdNotFoundException::new);
 

@@ -49,7 +49,7 @@ public class CautionServiceImpl implements CautionService {
         log.info("Create Caution Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
 
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
@@ -74,7 +74,7 @@ public class CautionServiceImpl implements CautionService {
         log.info("Get Caution Service 진입");
         Caution caution = cautionRepository.findById(id).orElseThrow(CautionIdNotFoundException::new);
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
 
         caution.increaseHits();
 
@@ -90,7 +90,7 @@ public class CautionServiceImpl implements CautionService {
 
         log.info("Get Caution Post List Service 진입");
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
         if (page == null) {
             page = 1;
         }
@@ -120,7 +120,7 @@ public class CautionServiceImpl implements CautionService {
                 .orElseThrow(CautionIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(caution.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(caution.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (image != null){
             // 기존 이미지 파일 삭제
@@ -155,7 +155,7 @@ public class CautionServiceImpl implements CautionService {
         Caution caution = cautionRepository.findById(id).orElseThrow(CautionIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(caution.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(caution.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         cautionRepository.delete(caution);
 
@@ -169,7 +169,7 @@ public class CautionServiceImpl implements CautionService {
         log.info("Update Like Of Caution Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         Caution caution = cautionRepository.findById(id).orElseThrow(CautionIdNotFoundException::new);
         
         if (!hasLikeCaution(caution, member)){

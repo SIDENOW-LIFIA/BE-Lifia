@@ -49,7 +49,7 @@ public class ChildcareServiceImpl implements ChildcareService {
         log.info("Create Childcare Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
 
         log.info("로그인 확인 완료! 유저 닉네임: "+member.getNickname());
 
@@ -74,7 +74,7 @@ public class ChildcareServiceImpl implements ChildcareService {
         log.info("Get Childcare Service 진입");
         Childcare childcare = childcareRepository.findById(id).orElseThrow(ChildcareIdNotFoundException::new);
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
 
         childcare.increaseHits();
 
@@ -90,7 +90,7 @@ public class ChildcareServiceImpl implements ChildcareService {
 
         log.info("Get Childcare Post List Service 진입");
         memberRepository.findById(securityUtils.getLoggedInMember()
-                .orElseThrow(MemberNotLoginException::new).getMemberId());
+                .orElseThrow(MemberNotLoginException::new).getId());
         if (page == null) {
             page = 1;
         }
@@ -120,7 +120,7 @@ public class ChildcareServiceImpl implements ChildcareService {
                 .orElseThrow(ChildcareIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(childcare.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(childcare.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         if (image != null){
             // 기존 이미지 파일 삭제
@@ -155,7 +155,7 @@ public class ChildcareServiceImpl implements ChildcareService {
         Childcare childcare = childcareRepository.findById(id).orElseThrow(ChildcareIdNotFoundException::new);
 
         // 게시글 작성자가 맞는지 확인
-        memberRepository.findById(childcare.getMember().getMemberId()).orElseThrow(MemberNotExistException::new);
+        memberRepository.findById(childcare.getMember().getId()).orElseThrow(MemberNotExistException::new);
 
         childcareRepository.delete(childcare);
 
@@ -169,7 +169,7 @@ public class ChildcareServiceImpl implements ChildcareService {
         log.info("Update Like Of Childcare Service 진입");
         Member member = memberRepository.findById(securityUtils.getLoggedInMember()
                 .orElseThrow(MemberNotLoginException::new)
-                .getMemberId()).get();
+                .getId()).get();
         Childcare childcare = childcareRepository.findById(id).orElseThrow(ChildcareIdNotFoundException::new);
         
         if (!hasLikeChildcare(childcare, member)){
