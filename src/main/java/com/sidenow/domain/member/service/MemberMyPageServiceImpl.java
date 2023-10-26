@@ -27,6 +27,4 @@ public class MemberMyPageServiceImpl implements MemberMyPageService{
 
         return MemberInfoResponse.from(member);
     }
-
-
 }
