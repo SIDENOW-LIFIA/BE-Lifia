@@ -60,28 +60,28 @@ public class MemberAuthServiceImpl implements MemberAuthService{
         refreshTokenRepository.save(refreshToken);
         member.updateLoginAt(LocalDateTime.now());
         log.info("Login Service 종료");
-        return MemberLoginResponse.from(tokenResponse);
+        return MemberLoginResponse.from(tokenResponse, member);
     }
 
     // 토큰 만료 시 재발행
-    @Override
-    public MemberLoginResponse reIssueToken(MemberTokenRequest req){
-
-        log.info("reIssueToken Service 진입");
-        validateRefreshToken(req);
-        Authentication authentication = tokenProvider.getAuthentication(req.getAccessToken());
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
-
-        validateRefreshTokenOwner(refreshToken, req);
-
-        TokenResponse tokenResponse = tokenProvider.createToken(authentication);
-        RefreshToken newRefreshToken = refreshToken.updateValue(tokenResponse.getRefreshToken());
-        refreshTokenRepository.save(newRefreshToken);
-        log.info("reIssueToken Service 종료(토큰 재발급 및 저장 완료)");
-
-        return MemberLoginResponse.from(tokenResponse);
-    }
+//    @Override
+//    public MemberLoginResponse reIssueToken(MemberTokenRequest req){
+//
+//        log.info("reIssueToken Service 진입");
+//        validateRefreshToken(req);
+//        Authentication authentication = tokenProvider.getAuthentication(req.getAccessToken());
+//        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+//                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+//
+//        validateRefreshTokenOwner(refreshToken, req);
+//
+//        TokenResponse tokenResponse = tokenProvider.createToken(authentication);
+//        RefreshToken newRefreshToken = refreshToken.updateValue(tokenResponse.getRefreshToken());
+//        refreshTokenRepository.save(newRefreshToken);
+//        log.info("reIssueToken Service 종료(토큰 재발급 및 저장 완료)");
+//
+//        return MemberLoginResponse.from(tokenResponse);
+//    }
 
     private TokenResponse validateLogin(MemberLoginRequest req) {
         log.info("회원 아이디/비밀번호 일치여부 확인 및 토큰 발행 Start");

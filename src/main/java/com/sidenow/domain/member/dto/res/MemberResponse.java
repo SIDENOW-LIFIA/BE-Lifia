@@ -15,11 +15,13 @@ public abstract class MemberResponse {
     public static class MemberLoginResponse{
         private final String accessToken;
         private final String refreshToken;
+        private final String nickname;
 
-        public static MemberLoginResponse from(TokenResponse tokenResponse) {
+        public static MemberLoginResponse from(TokenResponse tokenResponse, Member member) {
             return MemberLoginResponse.builder()
                     .accessToken(tokenResponse.getAccessToken())
                     .refreshToken(tokenResponse.getRefreshToken())
+                    .nickname(member.getNickname())
                     .build();
         }
     }
