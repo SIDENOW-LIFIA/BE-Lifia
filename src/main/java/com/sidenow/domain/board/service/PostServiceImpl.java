@@ -32,7 +32,7 @@ import static com.sidenow.domain.board.dto.response.PostResponse.*;
 @Service
 public class PostServiceImpl implements PostService{
     private static final int BOARD_PAGE_SIZE = 10;
-    private final Integer HOT_COUNT = 10;
+    private static final Integer HOT_COUNT = 10;
     private final Integer BEST_COUNT = 100;
     private static final String SUCCESS_LIKE_BOARD = "좋아요 처리 완료";
     private static final String SUCCESS_UNLIKE_BOARD = "좋아요 취소 완료";
@@ -104,11 +104,10 @@ public class PostServiceImpl implements PostService{
     @Transactional(readOnly = true)
     public Page<PostSimpleResponse> getHotPosts(Pageable pageable){
         log.info("Get Hot Posts Service 진입");
-        Page<Post> posts = postRepository.findPostsByLikeCount(HOT_COUNT, pageable);
+        Page<Post> posts = postRepository.findPostByLikeCount(HOT_COUNT, pageable);
         log.info("Get Hot Posts Service 종료");
 
-        return posts.map(PostSimpleResponse::new);
-
+        return posts.map(PostSimpleResponse::from);
     }
 
 

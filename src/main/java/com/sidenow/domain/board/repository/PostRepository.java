@@ -44,5 +44,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             value = "select p from Post p join fetch p.board join fetch p.member where p.likeCount >= :likeCount",
             countQuery = "select count(p) from Post p where p.likeCount >= :likeCount"
     )
-    Page<Post> findPostsByLikeCount(@Param("likeCount") Integer likeCount, Pageable pageable);
+    Page<Post> findPostByLikeCount(@Param("likeCount") Integer likeCount, Pageable pageable);
 }
