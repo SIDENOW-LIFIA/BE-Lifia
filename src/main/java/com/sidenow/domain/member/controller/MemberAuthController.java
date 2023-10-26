@@ -40,14 +40,14 @@ public class MemberAuthController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MemberSuccessMessage.MEMBER_LOGIN_SUCCESS.getMessage(), memberLoginResponse));
     }
 
-    @PostMapping("/re-issue")
-    @Operation(summary = "토큰 재발급", description = "Refresh Token을 보내주세요.")
-    public ResponseEntity<ResponseDto<MemberLoginResponse>> reIssueToken(@RequestBody MemberTokenRequest req) {
-
-        log.info("Member Reissue Token Api Start");
-        MemberLoginResponse memberLoginResponse = memberAuthService.reIssueToken(req);
-        log.info("Member Reissue Token Api End");
-
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_TOKEN_REFRESH_SUCCESS.getMessage(), memberLoginResponse));
-    }
+//    @PostMapping("/re-issue")
+//    @Operation(summary = "토큰 재발급", description = "Refresh Token을 보내주세요.")
+//    public ResponseEntity<ResponseDto<MemberLoginResponse>> reIssueToken(@RequestBody MemberTokenRequest req) {
+//
+//        log.info("Member Reissue Token Api Start");
+//        MemberLoginResponse memberLoginResponse = memberAuthService.reIssueToken(req);
+//        log.info("Member Reissue Token Api End");
+//
+//        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_TOKEN_REFRESH_SUCCESS.getMessage(), memberLoginResponse));
+//    }
 }
