@@ -16,6 +16,7 @@ public class MemberConstant {
         MEMBER_DELETE_SUCCESS("회원 탈퇴를 하였습니다."),
         MEMBER_LOGOUT_SUCCESS("로그아웃을 하였습니다."),
         MEMBER_MY_PAGE_MODIFY_SUCCESS("마이페이지가 성공적으로 수정되었습니다."),
+        MEMBER_INFO_GET_SUCCESS("회원정보를 성공적으로 가져왔습니다."),
         MEMBER_SEND_EMAIL_AUTH_CODE_SUCCESS("이메일 인증코드를 전송하였습니다."),
         MEMBER_EMAIL_AUTH_CODE_VERIFIED("이메일 인증코드가 일치합니다."),
         MEMBER_TOKEN_REFRESH_SUCCESS("토큰 재발급을 완료하였습니다.");
