@@ -1,9 +1,9 @@
 package com.sidenow.global.config.security;
 
+import com.sidenow.global.config.jwt.TokenProvider;
 import com.sidenow.global.config.jwt.filter.JwtAccessDeniedHandler;
 import com.sidenow.global.config.jwt.filter.JwtAuthenticationEntryPoint;
 import com.sidenow.global.config.jwt.filter.JwtAuthenticationFilter;
-import com.sidenow.global.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
