@@ -21,7 +21,7 @@ public abstract class MemberRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema(description = "유저 회원가입 요청 객체")
-    public static class SignUpMemberRequest {
+    public static class MemberSignUpRequest {
         @NotBlank(message = "이메일을 입력하세요.")
         @Email(message = "올바른 이메일주소를 입력하세요.")
         @Schema(description = "이메일 주소를 입력해주세요.", example = "jongseunghan@naver.com")

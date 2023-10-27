@@ -13,6 +13,7 @@ public class MemberConstant {
         MEMBER_SIGN_UP_SUCCESS("회원 가입에 성공했습니다."),
         MEMBER_CHECK_EMAIL_DUPLICATE_SUCCESS("사용 가능한 이메일입니다."),
         MEMBER_CHECK_NICKNAME_DUPLICATE_SUCCESS("사용 가능한 닉네임입니다."),
+        MEMBER_FIND_ALL_SUCCESS("전체 회원을 조회합니다."),
         MEMBER_DELETE_SUCCESS("회원 탈퇴를 하였습니다."),
         MEMBER_LOGOUT_SUCCESS("로그아웃을 하였습니다."),
         MEMBER_MY_PAGE_MODIFY_SUCCESS("마이페이지가 성공적으로 수정되었습니다."),
