@@ -1,6 +1,7 @@
 package com.sidenow.domain.member.service;
 
-import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
+import com.sidenow.domain.member.dto.req.MemberRequest.MemberSignUpRequest;
+import com.sidenow.domain.member.dto.res.MemberResponse.MemberSimpleResponse;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailDuplicateException;
 import com.sidenow.domain.member.exception.MemberNicknameDuplicateException;
@@ -11,8 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.sidenow.domain.member.constant.MemberConstant.Role.Role_USER;
 
@@ -20,14 +22,25 @@ import static com.sidenow.domain.member.constant.MemberConstant.Role.Role_USER;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class MemberSignUpServiceImpl implements MemberSignUpService {
+public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
+    @Override
+    public List<MemberSimpleResponse> findAllMembers(){
+        log.info("Find All Members Service 진입");
+        List<MemberSimpleResponse> allMembers = memberRepository.findAll().stream()
+                .map(MemberSimpleResponse::from)
+                .collect(Collectors.toList());
+        log.info("Find All Members Service 종료");
+
+        return allMembers;
+    }
+
     // 회원가입
     @Override
-    public Member signUp(SignUpMemberRequest req) {
+    public Member signUp(MemberSignUpRequest req) {
         log.info("Sign Up Member Service 진입");
         Member newMember = Member.builder()
                 .email(req.getEmail())

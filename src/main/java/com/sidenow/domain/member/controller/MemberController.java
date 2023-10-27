@@ -1,9 +1,11 @@
 package com.sidenow.domain.member.controller;
 
-import com.sidenow.domain.member.dto.req.MemberRequest.SignUpMemberRequest;
+import com.sidenow.domain.member.dto.req.MemberRequest;
+import com.sidenow.domain.member.dto.res.MemberResponse;
+import com.sidenow.domain.member.dto.res.MemberResponse.MemberSimpleResponse;
 import com.sidenow.domain.member.entity.Member;
 import com.sidenow.domain.member.exception.MemberEmailAuthCodeException;
-import com.sidenow.domain.member.service.MemberSignUpService;
+import com.sidenow.domain.member.service.MemberService;
 import com.sidenow.global.config.aws.service.AwsSesService;
 import com.sidenow.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,10 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.sidenow.domain.member.constant.MemberConstant.MemberSuccessMessage.*;
 
@@ -24,17 +25,26 @@ import static com.sidenow.domain.member.constant.MemberConstant.MemberSuccessMes
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/members")
-@Tag(name = "회원 가입", description = "Sign Up")
-public class MemberSignUpController {
+@Tag(name = "회원 API", description = "Member")
+public class MemberController {
 
-    private final MemberSignUpService memberSignUpService;
+    private final MemberService memberService;
     private final AwsSesService awsSesService;
+
+    @GetMapping("/")
+    @Operation(summary = "전체 회원 조회")
+    public ResponseEntity<ResponseDto<List<MemberSimpleResponse>>> findAllMembers() {
+        log.info("Find All Members Api 진입");
+        List<MemberSimpleResponse> result = memberService.findAllMembers();
+        log.info("Find All Members Api 종료");
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_FIND_ALL_SUCCESS.getMessage(), result));
+    }
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원가입")
-    public ResponseEntity<ResponseDto<Member>> signUp(@Valid @RequestBody SignUpMemberRequest signUpMemberRequest) {
+    public ResponseEntity<ResponseDto<Member>> signUp(@Valid @RequestBody MemberRequest.MemberSignUpRequest memberSignUpRequest) {
         log.info("Sign Up Api Start");
-        Member member = memberSignUpService.signUp(signUpMemberRequest);
+        Member member = memberService.signUp(memberSignUpRequest);
         log.info("Sign Up Api End");
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_SIGN_UP_SUCCESS.getMessage(), member));
     }
@@ -43,7 +53,7 @@ public class MemberSignUpController {
     @Operation(summary = "이메일 중복체크")
     public ResponseEntity<ResponseDto<Boolean>> checkEmailDuplicate(String email) {
         log.info("Check Email Duplicate Api Start");
-        boolean isEmailDuplicate = memberSignUpService.checkEmailDuplicate(email);
+        boolean isEmailDuplicate = memberService.checkEmailDuplicate(email);
         log.info("Check Email Duplicate Api End");
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_CHECK_EMAIL_DUPLICATE_SUCCESS.getMessage(), isEmailDuplicate));
     }
@@ -52,7 +62,7 @@ public class MemberSignUpController {
     @Operation(summary = "닉네임 중복체크")
     public ResponseEntity<ResponseDto<Boolean>> checkNicknameDuplicate(String nickname) {
         log.info("Check Nickname Duplicate Api Start");
-        boolean isNicknameDuplicate = memberSignUpService.checkNicknameDuplicate(nickname);
+        boolean isNicknameDuplicate = memberService.checkNicknameDuplicate(nickname);
         log.info("Check Nickname Duplicate Api End");
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), MEMBER_CHECK_NICKNAME_DUPLICATE_SUCCESS.getMessage(), isNicknameDuplicate));
     }

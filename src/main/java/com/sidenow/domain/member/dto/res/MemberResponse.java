@@ -47,4 +47,20 @@ public abstract class MemberResponse {
         }
     }
 
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class MemberSimpleResponse {
+        private final String name;
+        private final String nickname;
+
+        public static MemberSimpleResponse from(Member member){
+
+            return MemberSimpleResponse.builder()
+                    .name(member.getName())
+                    .nickname(member.getNickname())
+                    .build();
+        }
+    }
+
 }
