@@ -18,9 +18,11 @@ public abstract class FreeBoardResponse {
         private String title;
         private String content;
         private String image;
+        private String openLink;
 
         public static FreeBoardCreateResponse from(FreeBoard freeBoard) {
-            return new FreeBoardCreateResponse(freeBoard.getFreeBoardId(), freeBoard.getTitle(), freeBoard.getContent(), freeBoard.getImage());
+            return new FreeBoardCreateResponse(freeBoard.getFreeBoardId(), freeBoard.getTitle(),
+                    freeBoard.getContent(), freeBoard.getImage(), freeBoard.getOpenLink());
         }
     }
 

@@ -26,12 +26,16 @@ public abstract class FreeBoardRequest {
         @Schema(description = "게시글 내용을 입력해주세요.", example = "Test Content")
         private String content;
 
+        @Schema(description = "오픈 카톡방 링크를 입력해주세요.", example = "Test Link@kakao.co.kr")
+        private String openLink;
+
         public static FreeBoard to(FreeBoardCreateRequest req, Member member, String image) {
 
             return FreeBoard.builder()
                     .title(req.title)
                     .content(req.content)
                     .member(member)
+                    .openLink(req.openLink)
                     .image(image)
                     .build();
         }

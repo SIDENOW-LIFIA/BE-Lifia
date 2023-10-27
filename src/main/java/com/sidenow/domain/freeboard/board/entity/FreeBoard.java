@@ -31,6 +31,9 @@ public class FreeBoard extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String image;
 
+    @Column
+    private String openLink;
+
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int hits; // 게시글 조회 수
 
