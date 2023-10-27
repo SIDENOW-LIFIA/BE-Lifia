@@ -44,7 +44,6 @@ public abstract class PostResponse {
         private int commentCount;
         private LocalDateTime createdAt;
 
-        public PostSimpleResponse(Post post){}
 
         public static PostSimpleResponse from(Post post) {
             return PostSimpleResponse.builder()

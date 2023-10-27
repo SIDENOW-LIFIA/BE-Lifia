@@ -107,7 +107,7 @@ public class PostServiceImpl implements PostService{
         Page<Post> posts = postRepository.findPostsByLikeCount(HOT_COUNT, pageable);
         log.info("Get Hot Posts Service 종료");
 
-        return posts.map(PostSimpleResponse::new);
+        return posts.map(PostSimpleResponse::from);
 
     }
 
