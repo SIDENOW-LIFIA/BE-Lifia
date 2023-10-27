@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -61,12 +62,19 @@ public class SecurityConfig {
 
                 // 요청에 대한 인가 설정
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-//                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/auth/**").permitAll() // 로그인, 회원가입 API는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
-                        .requestMatchers("/members/**").permitAll()
+                        .requestMatchers("/members/info").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/freeBoards/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/caution/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/childcare/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/coBuying/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/delivery/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/vote/**").authenticated()
+//                        .requestMatchers("/auth/**").permitAll() // 로그인, 회원가입 API는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
+//                        .requestMatchers("/members/**").permitAll()
 //                        .requestMatchers(toH2Console()).permitAll() // h2-console 접속시키기
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-                        .anyRequest().authenticated()) // 그 외 나머지 API는 전부 인증 필요
+                        .anyRequest().permitAll())
+//                        .anyRequest().authenticated()) // 그 외 나머지 API는 전부 인증 필요
 
                 // JWT를 활용하면 세션이 필요 없으므로, STATELESS 설정 (Security는 기본적으로 세션을 사용함)
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
